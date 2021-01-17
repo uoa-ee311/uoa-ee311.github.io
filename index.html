@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>ELECTENG 311</title>
+  <meta name="description" content="ELECTENG 311" />
+  <meta name="keywords" content="design, auckland, uoa" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" title="style" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+          <h1><a href="index.html">ELECTENG 311</span></a></h1>
+          <h2>Electronics Systems Design</h2>
+        </div>
+        <div id="logo_img">
+
+        </div>
+      </div>
+     
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+          <li class="selected"><a href="index.html">Home</a></li>
+          <li><a href="lectures.html">Lectures</a></li>
+          <li><a href="extra.html">Extra</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      <div class="sidebar">
+        <!-- insert your sidebar items here -->
+        <h3>Latest News</h3>
+        <h5>January 16th, 2021</h5>
+        <p>We have developed this website to provide easy and mobile friendly access to ELECTENG 311 resources.</p>
+        <p></p>
+        <h4>Lectures Available Soon</h4>
+        <h5>January 16th, 2021</h5>
+        <p>We are in the process of adding lectures.</p>
+        <h3>Latest Photos</h3>
+        <ul>
+          <img src="img\Demo.png" alt="UoA" width="200">
+        </ul>
+        <h3>Search</h3>
+        <form method="post" action="#" id="search_form">
+          <p>
+            <input class="search" type="text" name="search_field" value="Enter keywords....." />
+            <input name="search" type="image" style="border: 0; margin: 0 0 -9px 5px;" src="style/search.png" alt="Search" title="Search" />
+          </p>
+        </form>
+      </div>
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>Introduction</h1>
+        <p>
+          This space is created to share information related to "ELECTENG 311: Electronics Systems Design" under a <a href="http://creativecommons.org/licenses/by/3.0">Creative Commons Attribution 3.0 Licence</a>. The site contains a collection of lectures along with extra information such as example designs from previous years, code examples, design ideas, etc. The presentations are written in <a href="https://daringfireball.net/projects/markdown/">Markdown</a>.
+        </p>
+        <h1>About ELECTENG 311</h1>
+        <p>
+          Electronic circuits, found in applications ranging from medical to consumer products to aerospace, require energy sources that are conditioned to specific forms to safely energize them. For example, to charge our mobile phone, we need to connect a regulated 5 V DC source to the charging port of the phone. The regulated voltage that is needed to power any electronic circuit is derived using a power converter. A power converter feeds from a raw energy source like a battery or an AC power outlet and generates a regulated output in the form that is accepted by the electronic circuit it powers. Typically, modern electronic devices employ complex circuitry requiring different voltage and power levels, and as such employ many power converters. Though simple low-power circuits employ liner-regulators as the power converters, switch-mode power converters are widely used in more demanding situations. Hence, it is vital to learn how a switch-mode converter works and be able to design one that meets a specific set of requirements.
+        </p>
+        <p>
+          In order to gain fundamental understanding of switch-mode power converters, during this project students will be designing and developing a pocket-sized power supply that could replace the bulky low-voltage power supply found on a typical work bench. The power supply would be fed from a USB-C PD capable port and its isolated output voltage is controlled by the user via a computer. Real-time information about the load attached to the power supply will also be displayed on the computer. To achieve this, students will be working as part of a design team of four students, who will undertake an investigation and subsequently design and develop a power supply that meets a set of specifications given.
+        </p>
+        <p>
+          There are four components to this project - hardware design, magnetic design, firmware development, and system integration. Students will start the project by developing a ‘paper’ design of the hardware, and then validate this design using LTspice simulations. Students will then work on the magnetic design, which will be validated and improved using Ansys Maxwell. In parallel, using Proteus Virtual System Simulator (VSM) and the ATmega328PB Xplained Mini, students will develop and validate the firmware needed to control your power supply. Finally, hardware, magnetic and firmware designs will be integrated to develop a prototype power supply to characterise and show that it meets the given design specifications. At the conclusion of the project, each design team will be interviewed by an assessor and given the opportunity to demonstrate the performance of their design. 
+        </p>
+      </div>
+    </div>
+    <div id="footer">
+      Copyright &copy; black_white | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">Free CSS Templates</a>
+    </div>
+  </div>
+</body>
+</html>

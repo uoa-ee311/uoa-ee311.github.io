@@ -1,0 +1,26 @@
+cat .gitignore
+
+## Ignore Mac and windows files
+.DS_Store
+desktop.ini
+Icon*
+
+## Ignore Altium files
+*.LOG
+__Previews/
+History/
+*.PrjPCBStructure
+*.SchDocPreview
+*.PcbDocPreview
+Project\ Logs
+
+## Ignore LTSpice created files
+*.net
+*.op
+*.raw
+*.lnk
+*.log
+*.ipynd_checkpoints
+*checkpoint.ipynb
+*.csv
+02_ALTIUM/EPC2152_GaN_HalfBridge/SOURCE/EPC2152_GaN_HalfBridge.SchDoc
