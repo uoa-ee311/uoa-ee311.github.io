@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introduction to ELECTENG 311</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { 
+        font-family: 'Droid Serif'; 
+        line-height: 1.6;
+        }
+
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: bold;
+        color: #00467F;
+      }
+
+      h1{
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+      }
+
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+      .TitleAuthor {
+        color:white; 
+        font-weight: normal;
+      }
+
+      .title-slide .remark-slide-number {
+        display: none;
+      }
+      .title-slide h1, h2, h3, h4 {
+        text-align: left;
+        color:white;
+        line-height: 0.7;
+        font-weight: bold;
+      }
+
+      .title-slide {
+        vertical-align: middle;
+        background-color: #00467F;
+      }
+
+      .logo-title {
+        content: "";
+        position: absolute;
+        top: 15px;
+        right:   15px;
+        height: 88px;
+        width: 267px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cdn.auckland.ac.nz/assets/central/central-services/mediaandmarketing/uoa-logos-2015/uoa-logo-2015-reverse.png);
+      }
+      .logo-slide {
+        content: "";
+        position: absolute;
+        top: 35px;
+        right:   15px;
+        height: 96px;
+        width: 100px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cpb-ap-se2.wpmucdn.com/blogs.auckland.ac.nz/dist/d/79/files/2015/10/uoa-v-colour2.png);
+      }
+
+      .left-column {
+        width: 65%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column {
+        width: 30%;
+        float: right;
+        word-wrap: break-word;
+      }
+
+      .footer {
+        content: "";
+        position: absolute;
+        bottom: 17px;
+        color:gray;
+        font-size: 10pt;
+      }
+      
+      @page {
+        size: 1210px 681px;
+        margin: 0;
+      }
+
+      @media print {
+        .remark-slide-scaler {
+          width: 100% !important;
+          height: 100% !important;
+          transform: scale(1) !important;
+          top: 0 !important;
+          left: 0 !important;
+        }
+      }
+      
+      .credits {
+        font-size: 12px;
+        line-height: 4px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .zoom175 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom175:hover {
+        transform: scale(1.75) translateY(-20%) translateX(-20%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+    </style>
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <style>
+    .smaller-font { font-size:14px } 
+    </style>
+
+    <!-- KaTeX and Mathjax support refer to below for syntax -->
+    <!-- https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+    
+    <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style>
+      /* Table Style */
+      .tg  {border-collapse:collapse;border-color:#9ABAD9;border-spacing:0;}
+      .tg td{background-color:#EBF5FF;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#444;
+        font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:3px 10px;word-break:normal;}
+      .tg th{background-color:#409cff;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#fff;
+        font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:3px 10px;word-break:normal;}
+      .tg .tg-dzaw{background-color:#4F81BD;color:#FFF;font-weight:bold;text-align:left;vertical-align:top}
+      .tg .tg-sabo{background-color:#ebf5ff;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-096r{color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-jayl{background-color:#d2e4fc;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-ig71{background-color:#D2E4FC;color:#000000;text-align:left;vertical-align:top}
+    </style>
+
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide
+count: false
+.logo-title[]
+
+## ELECTENG 311
+# Electronics Systems Design 
+### An Introduction
+
+.TitleAuthor[Duleepa J Thrimawithana]
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+
+name: SLO
+
+# Learning Objectives
+
+- What is a power converter?
+ - Power converter types
+ - Desirable features of a power converter
+- Power electronics research at UoA
+- Design project details
+ - What is to be designed
+ - Specifications & system architecture
+- Assessment details
+- Learning resources 
+- The design process
+- Fundamentals of switched-mode power supplies
+ - Key differences between linear regulators and SMPSs
+ - Pulse width modulation
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# What Are Power Electronics Converters?
+### An Introduction
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+
+name: S1
+
+# Background
+
+- Power conversion systems or power electronics converters play a vital role in the modern society
+ - A vital component of modern medical equipment, consumer electronics and appliances
+ - A key enabling technology that would help achieve a zero-carbon future 
+
+.center[
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2bXn2F58OsM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+name: S2
+
+# What is a Power Converter?
+
+- A power converter takes an energy source as the input and produce an output that is suitable to feed a load (e.g. electronic/electrical circuit or a motor)
+- As an example, a power converter may be designed to take an input from a battery and produce a constant current (even when the battery voltage changes as it discharges) to feed an LED light bulb
+ - We may also want to control the current setpoint to change the brightness of the LED bulb 
+
+.center[<img src="img/PowerConverterGen.png" height="250px">]
+
+---
+
+name: S3
+
+# Important Features of a Power Converter  
+
+
+- Designing a power converter involves improving 5 key performance features 
+ - Losses need to be minimized to achieve higher efficiency
+ - Weight and volume need to be minimized to achieve higher density
+ - Failure rate needs to be minimized to achieve higher reliability
+ - Costs need to be minimized so that its ready to market within an acceptable time frame and a budget
+ - Controllability needs to be improved so that it can produce a distortion-less output 
+- These performance features are related to each other 
+ - E.g., improving efficiency can often lead to an increase in cost and restrict controllability 
+- Depending on the application, a power electronics engineer often has to tradeoff some features for others 
+ - E.g., we may decide to go with a less efficient design to reduce cost
+
+.center[<img src="img/PEFeatures.png" height="100px">]
+
+---
+
+name: S4
+
+# Types of Power Converters
+
+.left-column[
+- Based on the nature of the input source and the output produced, power converters can be broadly categorized as
+ - *DC to DC* converters where input source is DC and output is DC
+ - *DC to AC* converters where input source is DC and output is AC
+ - *AC to DC* converters where input source is AC and output is DC
+ - *AC to AC* converters where input source is AC and output is AC
+- These 4 types of power converters can be categorized further as *isolated* and *non-isolated* converters
+ - An isolated converter often employs a transformer to provide galvanic isolation between input source and load in situations where for example to ensure user safety
+- E.g., your phone charger employs an *isolated AC to DC converter* to derive power from wall power socket and output 5V DC
+]
+
+.right-column[
+.center[<img src="img/ConverterTypes.png" width="260px">
+.credits[
+Apple 18W Charger Teardown [[1]](https://www.chargerlab.com/apple-18w-usb-c-power-adapter-a1695-teardown-review-beautiful-inside-and-out/)
+]
+]
+]
+
+---
+
+name: S5
+
+# Future of Power Electronics
+
+- Power electronics is a multidisciplinary field that encompasses the study of power converter topologies, modulation schemes, embedded control techniques, power semiconductors, magnetics, thermal management, CAD, system level optimization, etc. 
+ - Hopes to develop better performing power converters to meet future demand
+- Power electronics engineering roles are applied and practical
+ - Growing demand for *skilled* power electronics engineers due to increasing use of electronics systems in areas such as renewable generation and electrified transportation
+
+.center[
+<iframe width="355" height="200" src="https://www.youtube.com/embed/KPpYTnD_ZHw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Power Electronics Research at UoA
+### An Overview
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S5
+
+# Power Electronics Research Themes
+
+- Power electronics research group at ECSE is at the forefront of PE research
+ - Long history dating back to the late 1980's
+ - Considered global leaders and pioneers of near field wireless power transfer technology  
+
+.center[<img src="img/PEResearch.png" height="300px">]
+
+
+---
+name: S6
+
+# The Power Electronics Research Group
+
+.center[<img src="img/PEGROUP.gif" height="430">]
+
+---
+name: S7
+
+# Pioneers in Wireless Power Transfer (WPT)
+
+.center[
+<iframe width="784" height="441" src="https://www.youtube-nocookie.com/embed/G1q1HZLQ528?" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+name: S8
+
+# PE Group Connections
+
+- Power electronics research group at ECSE is well connected with top ranking universities as well as industry (a few of these connections are shown below)
+
+.center[<img src="img/Connections.png" height="350">]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Design of a Pocket Sized Power Supply
+### Project Information
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S9
+
+# The Project
+
+- What is this course about and what should you expect to learn?
+ - Gives you an opportunity to design and develop a commonly used switched-mode power supply using the electrical, magnetic, control and embedded programing principles you learnt so far
+ - During this process you will gain knowledge, experience, skill-set and professional behavior needed to succeed in more challenging projects you will engage as an engineer
+- What would you design and engineer during this course?
+ - A compact programmable power supply that could replace the bulky bench-top power supply 
+- How would you achieve this task?
+ - A *flyback* type power converter is developed to generate an *isolated* DC voltage between 5V and 30V from a 20V DC source
+ - A suitable *high-frequency isolation transformer* is designed for the flyback flyback converter while off-the-shelf digital isolators are used to isolate communication signals
+ - An *embedded software program* is developed to control the output voltage of the converter to voltage requested by the user 
+
+---
+name: S10
+
+# A Typical Work Bench Power Supply
+
+- A low voltage DC power supply is an essential equipment found on a work bench of a hardware engineer
+ - Typically has 1 or more independent isolated outputs
+ - The voltage and current at each output can be controlled/programmed via a user interface
+
+.center[<img src="img/PSU_GW.jpg" height="290">
+.credits[
+The GW3323 Low Voltage DC Power Supplies Found on MDLS Work Benches [[2]](https://www.gwinstek.com/en-global/products/detail/GPE-X323)
+]
+]
+
+---
+name: S11
+
+# Architecture of a Typical LV Power Supply
+
+- A 50Hz transformer with multiple taps is used to generate an isolated output 
+ - This low-frequency transformer is the main contributor to size and weight 
+- A series type linear regulator is used to regulate the output to value set by the user 
+ - Efficiency improved by switching between taps of the transformer 
+
+.center[<img src="img/PSU_GW2.png" height="260">
+.credits[
+Architecture of a GW3323 Power Supply [[3]](https://www.gwinstek.com/en-global/products/downloadSeriesDownNew/8033/1198)
+]
+]
+
+---
+name: S12
+
+# Internals of a Typical LV Power Supply
+
+- Internal circuitry show the size of the low-frequency transformer used
+ - We will use a high-frequency transformer to significantly reduce the size and weight
+- Second largest component is the heatsink used to cool the linear regulator 
+ - We will use a more efficient switched mode regulator to overcome this problem
+
+.center[
+<iframe width="500" height="281" src="https://www.youtube.com/embed/BGXbl0lrqfc?start=112" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+name: S13
+
+# Suggested System Architecture 
+
+.center[<img src="img/System.png" height="320">]
+
+- You will derive the 20V DC source needed to power your design from a bench-top power supply
+ - In real-life, you can use a USB-C PD interface to derive the 20V DC
+- A 220&Omega; rheostat will be used as the load to test and characterize you power supply
+
+---
+name: S14
+
+# Key System Specifications
+
+<table class="tg" style="undefined;table-layout: fixed; width: 647px; margin-left:auto; margin-right:auto;">
+  <colgroup>
+  <col style="width: 333px">
+  <col style="width: 314px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="tg-dzaw"><span style="color:white">Parameter</span></th>
+      <th class="tg-dzaw"><span style="color:white">Value</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-jayl">Input Voltage</td>
+      <td class="tg-jayl"> 20 V<sub>DC</sub> </td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Output Voltage Range</td>
+      <td class="tg-sabo"> 5 V<sub>DC</sub> to 30 V<sub>DC</sub> </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Load Regulation</td>
+      <td class="tg-ig71"> 5% </td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Maximum Output Power</td>
+      <td class="tg-sabo">12 W</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Output Voltage Ripple</td>
+      <td class="tg-ig71">100 mV or Less</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Efficiency</td>
+      <td class="tg-sabo">80% or Better for Over 5 W</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Switching Frequency</td>
+      <td class="tg-ig71">100 kHz</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Isolation Rating</td>
+      <td class="tg-sabo">1000 V</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Over Voltage Protection</td>
+      <td class="tg-ig71">32 V</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Converter Topology</td>
+      <td class="tg-sabo">Flyback</td>
+    </tr>
+    <tr>
+      <td class="tg-jayl">Information Displayed to User on PC</td>
+      <td class="tg-jayl">Output Voltage, Current and Power</td>
+    </tr>
+    <tr>
+      <td class="tg-096r">User Setpoints</td>
+      <td class="tg-096r">Output Voltage</td>
+    </tr>
+    <tr>
+      <td class="tg-jayl">PCB Technology</td>
+      <td class="tg-jayl">Double Layer with PTH</td>
+    </tr>
+    <tr>
+      <td class="tg-096r">PCB Size</td>
+      <td class="tg-096r">150 mm x 150 mm x 100mm</td>
+    </tr>
+  </tbody>
+</table>
+
+
+---
+name: S15
+
+# Expected Output Characteristics
+
+- Designing a power supply that can deliver 12W at any output voltage level (between 5V and 30V) is significantly more complicated
+ - Even commercial power supplies for this reason limit the output in some manner
+- To reduce the complexity of your design, it is expected to follow the output characteristics define by the output voltage vs. power curve below
+ - If you wish to improve power output at low voltages, then you must first discuss your solutions and seek approval
+
+.center[<img src="img/OutputChar.png" height="200">]
+
+---
+name: S15
+
+# Demo of Expected Final Design
+
+Coming soon...
+
+---
+name: S16
+
+# Working in Teams
+
+- You will work in a team of 4 
+ - You can chose your team members and register your group details on Canvas by the end of 1st week
+ - All team members should be from the same lab stream (NB: There are two lab streams)
+- Throughout the project work as a team and aim to support each other
+ - This is an important part of preparing to be a professional engineer
+ - You depend on each other to do well in this course
+- Plan your work, document your work and communicate regularly with your team members
+ - Use a logbook and/or [Trello](https://trello.com) to plan and document your work 
+ - Use [Slack](https://slack.com/intl/en-nz/) and [Zoom](https://zoom.us)/[Hangouts](https://hangouts.google.com) for team communications
+ - Use [GitHub](https://github.com) and [G Suite](https://gsuite.google.com)/[Office 365](https://www.library.auckland.ac.nz/services/it-essentials/computer-facilities/software-personal-use/microsoft-student-advantage-office-365) products to collaborate with team members
+- Be patient with your team members even if they are not making much progress during the initial stage
+ - If things are not working out, after about 1-2 weeks, let us know
+ - If a member is not engaging in team work we will ask that person to work alone
+
+---
+name: S17
+
+# Course Calendar
+
+.center[<img src="img/2021Calendar.png" height="450">]
+
+---
+name: S18
+
+# How to Get an Excellent Grade
+
+- Is the project challenging?
+ - Yes, design and developing your first switched-mode power supply can be quite challenging
+ - You need to have a good mastery of circuit analysis techniques, magnetics, control and embedded programming
+- What are the most challenging aspects?
+ - Time management, planing and team work are the key challenges
+ - As in a real life project, resources are limited (time, teams' availability, lab space, equipment, software licenses, etc.) and therefore last minute frantic endeavour will not help
+- How could I get an excellent grade?
+ - Enjoy designing a real-world product and be passionate about your design (this is the key ingredient)
+ - Plan and manage your and your team members' time well
+ - Throughout the semester you are expected to spend about 12 hours a week on the project 
+ - Make full use of all support sessions (there will be in average of about 8 support hours a week)
+
+---
+name: S19
+
+# Are Design Courses Useful?
+
+- Engineering a solution to solve a real-life problem helps you to understand the importance of the theoretical concepts you have learnt and teach you how to use these to achieve an output that could help the society 
+
+.center[
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Io3TiuJsfLc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Assessment Components
+### Details on How to Prepare
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S29
+
+# Assessment Components
+
+- All assessment components except the Smart Energy Challenge are compulsory
+ - It is compulsory to satisfactorily complete all components except the Design Challenge to obtain a passing grade
+ - To be eligible for the bonus marks you must satisfactorily complete the entire project
+ - Although this project will be undertaken in design teams of 4, you will be assessed individually
+
+<table class="tg" style="undefined;table-layout: fixed; width: 647px; margin-left:auto; margin-right:auto;">
+  <colgroup>
+  <col style="width: 383px">
+  <col style="width: 264px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="tg-dzaw"><span style="color:white">Component</span></th>
+      <th class="tg-dzaw"><span style="color:white">Weighting</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-jayl">Test (Written and Practical Components)</td>
+      <td class="tg-jayl"> 30% </td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Lecture Quizzes (Available for 24 Hrs) </td>
+      <td class="tg-sabo"> 5% </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Gate Reviews</td>
+      <td class="tg-ig71"> 20% </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Final Interview</td>
+      <td class="tg-ig71">10%</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Project Deliverables </td>
+      <td class="tg-sabo">35%</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Design Challenge (Optional)</td>
+      <td class="tg-ig71">4%</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+name: S30
+
+# Test, Lecture Quizzes & Gate Reviews
+
+- The 30% test will be conducted during week 10 of the semester in the laboratories
+ - The written part of the tests will assess your understanding of fundamental concepts 
+ - The practical component of the test will assess your ability to use design tools
+- We will conduct 0.5% lecture quizzes using Canvas to evaluate your engagement and understanding
+ - Quizzes will be available for 24 hours and you are allowed 3 attempts
+ - The maximum marks you can get will be capped to 5%
+- The 4 gate reviews are to guide you through the design and make sure you complete critical tasks on time
+ - Basic design calculations and a working simulation of your converter are due by 1<sup>st</sup> review  
+ - Transformer design, Ansys model and experimental validation of transformer are due by 2<sup>nd</sup> review
+ - Open-loop hardware validation, final design calculations and the PCB designs are due by 3<sup>rd</sup> review
+ - Implementation of the closed-loop controller and its experimental validation are due by 4<sup>th</sup> review
+ - We will check the completion of each task (2%), your understanding (2%) as well as the use of logbook/Trello, GitHub and Slack to plan, manage and document the work (1%)
+
+---
+name: S31
+
+# Final Interview & Deliverables
+
+- During the last week of the semester there will be an interview to evaluate your understanding of the subject matter
+ - Theoretical and practical knowledge of hardware (5%) and firmware (5%) concepts you gained during the project will be assessed 
+ - Though you will participate in the interviews as a team, you will be assessed individually 
+ - You will be assessed based on technical accuracy and completeness of the answers given as well as your ability to confidently explain technical concepts 
+ - The experience gained through this process will be invaluable to do well in technical job interviews
+- During the last week of the semester you will be given an opportunity to demonstration your final design
+ - Design will be evaluated based on functionality (10%), quality of output (7.5%) and quality of design (7.5%) 
+ - Marks for output quality will be scaled relative to best in class 
+ - You are also required to submit a short technical report with details of your design (10%)
+
+---
+name: S32
+
+# Design Challenges & Industry Judging
+
+- The optional *Design Challenges* are focused on implementing the following useful features 
+ - Constant current limiting where user can set the maximum current limit
+ - USB-C PD interface using a STUSB4500 IC to derive the 20V input to the converter 
+ - A GUI to control the power supply and display useful information
+- Before attempting the *Design Challenges* you must complete all other tasks
+ - Up to 2 bonus marks awarded for successfully completing each task (capped at 4%)
+- Based on the performance throughout the semester the top 3 design teams will be selected 
+- Industry judges from [Fisher & Paykel](https://www.fisherpaykel.com) will interview the top teams 
+ - F&P will deliver a seminar during the 8th week along with vital information about interviews
+ - They will decide the winners of the *2021 Design Challenge*
+
+.center[<img src="img/FP.png" height="85">]
+
+---
+name: S33
+
+# Collaborating with Team Members
+
+- To be a good engineer you also need to develop a number of *soft-skills*
+ - Some of the key skills you should aim to develop are management, teamwork and communication 
+- One of the primary responsibilities you will have as an engineer is to tell other engineers how to build, service, use and update a product you have been involved in designing/developing/building/testing/etc.
+ - Thus, engineers are expected to document all details about their work in a logbook 
+ - The information recorded in a logbook include, design notes, design decisions, calculations, software flow diagrams, schematics, meeting minutes, etc. 
+- In industry, many different digital tools are used to help with managing teamwork work, communicating with team members and documenting details of the project
+ - Trello, Slack and GitHub are a few such most commonly used and simple to use tools 
+- In this project all students are expected to use a logbook and/or Trello together with Slack and GitHub to effectively plan, manage and document the work
+ - We will regularly check how you use these tools as part of the assessment process
+
+---
+name: S34
+
+# Resources & Flexible Learning
+
+- Duleepa Thrimawithana (course director), Jackman Lin and Seho Kim, from the academic staff, will be looking after this course
+ - Moon Kim and Wai Yeung are your technical facilitators 
+- Teaching assistance (TAs) will be available during support sessions to help with the project
+ - Aaron Wadsworth (PhD), Rui Wen (PhD) and Kelvin Anto (PhD) are your TAs
+- You could get support in-person during the dedicated lab sessions shown on the course planner 
+ - We will also provide support remotely using Piazza, Slack and Zoom 
+ - You may also request additional staff assisted evening support/tutorial sessions (online or on-campus)
+ - All software needed for this course can be accessed from home 
+- Recorded media will be provided to support your learning 
+- We will communicate all course related information via Canvas and Slack
+
+---
+name: S35
+
+# Enrolment & Software Installation
+
+- Prerequisite for this course is ELECTENG 310 
+ - If you have failed ELECTENG 310, please contact us to check if your enrolment is still valid
+- In some cases, even if you do not meet the prerequisite, after an interview, we may allow you to continue with the course, but we will have to partner you with a suitable group 
+ - Contact Duleepa for more information
+- Follow details on Canvas or the [course website](https://uoa-ee311.github.io/extra.html) to get setup on Piazza, Slack and GitHub
+ - Guides detailing how to obtain and install your personal copy of the software we will use in this course (Atmel Studio, Proteus VSM, Altium Designer, LTspice and GitHub Desktop) are available
+ - Ansys is only available via FlexIT
+
+---
+name: S36
+
+# Building a Prototype
+
+- This is a design project and you are expected to develop a hardware prototype 
+ - This includes developing a PCB, building a prototype, testing hardware, etc.
+- We will provide resources and tools to get started on the project before you get to the stage of building your own prototype analog circuitry
+ - You can use Proteus VSM and the Xplained Mini development boards to develop and validate most of your firmware
+ - We will provide a hardware kit where you can attach your transformer and the Xplained Mini for further debugging and validation of your design
+- The lab benches in MDLS E&I labs will be equipped with suitable bench-top equipment 
+ - MDLS E&I 2 is booked specifically for this course during times shown on the planner 
+- We will have a number of workshops to teach you how to build and test your hardware
+
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Switched-Mode Converters
+### Fundamentals
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# End
+
+
+
+    </textarea>
+
+    <!-- 
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    -->    
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript">
+    </script>
+
+
+    <script src="remark/remark.min.js" type="text/javascript">
+    </script>
+
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="remark/terminal.language.js" type="text/javascript"></script>
+
+    <script src="https://kit.fontawesome.com/a405eedf54.js" crossorigin="anonymous"></script>
+    <script src="remark/mark.min.js" type="text/javascript">
+    </script>
+    <link rel="stylesheet" href="remark/remark.search.css">
+    <script src="remark/remark.search.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+      var options = {};
+
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        ]});
+      }
+
+      var slideshow = remark.create({
+        ratio: '16:9',
+        slideNumberFormat: '%current%',
+        countIncrementalSlides: false,
+        renderMath,
+        highlightLanguage: 'c',
+        highlightStyle: 'github',
+        navigation: {
+          // Enable or disable navigating using scroll
+          // Default: true
+          // Alternatives: false
+          scroll: true,
+
+          // Enable or disable navigation using touch
+          // Default: true
+          // Alternatives: false
+          touch: true,
+
+          // Enable or disable navigation using click
+          // Default: false
+          // Alternatives: true
+          click: false,
+        },
+        
+      });
+
+      MathJax.Hub.Config({
+          tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+          processEscapes: true
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          $(MathJax.Hub.getAllJax()).map(function(index, elem) {
+              return(elem.SourceElement());
+          }).parent().addClass('has-jax');
+      });
+
+      MathJax.Hub.Configured();
+      
+      //Terminal style highligting code
+      var highlighted = document.querySelectorAll("code.terminal span.hljs-ansi");
+      Array.prototype.forEach.call(highlighted, function(next) {
+        next.insertAdjacentHTML("beforebegin", next.textContent);
+        next.parentNode.removeChild(next);
+      });
+
+      window.addEventListener('load', function() {
+      RemarkSearch.create({'position': 'top-left', 'caseSensitive' : false, 'showIcon': true, 'autoSearch': true});
+      });
+
+    </script>
+  </body>
+</html>
