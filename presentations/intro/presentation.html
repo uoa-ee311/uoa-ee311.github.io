@@ -191,7 +191,7 @@ name: SLO
 - Assessment details
 - Learning resources 
 - The design process
-- Fundamentals of switched-mode power supplies
+- Fundamentals of switched-mode DC to DC power supplies
  - Key differences between linear regulators and SMPSs
  - Pulse width modulation
 
@@ -612,7 +612,7 @@ name: template_slide
 .footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
 
 ---
-name: S29
+name: S20
 
 # Assessment Components
 
@@ -661,7 +661,7 @@ name: S29
 </table>
 
 ---
-name: S30
+name: S21
 
 # Test, Lecture Quizzes & Gate Reviews
 
@@ -679,7 +679,7 @@ name: S30
  - We will check the completion of each task (2%), your understanding (2%) as well as the use of logbook/Trello, GitHub and Slack to plan, manage and document the work (1%)
 
 ---
-name: S31
+name: S22
 
 # Final Interview & Deliverables
 
@@ -694,7 +694,7 @@ name: S31
  - You are also required to submit a short technical report with details of your design (10%)
 
 ---
-name: S32
+name: S23
 
 # Design Challenges & Industry Judging
 
@@ -712,7 +712,7 @@ name: S32
 .center[<img src="img/FP.png" height="85">]
 
 ---
-name: S33
+name: S24
 
 # Collaborating with Team Members
 
@@ -727,7 +727,7 @@ name: S33
  - We will regularly check how you use these tools as part of the assessment process
 
 ---
-name: S34
+name: S25
 
 # Resources & Flexible Learning
 
@@ -743,7 +743,7 @@ name: S34
 - We will communicate all course related information via Canvas and Slack
 
 ---
-name: S35
+name: S26
 
 # Enrolment & Software Installation
 
@@ -756,7 +756,7 @@ name: S35
  - Ansys is only available via FlexIT
 
 ---
-name: S36
+name: S27
 
 # Building a Prototype
 
@@ -777,7 +777,7 @@ layout: false
 count: false
 .logo-title[]
 
-# Switched-Mode Converters
+# Switched-Mode DC to DC Converters
 ### Fundamentals
 
 ---
@@ -788,6 +788,42 @@ name: template_slide
 .logo-slide[]
 .footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
 
+---
+name: S28
+
+# DC to DC Converters
+
+- A DC to DC converter can be implemented as a linear regulator or as a switched-mode converter 
+- A linear regulator uses a switch such as a BJT, that is operated in its active region 
+ - In a series type linear regulator, the switch creates a voltage drop across it when its conducting current that flows from the source to the load
+ - The voltage drop across the switch is controlled to achieve the desirable output 
+ - Since the switch always has a certain voltage drop across it while also conducting current, the switch dissipate part of the power supplied by the source as losses, when used in a linear regulator 
+- A switched-mode converter uses a switch such as a BJT, that is continuously *switched* back and forth between the cut-off and saturation (or ohmic) regions
+ - In cut-off region, though there is voltage between the switch, it has no current flowing through it
+ - In saturation region, though there is current through the switch, voltage drop across it is insignificant
+ - As such, the switch does not dissipate power as loss when its either in the cut-off or saturation regions
+- Lets explore these two types of converters further with the aid of a case study
+
+---
+name: S29
+
+# Linear Regulator Example (PI)
+
+- As a case study, consider a power converter designed using a series type linear regulator to produce either a constant 5V or a 10V output from a 20V input source
+ - Assume the load resistance is 5&Omega; and a BJT is used as the *series pass device* 
+ - The *controller* takes user input, which indicates whether the output should be controlled to 5V or 10V and controls the base current, I<sub>b</sub>, to produce the correct output voltage
+ - Note that in practice the controller may also observe the output voltage and employ a *closed-loop* controller to produce the correct output 
+
+.center[<img src="img/LinearRegBJT.png" height="200">]
+
+
+---
+name: S29
+
+# Linear Regulator Example (PII)
+
+- Since the BJT of the linear regulator is operating in the active region we can model it  as a variable resistor, where the value of this variable resistor can be controlled using I<sub>b</sub>
+ - Note that in a BJT `\(I_{e} \approx I_{c} = \beta I_{b} \)`, from which we can deduce `\(I_{out} \approx I_{in} = \beta I_{b} \)`
 
 ---
 
