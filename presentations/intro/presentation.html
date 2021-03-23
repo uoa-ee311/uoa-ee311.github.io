@@ -408,7 +408,7 @@ name: S12
 
 # A Typical Work Bench Power Supply
 
-- A low voltage DC power supply is an essential equipment found on a work bench of a hardware engineer
+- A low voltage DC supply is a piece of essential equipment found on a work bench
  - Typically has 1 or more independent isolated outputs
  - The voltage and current at each output can be controlled/programmed via a user interface
 
@@ -439,7 +439,7 @@ name: S14
 
 # Internals of a Typical LV Power Supply
 
-- Internal circuitry show the size of the low-frequency transformer used
+- Internal circuitry shows the size of the low-frequency transformer used
  - We will use a high-frequency transformer to significantly reduce the size and weight
 - Second largest component is the heatsink used to cool the linear regulator 
  - We will use a more efficient switched-mode regulator to overcome this problem
@@ -529,7 +529,7 @@ name: S16
       <td class="tg-jayl">Double Layer with PTH</td>
     </tr>
     <tr>
-      <td class="tg-096r">Maximum PCB Size</td>
+      <td class="tg-096r">Maximum Prototype Size</td>
       <td class="tg-096r">150 mm x 150 mm x 100mm</td>
     </tr>
   </tbody>
@@ -704,7 +704,7 @@ name: S25
  - Though you will participate in the interviews as a team, you will be assessed individually 
  - You will be assessed based on technical accuracy and completeness of the answers given as well as your ability to confidently explain technical concepts 
  - The experience gained through this process will be invaluable to do well in technical job interviews
-- During the last week of the semester you will be given an opportunity to demonstration your final design
+- During the last week of the semester you will be given an opportunity to demonstrate your final design
  - Design will be evaluated based on functionality (10%), quality of output (7.5%) and quality of design (7.5%) 
  - Marks for output quality will be scaled relative to best in class 
  - You are also required to submit a short technical report with details of your design (10%)
@@ -751,7 +751,7 @@ name: S28
  - Moon Kim and Wai Yeung are your technical facilitators 
 - Teaching assistance (TAs) will be available during support sessions to help with the project
  - Aaron Wadsworth (PhD), Rui Wen (PhD) and Kelvin Anto (PhD) are your TAs
-- You could get support in-person during the dedicated lab sessions shown on the course planner 
+- You can get support in-person during the dedicated lab sessions shown on the course planner 
  - We will also provide support remotely using Piazza, Slack and Zoom 
  - You may also request additional staff assisted evening support/tutorial sessions (online or on-campus)
  - All software needed for this course can be accessed from home 
@@ -813,7 +813,7 @@ name: S31
 - A linear regulator uses a switch such as a BJT, that is operated in its active region 
  - In a series type linear regulator, the switch creates a voltage drop across it when its conducting current that flows from the source to the load
  - The voltage drop across the switch is controlled to achieve the desirable output 
- - Since the switch always has a certain voltage drop across it while also conducting current, the switch dissipate part of the power supplied by the source as losses
+ - Since the switch always has a certain voltage drop across it while also conducting current, the switch dissipates part of the power supplied by the source as losses
 - A switched-mode converter uses a switch such as a BJT, that is continuously *switched* back and forth between the cut-off and saturation (or ohmic) regions
  - In cut-off region, though there is voltage between the switch, it has no current flowing through it
  - In saturation region, though there is current through the switch, voltage drop across it is insignificant
@@ -879,8 +879,8 @@ name: S36
 
 - To improve the efficiency of our example linear regulator, we need to make sure V<sub>in</sub> is as close as possible to V<sub>out</sub> (i.e., reduce V<sub>ce</sub> as much as possible)
  - However, V<sub>ce</sub> cannot be too small as we need to make sure BJT operates in the active region 
- - Minimum V<sub>ce</sub> required is called the *headroom voltage* and can be as much as a few voltage
-- If you had an AC input source, a transformer with taps can be used to switch in a V<sub>in</sub> thats close to each V<sub>out</sub> level we like to have
+ - Minimum V<sub>ce</sub> required is called the *headroom voltage* and can be as much as a few volts
+- If you had an AC input source, a transformer with taps can be used to switch in a V<sub>in</sub> that's close to each V<sub>out</sub> level we like to have
  - In this example, the *tap selector* selects 7V tap when needing a V<sub>out</sub> of 5V (`\( \eta \approx 71\% \)`) while the 12V tap is selected when outputting 10V (`\( \eta \approx 83\% \)`)
 
 .center[<img src="img/LinearBJTTap.png" height="160">]
@@ -956,12 +956,12 @@ name: S42
 - If we use an ideal switch, theoretically there is [no power losses](#S38), leading to a 100% efficient converter
 - In real life, for example when using a BJT as the switch, V<sub>ce(sat)</sub> will not be exactly 0V when turned-on 
  - Small voltage drop across switch when turned-on and conducting will lead to some power loss
- - This type of loss is referred to as *conduction loss* of the switch
-- Also when the switch transitions from on to off state and vice versa it traverse through the active region 
+ - This type of loss is referred to as the *conduction loss* of the switch
+- Also when the switch transitions from on to off state and vice versa, it passes through the active region 
  - This means momentarily there will be voltage across the device while also conducting current leading to some power loss
- - This type of loss is referred to as *switching loss* 
+ - This type of loss is referred to as the *switching loss* 
 - We use some form of a passive filter to obtain a smooth V<sub>out(av)</sub> by removing pulsation in V<sub>out</sub> 
- - This filter also introduce losses 
+ - This filter also introduces losses 
 - A modern SMPS can achieve efficiencies over 99% but often practical converters have slightly lower efficiencies
  - Note efficiency is not the only important feature of a power converter as previously [discussed](#S4)
 
@@ -971,7 +971,7 @@ name: S43
 # Example: Importance of Efficiency
 
 .questions[
-A remote sensor that is measuring environmental CO2 requires a regulator 3.3V supply. The sensor draws a constant 0.1mA current. The sensor is to be powered using a battery pack that has a nominal voltage of 6.6V. The battery pack has a capacity of 3.3Wh. A power converter is to be designed to convert the battery voltage to a regulated 3.3V output to supply the sensor. 
+A remote sensor that is measuring environmental CO2 requires a regulated 3.3V supply. The sensor draws a constant 0.1mA current. The sensor is to be powered using a battery pack that has a nominal voltage of 6.6V. The battery pack has a capacity of 3.3Wh. A power converter is to be designed to convert the battery voltage to a regulated 3.3V output to supply the sensor. 
 - If a linear regulator is used as the power converter, how many hours can the sensor operate before needing a battery replacement? Assume the battery voltage is constant.
 
 - If a buck type switched-mode converter is used as the power converter, how many hours can the sensor operate before needing a battery replacement? Assume the converter efficiency is 95%.
@@ -989,7 +989,7 @@ name: S44
  - Efficiency
  - Isolation rating
  - No load input current 
- - Line regulation: Change in output voltage when input voltage change from minimum to maximum
+ - Line regulation: Change in output voltage when input voltage changes from minimum to maximum
  - Load regulation: Change in output voltage when load current changes from minimum to maximum
  - Output ripple voltage: Pulsation in output voltage around its average value
  - Settling time: Time taken for output of power supply to settle as operating conditions change
