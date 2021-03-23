@@ -206,10 +206,10 @@ name: S1
  - Specifications & system architecture
 - Assessment details
 - Learning resources 
-- The design process
 - Fundamentals of switched-mode DC to DC power supplies
  - Key differences between linear regulators and SMPSs
  - Pulse width modulation
+ - Power supply specifications
 
 ---
 
@@ -288,7 +288,7 @@ name: S5
  - *AC to DC* converters where input source is AC and output is DC
  - *AC to AC* converters where input source is AC and output is AC
 - These 4 types of power converters can be categorized further as *isolated* and *non-isolated* converters
- - An isolated converter often employs a transformer to provide galvanic isolation between input source and load in situations where for example to ensure user safety
+ - An isolated converter often employs a transformer to provide galvanic isolation between input source and load in situations where for example we need to ensure user safety
 - E.g., your phone charger employs an *isolated AC to DC converter* to derive power from wall power socket and output 5V DC
 ]
 
@@ -307,7 +307,7 @@ name: S6
 # Future of Power Electronics
 
 - Power electronics is a multidisciplinary field that encompasses the study of power converter topologies, modulation schemes, embedded control techniques, power semiconductors, magnetics, thermal management, CAD, system level optimization, etc. 
- - Hopes to develop better performing power converters to meet future demand
+ - Hope is to develop better performing power converters to meet future demand
 - Power electronics engineering roles are applied and practical
  - Growing demand for *skilled* power electronics engineers due to increasing use of electronics systems in areas such as renewable generation and electrified transportation
 
@@ -397,10 +397,10 @@ name: S11
  - Gives you an opportunity to design and develop a commonly used switched-mode power supply using the electrical, magnetic, control and embedded programing principles you learnt so far
  - During this process you will gain knowledge, experience, skill-set and professional behavior needed to succeed in more challenging projects you will engage as an engineer
 - What would you design and engineer during this course?
- - A compact programmable power supply that could replace the bulky bench-top power supply 
+ - A compact programmable power supply that could replace the bulky bench power supply 
 - How would you achieve this task?
- - A *flyback* type power converter is developed to generate an *isolated* DC voltage between 5V and 30V from a 20V DC source
- - A suitable *high-frequency isolation transformer* is designed for the flyback flyback converter while off-the-shelf digital isolators are used to isolate communication signals
+ - A *flyback* type power converter is developed to generate a programmable *isolated* DC voltage between 5V and 30V from a 20V DC source
+ - A suitable *high-frequency isolation transformer* is designed for the flyback converter while off-the-shelf digital isolators are used to isolate communication signals
  - An *embedded software program* is developed to control the output voltage of the converter to voltage requested by the user 
 
 ---
@@ -442,7 +442,7 @@ name: S14
 - Internal circuitry show the size of the low-frequency transformer used
  - We will use a high-frequency transformer to significantly reduce the size and weight
 - Second largest component is the heatsink used to cool the linear regulator 
- - We will use a more efficient switched mode regulator to overcome this problem
+ - We will use a more efficient switched-mode regulator to overcome this problem
 
 .center[
 <iframe width="500" height="281" src="https://www.youtube.com/embed/BGXbl0lrqfc?start=112" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -457,7 +457,7 @@ name: S15
 
 - You will derive the 20V DC source needed to power your design from a bench-top power supply
  - In real-life, you can use a USB-C PD interface to derive the 20V DC
-- A 220&Omega; rheostat will be used as the load to test and characterize you power supply
+- A 220&Omega; rheostat will be used as the load to test and characterize your power supply
 
 ---
 name: S16
@@ -529,7 +529,7 @@ name: S16
       <td class="tg-jayl">Double Layer with PTH</td>
     </tr>
     <tr>
-      <td class="tg-096r">PCB Size</td>
+      <td class="tg-096r">Maximum PCB Size</td>
       <td class="tg-096r">150 mm x 150 mm x 100mm</td>
     </tr>
   </tbody>
@@ -543,7 +543,7 @@ name: S17
 
 - Designing a power supply that can deliver 12W at any output voltage level (between 5V and 30V) is significantly more complicated
  - Even commercial power supplies for this reason limit the output in some manner
-- To reduce the complexity of your design, it is expected to follow the output characteristics define by the output voltage vs. power curve below
+- To reduce the complexity of your design, it is expected to follow the output characteristics defined by the output voltage vs. power curve below
  - If you wish to improve power output at low voltages, then you must first discuss your solutions and seek approval
 
 .center[<img src="img/OutputChar.png" height="200">]
@@ -561,8 +561,8 @@ name: S19
 # Working in Teams
 
 - You will work in a team of 4 
- - You can chose your team members and register your group details on Canvas by the end of 1st week
- - All team members should be from the same lab stream (NB: There are two lab streams)
+ - You can chose your team members and register your team details on Canvas by the end of 1st week
+ - All team members should attend support sessions together 
 - Throughout the project work as a team and aim to support each other
  - This is an important part of preparing to be a professional engineer
  - You depend on each other to do well in this course
@@ -596,14 +596,14 @@ name: S21
  - Enjoy designing a real-world product and be passionate about your design (this is the key ingredient)
  - Plan and manage your and your team members' time well
  - Throughout the semester you are expected to spend about 12 hours a week on the project 
- - Make full use of all support sessions (there will be in average of about 8 support hours a week)
+ - Make full use of all support sessions (there will be in average 8 support hours a week)
 
 ---
 name: S22
 
 # Are Design Courses Useful?
 
-- Engineering a solution to solve a real-life problem helps you to understand the importance of the theoretical concepts you have learnt and teach you how to use these to achieve an output that could help the society 
+- Engineering a solution to solve a real-life problem helps you to understand the importance of the theoretical concepts you have learnt and teach you how to use these theories to achieve an output that could help the society 
 
 .center[
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Io3TiuJsfLc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -632,8 +632,8 @@ name: S23
 
 # Assessment Components
 
-- All assessment components except the Smart Energy Challenge are compulsory
- - It is compulsory to satisfactorily complete all components except the Design Challenge to obtain a passing grade
+- All assessment components except the *Design Challenge* are compulsory
+ - It is compulsory to satisfactorily complete all components except the design challenge to obtain a passing grade
  - To be eligible for the bonus marks you must satisfactorily complete the entire project
  - Although this project will be undertaken in design teams of 4, you will be assessed individually
 
@@ -722,7 +722,7 @@ name: S26
  - Up to 2 bonus marks awarded for successfully completing each task (capped at 4%)
 - Based on the performance throughout the semester the top 3 design teams will be selected 
 - Industry judges from [Fisher & Paykel](https://www.fisherpaykel.com) will interview the top teams 
- - F&P will deliver a seminar during the 8th week along with vital information about interviews
+ - F&P visit during 8th week to learn about current industry practices and meet engineers
  - They will decide the winners of the *2021 Design Challenge*
 
 .center[<img src="img/FP.png" height="85">]
@@ -765,7 +765,7 @@ name: S29
 
 - Prerequisite for this course is ELECTENG 310 
  - If you have failed ELECTENG 310, please contact us to check if your enrolment is still valid
-- In some cases, even if you do not meet the prerequisite, after an interview, we may allow you to continue with the course, but we will have to partner you with a suitable group 
+- In some cases, even if you do not meet the prerequisite, after an interview, we may allow you to continue with the course, but we will have to partner you with a suitable team 
  - Contact Duleepa for more information
 - Follow details on Canvas or the [course website](https://uoa-ee311.github.io/extra.html) to get setup on Piazza, Slack and GitHub
  - Guides detailing how to obtain and install your personal copy of the software we will use in this course (Atmel Studio, Proteus VSM, Altium Designer, LTspice and GitHub Desktop) are available
@@ -778,11 +778,13 @@ name: S30
 
 - This is a design project and you are expected to develop a hardware prototype 
  - This includes developing a PCB, building a prototype, testing hardware, etc.
-- We will provide resources and tools to get started on the project before you get to the stage of building your own prototype analog circuitry
+- We will provide resources and tools to get started on the project before you get to the stage of building your own prototype circuitry
  - You can use Proteus VSM and the Xplained Mini development boards to develop and validate most of your firmware
  - We will provide a hardware kit where you can attach your transformer and the Xplained Mini for further debugging and validation of your design
 - The lab benches in MDLS E&I labs will be equipped with suitable bench-top equipment 
  - MDLS E&I 2 is booked specifically for this course during times shown on the planner 
+- You are expected to work from MDLS E&I 2 with your team during the dedicated support sessions
+ - We will keep a record of attendance and students who frequently miss sessions will be contacted 
 - We will have a number of workshops to teach you how to build and test your hardware
 
 
@@ -811,7 +813,7 @@ name: S31
 - A linear regulator uses a switch such as a BJT, that is operated in its active region 
  - In a series type linear regulator, the switch creates a voltage drop across it when its conducting current that flows from the source to the load
  - The voltage drop across the switch is controlled to achieve the desirable output 
- - Since the switch always has a certain voltage drop across it while also conducting current, the switch dissipate part of the power supplied by the source as losses, when used in a linear regulator 
+ - Since the switch always has a certain voltage drop across it while also conducting current, the switch dissipate part of the power supplied by the source as losses
 - A switched-mode converter uses a switch such as a BJT, that is continuously *switched* back and forth between the cut-off and saturation (or ohmic) regions
  - In cut-off region, though there is voltage between the switch, it has no current flowing through it
  - In saturation region, though there is current through the switch, voltage drop across it is insignificant
@@ -852,8 +854,8 @@ name: S34
 
 - For the BJT of the linear regulator to behave as a variable resistor it needs to be operated within its active region
 - Lets assume that the &beta; of the BJT employed in our example linear regulator is 100
- - When the linear regulating is producing a 5V across the 5&Omega; load, I<sub>out</sub> is 1A and thus I<sub>b</sub> should be 10mA, while V<sub>ce</sub> is 15V, correspondingly BJT operates at point __'A'__
- - When the linear regulating is producing a 10V across the 5&Omega; load, I<sub>out</sub> is 2A and thus I<sub>b</sub> should be 20mA, while V<sub>ce</sub> is 10V, correspondingly BJT operates at point __'B'__
+ - When the linear regulating is producing 5V across the 5&Omega; load, I<sub>out</sub> is 1A and thus I<sub>b</sub> should be 10mA, while V<sub>ce</sub> is 15V, correspondingly BJT operates at point __'A'__
+ - When the linear regulating is producing 10V across the 5&Omega; load, I<sub>out</sub> is 2A and thus I<sub>b</sub> should be 20mA, while V<sub>ce</sub> is 10V, correspondingly BJT operates at point __'B'__
 
 .center[<img src="img/LinearBJTIV.png" height="200">]
 
@@ -901,8 +903,8 @@ name: S38
 # Switched-Mode Converter Example (PII)
 
 - Since the BJT of the switched-mode converter is operated either in the cut-off or saturation regions we can model it as an on/off switch
- - When in cut-off region, its a turned-off switch and `\(I_{in} = I_{out} = 0\)`, `\(V_{out} = 0 \)` and `\(V_{ce} = V_{in} \)`
- - When in saturation region, its a turned-on switch and `\(V_{ce} \approx 0 \)`, `\(V_{out} \approx V_{in} \)` and `\(I_{in} \approx I_{out} = V_{out}/R_{L} \)`
+ - When in cut-off region, its a turned-off switch, thus `\(I_{in} = I_{out} = 0\)`, `\(V_{out} = 0 \)` and `\(V_{ce} = V_{in} \)`
+ - When in saturation region, its a turned-on switch, thus `\(V_{ce} \approx 0 \)`, `\(V_{out} \approx V_{in} \)` and `\(I_{in} \approx I_{out} = V_{out}/R_{L} \)`
  - In either case (i.e., on/off) power dissipated in BJT is negligible since `\(P_{BJT\_loss} \approx V_{ce}I_{in} \approx 0W \)`
 - To produce an *average* 5V or 10V output from the 20V input, on-time, T<sub>on</sub>, is varied with respect to a constant time period, T<sub>s</sub>, where `\(T_{s} = T_{on} + T_{off} \)`
 
@@ -914,8 +916,8 @@ name: S39
 
 # BJT Operation in the SMPS Example
 
-- For the BJT of the switched-mode regulator to behave as a on/off switch it needs to be operated either in the cut-off or saturation regions 
-- Lets assume that the &beta; of the BJT employed in our example linear regulator is 100
+- For the BJT of the switched-mode regulator to behave as an on/off switch it needs to be operated either in the cut-off or saturation regions 
+- Lets assume that the &beta; of the BJT employed in our example SMPS is 100
  - When working as a tuned-on switch, the voltage across the 5&Omega; load is 20V, I<sub>out</sub> is 4A and thus `\(I_{b} >> 40mA \)`, while `\(V_{ce} \approx 0 \)`, correspondingly BJT operates at point __'A'__
  - When working as a tuned-off switch, the voltage across the 5&Omega; load is 0V, I<sub>out</sub> is 0A and thus `\(I_{b} = 0 \)`, while `\(V_{ce} = 20V \)`, correspondingly BJT operates at point __'B'__
 
@@ -941,7 +943,7 @@ name: S41
 
 - A new parameter called the *duty cycle*, which is also referred to as *D*, is introduced in SMPS terminology to help us easily quantify the ratio `\( T_{on} / T_{s} \)` and thus,
 \\[ D = \frac{T\_{on}}{T\_s} \quad \text{where} \quad 0 \leqslant  D \leqslant 1 \\]
-- Using D, we could express T<sub>on</sub> and T<sub>off</sub> as a function of T<sub>s</sub> as `\( T_{on} = DT_{s} \)` and `\( T_{off} = (1-D)T_{s} \)`
+- Using D, we could express T<sub>on</sub> and T<sub>off</sub> as `\( T_{on} = DT_{s} \)` and `\( T_{off} = (1-D)T_{s} \)`
 - The average output voltage can now be simply written as `\( V_{out(av)} = D V_{in} \)` where `\( 0 \leqslant  D \leqslant 1 \)`
 
 .center[<img src="img/PWMBasicD.png" height="200">]
@@ -951,13 +953,15 @@ name: S42
 
 # SMPS Efficiency
 
-- As [discussed](#S38), if we use an ideal switch, then theoretically there will be no power losses, leading to a 100% efficient converter
-- In real life, for example when using a BJT as the switch, V<sub>ce(sat)</sub> will not be exactly 0V when it is turned-on 
- - The small voltage drop across the BJT when turned-on and conducting current will lead to some power loss
+- If we use an ideal switch, theoretically there is [no power losses](#S38), leading to a 100% efficient converter
+- In real life, for example when using a BJT as the switch, V<sub>ce(sat)</sub> will not be exactly 0V when turned-on 
+ - Small voltage drop across switch when turned-on and conducting will lead to some power loss
  - This type of loss is referred to as *conduction loss* of the switch
 - Also when the switch transitions from on to off state and vice versa it traverse through the active region 
  - This means momentarily there will be voltage across the device while also conducting current leading to some power loss
  - This type of loss is referred to as *switching loss* 
+- We use some form of a passive filter to obtain a smooth V<sub>out(av)</sub> by removing pulsation in V<sub>out</sub> 
+ - This filter also introduce losses 
 - A modern SMPS can achieve efficiencies over 99% but often practical converters have slightly lower efficiencies
  - Note efficiency is not the only important feature of a power converter as previously [discussed](#S4)
 
@@ -984,7 +988,7 @@ name: S44
  - Operating temperature range
  - Efficiency
  - Isolation rating
- - No load input current: Current drawn by power supply circuitry to maintain the output voltage 
+ - No load input current 
  - Line regulation: Change in output voltage when input voltage change from minimum to maximum
  - Load regulation: Change in output voltage when load current changes from minimum to maximum
  - Output ripple voltage: Pulsation in output voltage around its average value
