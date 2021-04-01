@@ -506,7 +506,7 @@ name: S16
     </tr>
     <tr>
       <td class="tg-sabo">Isolation Rating</td>
-      <td class="tg-sabo">1000 V</td>
+      <td class="tg-sabo"> 500 V or more</td>
     </tr>
     <tr>
       <td class="tg-ig71">Over Voltage Protection</td>
@@ -527,10 +527,6 @@ name: S16
     <tr>
       <td class="tg-jayl">PCB Technology</td>
       <td class="tg-jayl">Double Layer with PTH</td>
-    </tr>
-    <tr>
-      <td class="tg-096r">Maximum Prototype Size</td>
-      <td class="tg-096r">150 mm x 150 mm x 100mm</td>
     </tr>
   </tbody>
 </table>
@@ -690,7 +686,7 @@ name: S24
 - The 4 gate reviews are to guide you through the design and make sure you complete critical tasks on time
  - Basic design calculations and a working simulation of your converter are due by 1<sup>st</sup> review  
  - Transformer design, Ansys model and experimental validation of transformer are due by 2<sup>nd</sup> review
- - Open-loop hardware validation, final design calculations and the PCB designs are due by 3<sup>rd</sup> review
+ - Final design calculations and open-loop hardware validation are due by 3<sup>rd</sup> review
  - Implementation of the closed-loop controller and its experimental validation are due by 4<sup>th</sup> review
  - We will check the completion of each task (2%), your understanding (2%) as well as the use of logbook/Trello, GitHub and Slack to plan, manage and document the work (1%)
 
@@ -716,7 +712,7 @@ name: S26
 
 - The optional *Design Challenges* are focused on implementing the following useful features 
  - Constant current limiting where user can set the maximum current limit
- - USB-C PD interface using a STUSB4500 IC to derive the 20V input to the converter 
+ - Compact PCB design with onboard MCU and smaller EFD20 based transformer 
  - A GUI to control the power supply and display useful information
 - Before attempting the *Design Challenges* you must complete all other tasks
  - Up to 2 bonus marks awarded for successfully completing each task (capped at 4%)
@@ -777,10 +773,11 @@ name: S30
 # Building a Prototype
 
 - This is a design project and you are expected to develop a hardware prototype 
- - This includes developing a PCB, building a prototype, testing hardware, etc.
-- We will provide resources and tools to get started on the project before you get to the stage of building your own prototype circuitry
+ - This includes building a prototype, testing hardware, rework, etc.
+- We will provide resources and tools to get started on the project 
  - You can use Proteus VSM and the Xplained Mini development boards to develop and validate most of your firmware
- - We will provide a hardware kit where you can attach your transformer and the Xplained Mini for further debugging and validation of your design
+ - We will provide a generic PCB and a Xplained Mini to experimentally validate your design
+ - Developing you own PCB and a prototype is an optional bonus task
 - The lab benches in MDLS E&I labs will be equipped with suitable bench-top equipment 
  - MDLS E&I 2 is booked specifically for this course during times shown on the planner 
 - You are expected to work from MDLS E&I 2 with your team during the dedicated support sessions
@@ -995,6 +992,11 @@ name: S44
  - Settling time: Time taken for output of power supply to settle as operating conditions change
  - Protection features: Under/over voltage, current limiting, over temperature, short-circuit, etc.
 - You are expected to develop a set of specifications for the power supply you will design  
+
+---
+
+test
+<iframe src="https://everycircuit.com/embed/4874101090680832" width="900" height="400" frameborder="0"></iframe> 
 
 ---
 
