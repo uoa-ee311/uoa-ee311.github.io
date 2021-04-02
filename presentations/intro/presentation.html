@@ -1,8 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="plecsModel">
   <head>
     <title>Introduction to ELECTENG 311</title>
     <meta charset="utf-8">
+
+    <!--Plecs WBS--->
+    <link href="//demo.plexim.com/css/plecs.css" rel="stylesheet" type="text/css" />
+    <script src="//demo.plexim.com/js/xdomain.min.js" slave="//demo.plexim.com/proxy.html"></script>
+    <script src="//demo.plexim.com/js/angular.min.js">
+    </script>
+    <script src="//demo.plexim.com/js/plecs.min.js">
+    </script>
+
     <style>
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
       @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
@@ -995,8 +1004,10 @@ name: S44
 
 ---
 
-test
-<iframe src="https://everycircuit.com/embed/4874101090680832" width="900" height="400" frameborder="0"></iframe> 
+# Test - PLECS WBS
+
+<div pl-model="buck_conv" pl-path="plexim" pl-eval-url=true>
+</div>
 
 ---
 
