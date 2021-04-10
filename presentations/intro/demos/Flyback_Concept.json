@@ -1,0 +1,69 @@
+{
+"schematics":
+[
+   {
+      "path": "",
+      "height": 270
+   }
+],
+
+
+"scopes" :
+[
+   {
+      "path": "Scope",
+      "height": 270,
+      "width":500,
+      "analysis":
+      {
+         "cursor1": { "time": 0.00998},
+         "cursor2": { "time": 0.01},
+         "rms": true,
+         "mean": true,
+         "delta":
+         {
+            "locked": true,
+            "time": 0.00002
+         }
+      }
+   }
+
+],
+
+"paramtables":
+[
+   {
+      "display": "dialog",
+      "component": "RL",
+      "labelpos": "bottom",
+      "parameters":
+      [
+         {
+            "variable": "RL",
+            "label": "RL",
+            "unit": "Ω",
+            "min": 100,
+            "max": 500,
+            "value": 100
+         }
+      ]
+   },
+   {
+      "display": "schematic",
+      "component": "PWM",
+      "labelpos": "top",
+      "parameters":
+      [
+         {
+            "variable": "D",
+            "label": "D",
+            "unit": "",
+            "min": 0,
+            "max": 0.5,
+            "value": 0.5
+         }
+      ]
+   }
+]
+
+}
