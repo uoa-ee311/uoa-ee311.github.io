@@ -1,4 +1,7 @@
 {
+
+
+
 "schematics":
 [
    {
@@ -64,6 +67,14 @@
          }
       ]
    }
+],
+
+"simulations":
+[
+{
+"label": "Simulate",
+"analysis": "Steady-State Analysis"
+}
 ]
 
 }

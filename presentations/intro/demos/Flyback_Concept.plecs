@@ -47,7 +47,7 @@ Plecs {
   ScriptsDialogGeometry "[746 360 456 272]"
   ScriptsDialogSplitterPos "100"
   Schematic {
-    Location      [1083, 258; 1751, 759]
+    Location      [1012, 258; 1680, 759]
     ZoomFactor    1.33333
     SliderPosition [0, 0]
     ShowBrowser   off
@@ -706,6 +706,19 @@ Plecs {
       Path          ""
       Signals       {"Diode voltage"}
     }
+  }
+  Analysis {
+    Type          SteadyStateAnalysis
+    Name          "Steady-State Analysis"
+    OperatingPoint "1"
+    TimeSpan      "1/100e3"
+    StartTime     "0"
+    Tolerance     "1e-4"
+    MaxIter       "20"
+    JacobianPerturbation "1e-4"
+    JacobianCalculation "2"
+    InitCycles    "0"
+    ShowCycles    "10"
   }
   Script {
     Name          "Script"
