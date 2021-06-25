@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="plecsModel">
+  <head>
+    <title>Introduction to Flyback Converters</title>
+    <meta charset="utf-8">
+
+    <!--Plecs WBS--->
+    <link href="//demo.plexim.com/css/plecs.css" rel="stylesheet" type="text/css" />
+    <script src="//demo.plexim.com/js/xdomain.min.js" slave="//demo.plexim.com/proxy.html"></script>
+    <script src="//demo.plexim.com/js/angular.min.js">
+    </script>
+    <script src="//demo.plexim.com/js/plecs.min.js">
+    </script>
+
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { 
+        font-family: 'Droid Serif'; 
+        line-height: 1.6 !important;
+        }
+
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: bold;
+        color: #00467F;
+      }
+
+      h1{
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+      }
+
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+      .TitleAuthor {
+        color:white; 
+        font-weight: normal;
+      }
+
+      .title-slide .remark-slide-number {
+        display: none;
+      }
+      .title-slide h1, h2, h3, h4 {
+        text-align: left;
+        color:white;
+        line-height: 0.7;
+        font-weight: bold;
+      }
+
+      .title-slide {
+        vertical-align: middle;
+        background-color: #00467F;
+      }
+
+      .logo-title {
+        content: "";
+        position: absolute;
+        top: 15px;
+        right:   15px;
+        height: 88px;
+        width: 267px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cdn.auckland.ac.nz/assets/central/central-services/mediaandmarketing/uoa-logos-2015/uoa-logo-2015-reverse.png);
+      }
+      .logo-slide {
+        content: "";
+        position: absolute;
+        top: 35px;
+        right:   15px;
+        height: 96px;
+        width: 100px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cpb-ap-se2.wpmucdn.com/blogs.auckland.ac.nz/dist/d/79/files/2015/10/uoa-v-colour2.png);
+      }
+
+      .left-column {
+        width: 65%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column {
+        width: 30%;
+        float: right;
+        word-wrap: break-word;
+      }
+
+      .footer {
+        content: "";
+        position: absolute;
+        bottom: 17px;
+        color:gray;
+        font-size: 10pt;
+      }
+      
+      @page {
+        size: 1210px 681px;
+        margin: 0;
+      }
+
+      @media print {
+        .remark-slide-scaler {
+          width: 100% !important;
+          height: 100% !important;
+          transform: scale(1) !important;
+          top: 0 !important;
+          left: 0 !important;
+        }
+      }
+      
+      .credits {
+        font-size: 12px;
+        line-height: 4px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .codes {
+        
+        line-height: 20px !important;
+      }
+
+      .codes_dense {
+        
+        line-height: 15px !important;
+      }
+
+      .questions {
+        font-size: 20px;
+        line-height: 28px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .zoom175 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom175:hover {
+        transform: scale(1.75) translateY(-20%) translateX(-20%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+    </style>
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <style>
+    .smaller-font { font-size:14px } 
+    </style>
+
+    <!-- KaTeX and Mathjax support refer to below for syntax -->
+    <!-- https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+    
+    <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style>
+      /* Table Style */
+      .tg  {border-collapse:collapse;border-color:#9ABAD9;border-spacing:0;}
+      .tg td{background-color:#EBF5FF;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#444;
+        font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:3px 10px;word-break:normal;}
+      .tg th{background-color:#409cff;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#fff;
+        font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:3px 10px;word-break:normal;}
+      .tg .tg-dzaw{background-color:#4F81BD;color:#FFF;font-weight:bold;text-align:left;vertical-align:top}
+      .tg .tg-sabo{background-color:#ebf5ff;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-096r{color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-jayl{background-color:#d2e4fc;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-ig71{background-color:#D2E4FC;color:#000000;text-align:left;vertical-align:top}
+    </style>
+
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide
+count: false
+.logo-title[]
+
+## ELECTENG 311
+# Electronics Systems Design 
+### Flyback Converter Analysis & Design
+
+.TitleAuthor[Duleepa J Thrimawithana]
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+
+name: S1
+
+# Learning Objectives
+
+- What is a flyback converter?
+ - Converter topology
+ - How does it work?
+- A simplified model of a flyback converter
+- Steady-state analysis of an ideal flyback converter
+ - What are the expected voltage and current waveforms
+ - Deriving relation between circuit parameters and operating conditions
+- Example design
+ - Determining the circuit parameters to meet a set of design specifications
+ - Determining the operating conditions 
+- Practical considerations
+ - Understanding the impact of non-ideal transformer 
+ - Practical waveforms
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# What is a Flyback Converter?
+### An Introduction
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+
+name: S2
+
+# Converter Topology
+
+.center[<img src="img/Flyback_Main.png" height="200px">]
+
+- A flyback converter consists of a *flyback transformer*, *switch*, *diode* and a *capacitor*
+- The switch is operated at a certain duty-cycle, D<sub>p</sub>, to control the output voltage, V<sub>out</sub>
+ - When the switch is turned-on, the primary winding, L<sub>p</sub>, of the transformer is connected across the input source, V<sub>in</sub>, storing energy in L<sub>p</sub>
+ - When the switch is turned-off,  
+
+---
+
+name: S3
+
+# What is a Power Converter?
+
+- A fly
+- As an example, a power converter may be designed to take an input from a battery and produce a constant current (even when the battery voltage changes as it discharges) to feed an LED light bulb
+ - We may also want to control the current setpoint to change the brightness of the LED bulb 
+
+.center[<img src="img/PowerConverterGen.png" height="250px">]
+
+---
+
+name: S4
+
+# Important Features of a Power Converter  
+
+
+- Designing a power converter involves improving 5 key performance features 
+ - Losses need to be minimized to achieve higher efficiency
+ - Weight and volume need to be minimized to achieve higher density
+ - Failure rate needs to be minimized to achieve higher reliability
+ - Costs need to be minimized so that its ready to market within an acceptable time frame and a budget
+ - Controllability needs to be improved so that it can produce a distortion-less output 
+- These performance features are related to each other 
+ - E.g., improving efficiency can often lead to an increase in cost and restrict controllability 
+- Depending on the application, a power electronics engineer often has to tradeoff some features for others 
+ - E.g., we may decide to go with a less efficient design to reduce cost
+
+.center[<img src="img/PEFeatures.png" height="100px">]
+
+---
+
+name: S5
+
+# Types of Power Converters
+
+.left-column[
+- Based on the nature of the input source and the output produced, power converters can be broadly categorized as
+ - *DC to DC* converters where input source is DC and output is DC
+ - *DC to AC* converters where input source is DC and output is AC
+ - *AC to DC* converters where input source is AC and output is DC
+ - *AC to AC* converters where input source is AC and output is AC
+- These 4 types of power converters can be categorized further as *isolated* and *non-isolated* converters
+ - An isolated converter often employs a transformer to provide galvanic isolation between input source and load in situations where for example we need to ensure user safety
+- E.g., your phone charger employs an *isolated AC to DC converter* to derive power from wall power socket and output 5V DC
+]
+
+.right-column[
+.center[<img src="img/ConverterTypes.png" width="260px">
+.credits[
+Apple 18W Charger Teardown [[1]](https://www.chargerlab.com/apple-18w-usb-c-power-adapter-a1695-teardown-review-beautiful-inside-and-out/)
+]
+]
+]
+
+---
+
+name: S6
+
+# Future of Power Electronics
+
+- Power electronics is a multidisciplinary field that encompasses the study of power converter topologies, modulation schemes, embedded control techniques, power semiconductors, magnetics, thermal management, CAD, system level optimization, etc. 
+ - Hope is to develop better performing power converters to meet future demand
+- Power electronics engineering roles are applied and practical
+ - Growing demand for *skilled* power electronics engineers due to increasing use of electronics systems in areas such as renewable generation and electrified transportation
+
+.center[
+<iframe width="355" height="200" src="https://www.youtube.com/embed/KPpYTnD_ZHw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Power Electronics Research at UoA
+### An Overview
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S7
+
+# Power Electronics Research Themes
+
+- Power electronics research group at ECSE is at the forefront of PE research
+ - Long history dating back to the late 1980's
+ - Considered global leaders and pioneers of near field wireless power transfer technology  
+
+.center[<img src="img/PEResearch.png" height="300px">]
+
+
+---
+name: S8
+
+# The Power Electronics Research Group
+
+.center[<img src="img/PEGROUP.gif" height="430">]
+
+---
+name: S9
+
+# Pioneers in Wireless Power Transfer (WPT)
+
+.center[
+<iframe width="784" height="441" src="https://www.youtube-nocookie.com/embed/G1q1HZLQ528?" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+name: S10
+
+# PE Group Connections
+
+- Power electronics research group at ECSE is well connected with top ranking universities as well as industry (a few of these connections are shown below)
+
+.center[<img src="img/Connections.png" height="350">]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Design of a Pocket Sized Power Supply
+### Project Information
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S11
+
+# The Project
+
+- What is this course about and what should you expect to learn?
+ - Gives you an opportunity to design and develop a commonly used switched-mode power supply using the electrical, magnetic, control and embedded programing principles you learnt so far
+ - During this process you will gain knowledge, experience, skill-set and professional behavior needed to succeed in more challenging projects you will engage as an engineer
+- What would you design and engineer during this course?
+ - A compact programmable power supply that could replace the bulky bench power supply 
+- How would you achieve this task?
+ - A *flyback* type power converter is developed to generate a programmable *isolated* DC voltage between 5V and 30V from a 20V DC source
+ - A suitable *high-frequency isolation transformer* is designed for the flyback converter while off-the-shelf digital isolators are used to isolate communication signals
+ - An *embedded software program* is developed to control the output voltage of the converter to voltage requested by the user 
+
+---
+name: S12
+
+# A Typical Work Bench Power Supply
+
+- A low voltage DC supply is a piece of essential equipment found on a work bench
+ - Typically has 1 or more independent isolated outputs
+ - The voltage and current at each output can be controlled/programmed via a user interface
+
+.center[<img src="img/PSU_GW.jpg" height="290">
+.credits[
+The GW3323 Low Voltage DC Power Supplies Found on MDLS Work Benches [[2]](https://www.gwinstek.com/en-global/products/detail/GPE-X323)
+]
+]
+
+---
+name: S13
+
+# Architecture of a Typical LV Power Supply
+
+- A 50Hz transformer with multiple taps is used to generate an isolated output 
+ - This low-frequency transformer is the main contributor to size and weight 
+- A series type linear regulator is used to regulate the output to value set by the user 
+ - Efficiency improved by switching between taps of the transformer 
+
+.center[<img src="img/PSU_GW2.png" height="260">
+.credits[
+Architecture of a GW3323 Power Supply [[3]](https://www.gwinstek.com/en-global/products/downloadSeriesDownNew/8033/1198)
+]
+]
+
+---
+name: S14
+
+# Internals of a Typical LV Power Supply
+
+- Internal circuitry shows the size of the low-frequency transformer used
+ - We will use a high-frequency transformer to significantly reduce the size and weight
+- Second largest component is the heatsink used to cool the linear regulator 
+ - We will use a more efficient switched-mode regulator to overcome this problem
+
+.center[
+<iframe width="500" height="281" src="https://www.youtube.com/embed/BGXbl0lrqfc?start=112" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+name: S15
+
+# Suggested System Architecture 
+
+.center[<img src="img/System.png" height="320">]
+
+- You will derive the 20V DC source needed to power your design from a bench-top power supply
+ - In real-life, you can use a USB-C PD interface to derive the 20V DC
+- A 220&Omega; rheostat will be used as the load to test and characterize your power supply
+
+---
+name: S16
+
+# Key System Specifications
+
+<table class="tg" style="undefined;table-layout: fixed; width: 647px; margin-left:auto; margin-right:auto;">
+  <colgroup>
+  <col style="width: 333px">
+  <col style="width: 314px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="tg-dzaw"><span style="color:white">Parameter</span></th>
+      <th class="tg-dzaw"><span style="color:white">Value</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-jayl">Input Voltage</td>
+      <td class="tg-jayl"> 20 V<sub>DC</sub> </td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Output Voltage Range</td>
+      <td class="tg-sabo"> 5 V<sub>DC</sub> to 30 V<sub>DC</sub> </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Load Regulation</td>
+      <td class="tg-ig71"> 5% </td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Maximum Output Power</td>
+      <td class="tg-sabo">12 W</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Output Voltage Ripple</td>
+      <td class="tg-ig71">100 mV or Less</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Efficiency</td>
+      <td class="tg-sabo">80% or Better for Over 5 W</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Switching Frequency</td>
+      <td class="tg-ig71">100 kHz</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Isolation Rating</td>
+      <td class="tg-sabo"> 500 V or more</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Over Voltage Protection</td>
+      <td class="tg-ig71">32 V</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Converter Topology</td>
+      <td class="tg-sabo">Flyback</td>
+    </tr>
+    <tr>
+      <td class="tg-jayl">Information Displayed to User on PC</td>
+      <td class="tg-jayl">Output Voltage, Current and Power</td>
+    </tr>
+    <tr>
+      <td class="tg-096r">User Setpoints</td>
+      <td class="tg-096r">Output Voltage</td>
+    </tr>
+    <tr>
+      <td class="tg-jayl">PCB Technology</td>
+      <td class="tg-jayl">Double Layer with PTH</td>
+    </tr>
+  </tbody>
+</table>
+
+
+---
+name: S17
+
+# Expected Output Characteristics
+
+- Designing a power supply that can deliver 12W at any output voltage level (between 5V and 30V) is significantly more complicated
+ - Even commercial power supplies for this reason limit the output in some manner
+- To reduce the complexity of your design, it is expected to follow the output characteristics defined by the output voltage vs. power curve below
+ - If you wish to improve power output at low voltages, then you must first discuss your solutions and seek approval
+
+.center[<img src="img/OutputChar.png" height="200">]
+
+---
+name: S18
+
+# Demo of Expected Final Design
+
+.center[<img src="img/Demo.png" height="430">]
+
+---
+name: S19
+
+# Working in Teams
+
+- You will work in a team of 4 
+ - You can chose your team members and register your team details on Canvas by the end of 1st week
+ - All team members should attend support sessions together 
+- Throughout the project work as a team and aim to support each other
+ - This is an important part of preparing to be a professional engineer
+ - You depend on each other to do well in this course
+- Plan your work, document your work and communicate regularly with your team members
+ - Use a logbook and/or [Trello](https://trello.com) to plan and document your work 
+ - Use [Slack](https://slack.com/intl/en-nz/) and [Zoom](https://zoom.us)/[Hangouts](https://hangouts.google.com) for team communications
+ - Use [GitHub](https://github.com) and [G Suite](https://gsuite.google.com)/[Office 365](https://www.library.auckland.ac.nz/services/it-essentials/computer-facilities/software-personal-use/microsoft-student-advantage-office-365) products to collaborate with team members
+- Be patient with your team members even if they are not making much progress during the initial stage
+ - If things are not working out, after about 1-2 weeks, let us know
+ - If a member is not engaging in team work we will ask that person to work alone
+
+---
+name: S20
+
+# Course Calendar
+
+.center[<img src="img/2021Calendar.png" height="450">]
+
+---
+name: S21
+
+# How to Get an Excellent Grade
+
+- Is the project challenging?
+ - Yes, design and developing your first switched-mode power supply can be quite challenging
+ - You need to have a good mastery of circuit analysis techniques, magnetics, control and embedded programming
+- What are the most challenging aspects?
+ - Time management, planing and team work are the key challenges
+ - As in a real life project, resources are limited (time, teams' availability, lab space, equipment, software licenses, etc.) and therefore last minute frantic endeavour will not help
+- How could I get an excellent grade?
+ - Enjoy designing a real-world product and be passionate about your design (this is the key ingredient)
+ - Plan and manage your and your team members' time well
+ - Throughout the semester you are expected to spend about 12 hours a week on the project 
+ - Make full use of all lab work sessions (there are 4 sessions a week)
+
+---
+name: S22
+
+# Are Design Courses Useful?
+
+- Engineering a solution to solve a real-life problem helps you to understand the importance of the theoretical concepts you have learnt and teach you how to use these theories to achieve an output that could help the society 
+
+.center[
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Io3TiuJsfLc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Assessment Components
+### Details on How to Prepare
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S23
+
+# Assessment Components
+
+- All assessment components except the *Design Challenge* are compulsory
+ - It is compulsory to satisfactorily complete all components except the design challenge to obtain a passing grade
+ - To be eligible for the bonus marks you must satisfactorily complete the entire project
+ - Although this project will be undertaken in design teams of 4, you will be assessed individually
+
+<table class="tg" style="undefined;table-layout: fixed; width: 647px; margin-left:auto; margin-right:auto;">
+  <colgroup>
+  <col style="width: 383px">
+  <col style="width: 264px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="tg-dzaw"><span style="color:white">Component</span></th>
+      <th class="tg-dzaw"><span style="color:white">Weighting</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-jayl">Test (Written and Practical Components)</td>
+      <td class="tg-jayl"> 30% </td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Lecture Quizzes (Available for 24 Hrs) </td>
+      <td class="tg-sabo"> 5% </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Gate Reviews</td>
+      <td class="tg-ig71"> 20% </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Final Interview</td>
+      <td class="tg-ig71">10%</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Project Deliverables </td>
+      <td class="tg-sabo">35%</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Design Challenge (Optional)</td>
+      <td class="tg-ig71">4%</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+name: S24
+
+# Test, Lecture Quizzes & Gate Reviews
+
+- The 30% test will be conducted during week 10 of the semester in the laboratories
+ - The written part of the tests will assess your understanding of fundamental concepts 
+ - The practical component of the test will assess your ability to use design tools
+- We will conduct 0.5% lecture quizzes using Canvas to evaluate your engagement and understanding
+ - Quizzes will be available for 24 hours and you are allowed 3 attempts
+ - The maximum marks you can get will be capped to 5%
+- The 4 gate reviews are to guide you through the design and make sure you complete critical tasks on time
+ - Basic design calculations and a working simulation of your converter are due by 1<sup>st</sup> review  
+ - Transformer design, Ansys model and experimental validation of transformer are due by 2<sup>nd</sup> review
+ - Final design calculations and open-loop hardware validation are due by 3<sup>rd</sup> review
+ - Implementation of the closed-loop controller and its experimental validation are due by 4<sup>th</sup> review
+ - We will check the completion of each task (2%), your understanding (2%) as well as the use of logbook/Trello, GitHub and Slack to plan, manage and document the work (1%)
+
+---
+name: S25
+
+# Final Interview & Deliverables
+
+- During the last week there will be an interview to evaluate your understanding of the subject matter (10%) 
+ - Theoretical and practical knowledge of hardware and firmware concepts you gained during the project will be assessed 
+ - Though you will participate in the interviews as a team, you will be assessed individually 
+ - You will be assessed based on technical accuracy and completeness of the answers given as well as your ability to confidently explain technical concepts 
+ - The experience gained through this process will be invaluable to do well in technical job interviews
+- During the last week of the semester you will be given an opportunity to demonstrate your final design
+ - Design will be evaluated based on functionality (10%), quality of output (7.5%) and quality of design (7.5%) 
+ - Marks for output quality will be scaled relative to best in class 
+ - You are also required to submit a short technical report with details of your design (10%)
+
+---
+name: S26
+
+# Design Challenges & Industry Judging
+
+- The optional *Design Challenges* are focused on implementing the following useful features 
+ - Constant current limiting where user can set the maximum current limit
+ - Compact PCB design with onboard MCU and smaller EFD20 based transformer 
+ - A GUI to control the power supply and display useful information
+- Before attempting the *Design Challenges* you must complete all other tasks
+ - Up to 2 bonus marks awarded for successfully completing each task (capped at 4%)
+- Based on the performance throughout the semester the top 3 design teams will be selected 
+- Industry judges from [Fisher & Paykel](https://www.fisherpaykel.com) will interview the top teams 
+ - F&P visit during 8th week to learn about current industry practices and meet engineers
+ - They will decide the winners of the *2021 Design Challenge*
+
+.center[<img src="img/FP.png" height="85">]
+
+---
+name: S27
+
+# Collaborating with Team Members
+
+- To be a good engineer you also need to develop a number of *soft-skills*
+ - Some of the key skills you should aim to develop are management, teamwork and communication 
+- One of the primary responsibilities you will have as an engineer is to tell other engineers how to build, service, use and update a product you have been involved in designing/developing/building/testing/etc.
+ - Thus, engineers are expected to document all details about their work in a logbook 
+ - The information recorded in a logbook include, design notes, design decisions, calculations, software flow diagrams, schematics, meeting minutes, etc. 
+- In industry, many different digital tools are used to help with managing teamwork work, communicating with team members and documenting details of the project
+ - Trello, Slack and GitHub are a few such most commonly used and simple to use tools 
+- In this project all students are expected to use a logbook and/or Trello together with Slack and GitHub to effectively plan, manage and document the work
+ - We will regularly check how you use these tools as part of the assessment process
+
+---
+name: S28
+
+# Resources & Flexible Learning
+
+- Duleepa Thrimawithana (course director), Jackman Lin and Seho Kim, from the academic staff, will be looking after this course
+ - Moon Kim and Wai Yeung are your technical facilitators 
+- Teaching assistance (TAs) will be available during support sessions to help with the project
+ - Aaron Wadsworth (PhD), Rui Wen (PhD) and Kelvin Anto (PhD) are your TAs
+- You will get in-person support/training during the dedicated lab sessions shown on the course planner 
+ - You are expected to attend at least 3 labs a week as a team
+ - In case you cannot attend your 3 sessions, you need to inform us via Slack (like applying for leave)
+- We will also provide support remotely using Piazza, Slack and Zoom 
+ - You may also request additional staff assisted evening support/tutorial sessions (online or on-campus)
+ - All software needed for this course can be accessed from home 
+- Recorded media will be provided to support your learning 
+- We will communicate all course related information via Canvas and Slack
+
+---
+name: S29
+
+# Enrolment & Software Installation
+
+- Prerequisite for this course is ELECTENG 310 
+ - If you have failed ELECTENG 310, please contact us to check if your enrolment is still valid
+- In some cases, even if you do not meet the prerequisite, after an interview, we may allow you to continue with the course, but we will have to partner you with a suitable team 
+ - Contact Duleepa for more information
+- Follow details on Canvas or the [course website](https://uoa-ee311.github.io/extra.html) to get setup on Piazza, Slack and GitHub
+ - Guides detailing how to obtain and install your personal copy of the software we will use in this course (Atmel Studio, Proteus VSM, Altium Designer, LTspice and GitHub Desktop) are available
+ - Ansys is only available via FlexIT
+
+---
+name: S30
+
+# Building a Prototype
+
+- This is a design project and you are expected to develop a hardware prototype 
+ - This includes building a prototype, testing hardware, rework, etc.
+- We will provide resources and tools to get started on the project 
+ - You can use Proteus VSM and the Xplained Mini development boards to develop and validate most of your firmware
+ - We will provide a generic PCB and a Xplained Mini to experimentally validate your design
+ - Developing you own PCB and a prototype is an optional bonus task
+- The lab benches in MDLS E&I labs will be equipped with suitable bench-top equipment 
+ - MDLS E&I 2 is booked specifically for this course during times shown on the planner 
+- You are expected to work from MDLS E&I 2 with your team during the dedicated support sessions
+ - We will keep a record of attendance and students who frequently miss sessions will be contacted 
+- We will have a number of workshops to teach you how to build and test your hardware
+
+
+---
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Switched-Mode DC to DC Converters
+### Fundamentals
+
+---
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S31
+
+# DC to DC Converters
+
+- A DC to DC converter can be implemented as a linear regulator or as a switched-mode converter 
+- A linear regulator uses a switch such as a BJT, that is operated in its active region 
+ - In a series type linear regulator, the switch creates a voltage drop across it when its conducting current that flows from the source to the load
+ - The voltage drop across the switch is controlled to achieve the desirable output 
+ - Since the switch always has a certain voltage drop across it while also conducting current, the switch dissipates part of the power supplied by the source as losses
+- A switched-mode converter uses a switch such as a BJT, that is continuously *switched* back and forth between the cut-off and saturation (or ohmic) regions
+ - In cut-off region, though there is voltage between the switch, it has no current flowing through it
+ - In saturation region, though there is current through the switch, voltage drop across it is insignificant
+ - As such, the switch does not dissipate power as loss when its either in the cut-off or saturation regions
+- Lets explore these two types of converters further with the aid of a case study
+
+---
+name: S32
+
+# Linear Regulator Example (PI)
+
+- As a case study, consider a power converter designed using a series type linear regulator to produce either a constant 5V or a 10V output from a 20V input source
+ - Assume the load resistance is 5&Omega; and a BJT is used as the *series pass device* 
+ - The *controller* takes user input, which indicates whether the output should be controlled to 5V or 10V and controls the base current, I<sub>b</sub>, to produce the correct output voltage
+ - Note that in practice the controller may also observe the output voltage and employ a *closed-loop* controller to produce the correct output 
+
+.center[<img src="img/LinearRegBJT.png" height="200">]
+
+---
+name: S33
+
+# Linear Regulator Example (PII)
+
+- Since the BJT of the linear regulator is operating in the active region we can model it  as a variable resistance, R<sub>ce</sub>, where R<sub>ce</sub> can be controlled using I<sub>b</sub>
+ - Note that in a BJT `\(I_{e} \approx I_{c} = \beta I_{b} \)`, from which we can deduce `\(I_{out} \approx I_{in} = \beta I_{b} \)`
+ - Value of R<sub>ce</sub> thus can be thought of as `\( \left (  V_{in} - V_{out} \right ) / I_{c}  \)` or `\( \left (  V_{in} - V_{out} \right ) / \beta I_{b}  \)`
+- To produce a 5V output from the 20V input, as per voltage divider theory R<sub>ce</sub> should be set to 15&Omega;
+ - I<sub>out</sub> and therefore approximately I<sub>in</sub> are both equal to `\(V_{out} /R_{L} = 1A   \)`
+- To produce a 10V output from the 20V input, as per voltage divider theory R<sub>ce</sub> should be set to 5&Omega;
+
+.center[<img src="img/LinearRegEq.png" height="180">]
+
+
+---
+name: S34
+
+# BJT Operation in Linear Regulator Example
+
+- For the BJT of the linear regulator to behave as a variable resistor it needs to be operated within its active region
+- Lets assume that the &beta; of the BJT employed in our example linear regulator is 100
+ - When the linear regulating is producing 5V across the 5&Omega; load, I<sub>out</sub> is 1A and thus I<sub>b</sub> should be 10mA, while V<sub>ce</sub> is 15V, correspondingly BJT operates at point __'A'__
+ - When the linear regulating is producing 10V across the 5&Omega; load, I<sub>out</sub> is 2A and thus I<sub>b</sub> should be 20mA, while V<sub>ce</sub> is 10V, correspondingly BJT operates at point __'B'__
+
+.center[<img src="img/LinearBJTIV.png" height="200">]
+
+---
+name: S35
+
+# Linear Regulator Efficiency
+
+- As we saw from the operating points, the BJT always has a certain voltage drop (V<sub>ce</sub>) across it while also conducting current (I<sub>out</sub>) 
+ - Thus the BJT dissipate a significant portion of the power supplied by the source as losses 
+- The efficiency of a series type linear regulator can be given by  
+\\[ \eta = \frac {V\_{out}I\_{out}} {V\_{in}I\_{in}} \approx \frac {V\_{out}} {V\_{in}} \quad \left [  \because I\_{out} \approx I\_{in} \right ]\\]
+- Our example regulator will be about 25% efficient when V<sub>out</sub> is 5V, and 50% efficient when V<sub>out</sub> is 10V
+
+.center[<img src="img/LinearBJTIV.png" height="170">]
+
+---
+name: S36
+
+# Improving Linear Regulator Efficiency
+
+- To improve the efficiency of our example linear regulator, we need to make sure V<sub>in</sub> is as close as possible to V<sub>out</sub> (i.e., reduce V<sub>ce</sub> as much as possible)
+ - However, V<sub>ce</sub> cannot be too small as we need to make sure BJT operates in the active region 
+ - Minimum V<sub>ce</sub> required is called the *headroom voltage* and can be as much as a few volts
+- If you had an AC input source, a transformer with taps can be used to switch in a V<sub>in</sub> that's close to each V<sub>out</sub> level we like to have
+ - In this example, the *tap selector* selects 7V tap when needing a V<sub>out</sub> of 5V (`\( \eta \approx 71\% \)`) while the 12V tap is selected when outputting 10V (`\( \eta \approx 83\% \)`)
+
+.center[<img src="img/LinearBJTTap.png" height="160">]
+
+---
+name: S37
+
+# Switched-Mode Converter Example (PI)
+
+- As a second case study, consider a power converter designed using a buck type switched-mode converter to produce either an *average* 5V or a 10V output from a 20V input source
+ - Assume the load resistance is 5&Omega; and a BJT is used as the *on/off switch* 
+ - The *controller* takes user input, which indicates whether the output should be 5V or 10V and controls the on-time, T<sub>on</sub>, with respect to a constant time period, T<sub>s</sub>, to produce the correct *average* output
+ - Note that in practice the controller may also observe the output voltage and employ a *closed-loop* controller to produce the correct output 
+
+.center[<img src="img/SMPSBJT.png" height="200">]
+
+---
+name: S38
+
+# Switched-Mode Converter Example (PII)
+
+- Since the BJT of the switched-mode converter is operated either in the cut-off or saturation regions we can model it as an on/off switch
+ - When in cut-off region, its a turned-off switch, thus `\(I_{in} = I_{out} = 0\)`, `\(V_{out} = 0 \)` and `\(V_{ce} = V_{in} \)`
+ - When in saturation region, its a turned-on switch, thus `\(V_{ce} \approx 0 \)`, `\(V_{out} \approx V_{in} \)` and `\(I_{in} \approx I_{out} = V_{out}/R_{L} \)`
+ - In either case (i.e., on/off) power dissipated in BJT is negligible since `\(P_{BJT\_loss} \approx V_{ce}I_{in} \approx 0W \)`
+- To produce an *average* 5V or 10V output from the 20V input, on-time, T<sub>on</sub>, is varied with respect to a constant time period, T<sub>s</sub>, where `\(T_{s} = T_{on} + T_{off} \)`
+
+
+.center[<img src="img/SMPSEq.png" height="170">]
+
+---
+name: S39
+
+# BJT Operation in the SMPS Example
+
+- For the BJT of the switched-mode regulator to behave as an on/off switch it needs to be operated either in the cut-off or saturation regions 
+- Lets assume that the &beta; of the BJT employed in our example SMPS is 100
+ - When working as a tuned-on switch, the voltage across the 5&Omega; load is 20V, I<sub>out</sub> is 4A and thus `\(I_{b} >> 40mA \)`, while `\(V_{ce} \approx 0 \)`, correspondingly BJT operates at point __'A'__
+ - When working as a tuned-off switch, the voltage across the 5&Omega; load is 0V, I<sub>out</sub> is 0A and thus `\(I_{b} = 0 \)`, while `\(V_{ce} = 20V \)`, correspondingly BJT operates at point __'B'__
+
+.center[<img src="img/SMPSBJTIV.png" height="200">]
+
+---
+name: S40
+
+# Pulse Width Modulation
+
+- Varying the on-time, T<sub>on</sub>, of the switch of an SMPS, while keeping the time period, T<sub>s</sub>, constant, is referred to as pulse width modulation (PWM) 
+ - Note that `\(T_{s} = T_{on} + T_{off} \)` and thus varying T<sub>on</sub> has the opposite effect on T<sub>off</sub> since T<sub>s</sub> is constant
+- PWM allows us to change the average value of V<sub>out</sub>, V<sub>out(av)</sub>, between 0V and V<sub>in</sub> since,
+\\[ V\_{out(av)} = \frac{1}{T\_s} \int\_{0}^{T\_s} V\_{out}dt = \frac{1}{T\_s} \left[ V\_{in}T\_{on} + 0 \right] = \frac{T\_{on}}{T\_s} V\_{in} \\]
+ - For example, if switch is always on, then V<sub>out(av)</sub> is 20V, while if it is always off V<sub>out(av)</sub> is 0V
+
+.center[<img src="img/PWMBasic.png" height="160">]
+
+---
+name: S41
+
+# Duty Cycle
+
+- A new parameter called the *duty cycle*, which is also referred to as *D*, is introduced in SMPS terminology to help us easily quantify the ratio `\( T_{on} / T_{s} \)` and thus,
+\\[ D = \frac{T\_{on}}{T\_s} \quad \text{where} \quad 0 \leqslant  D \leqslant 1 \\]
+- Using D, we could express T<sub>on</sub> and T<sub>off</sub> as `\( T_{on} = DT_{s} \)` and `\( T_{off} = (1-D)T_{s} \)`
+- The average output voltage can now be simply written as `\( V_{out(av)} = D V_{in} \)` where `\( 0 \leqslant  D \leqslant 1 \)`
+
+.center[<img src="img/PWMBasicD.png" height="200">]
+
+---
+name: S42
+
+# SMPS Efficiency
+
+- If we use an ideal switch, theoretically there is [no power losses](#S38), leading to a 100% efficient converter
+- In real life, for example when using a BJT as the switch, V<sub>ce(sat)</sub> will not be exactly 0V when turned-on 
+ - Small voltage drop across switch when turned-on and conducting will lead to some power loss
+ - This type of loss is referred to as the *conduction loss* of the switch
+- Also when the switch transitions from on to off state and vice versa, it passes through the active region 
+ - This means momentarily there will be voltage across the device while also conducting current leading to some power loss
+ - This type of loss is referred to as the *switching loss* 
+- We use some form of a passive filter to obtain a smooth V<sub>out(av)</sub> by removing pulsation in V<sub>out</sub> 
+ - This filter also introduces losses 
+- A modern SMPS can achieve efficiencies over 99% but often practical converters have slightly lower efficiencies
+ - Note efficiency is not the only important feature of a power converter as previously [discussed](#S4)
+
+---
+name: S43
+
+# Example: Importance of Efficiency
+
+.questions[
+A remote sensor that is measuring environmental CO2 requires a regulated 3.3V supply. The sensor draws a constant 0.1mA current. The sensor is to be powered using a battery pack that has a nominal voltage of 6.6V. The battery pack has a capacity of 3.3Wh. A power converter is to be designed to convert the battery voltage to a regulated 3.3V output to supply the sensor. 
+- If a linear regulator is used as the power converter, how many hours can the sensor operate before needing a battery replacement? Assume the battery voltage is constant.
+
+- If a buck type switched-mode converter is used as the power converter, how many hours can the sensor operate before needing a battery replacement? Assume the converter efficiency is 95%.
+]
+
+---
+name: S44
+
+# Power Converter Specifications
+
+- A number of different specifications are typically used to highlight the performance of a power supply 
+ - Input voltage range 
+ - Output voltage and current range 
+ - Operating temperature range
+ - Efficiency
+ - Isolation rating
+ - No load input current 
+ - Line regulation: Change in output voltage when input voltage changes from minimum to maximum
+ - Load regulation: Change in output voltage when load current changes from minimum to maximum
+ - Output ripple voltage: Pulsation in output voltage around its average value
+ - Settling time: Time taken for output of power supply to settle as operating conditions change
+ - Protection features: Under/over voltage, current limiting, over temperature, short-circuit, etc.
+- You are expected to develop a set of specifications for the power supply you will design  
+
+---
+
+# Demo: A Simple SMPS
+
+.questions[
+Explore the behavior of this circuit when the duty cycle and load resistance change. Derive an expression for RMS & average current through switch as a function of D and validate using this simulation model.
+]
+
+.center[
+<iframe src="example1.html" width="900" height="420" frameborder="0"></iframe> 
+]
+
+---
+
+# Demo: A Conceptual Flyback Converter
+
+.center[
+<iframe src="example2.html" width="900" height="420" frameborder="0"></iframe> 
+]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Questions?
+
+
+
+    </textarea>
+
+    
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+      
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript">
+    </script>
+
+    <!-- 
+    <script src="remark/remark.min.js" type="text/javascript">
+    </script>
+    -->  
+
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="remark/terminal.language.js" type="text/javascript"></script>
+
+    <script src="https://kit.fontawesome.com/a405eedf54.js" crossorigin="anonymous"></script>
+    <script src="remark/mark.min.js" type="text/javascript">
+    </script>
+    <link rel="stylesheet" href="remark/remark.search.css">
+    <script src="remark/remark.search.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+      var options = {};
+
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        ]});
+      }
+
+      var slideshow = remark.create({
+        ratio: '16:9',
+        slideNumberFormat: '%current%',
+        countIncrementalSlides: false,
+        renderMath,
+        highlightLanguage: 'c',
+        highlightStyle: 'github',
+        navigation: {
+          // Enable or disable navigating using scroll
+          // Default: true
+          // Alternatives: false
+          scroll: true,
+
+          // Enable or disable navigation using touch
+          // Default: true
+          // Alternatives: false
+          touch: true,
+
+          // Enable or disable navigation using click
+          // Default: false
+          // Alternatives: true
+          click: false,
+        },
+        
+      });
+
+      MathJax.Hub.Config({
+          tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+          processEscapes: true
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          $(MathJax.Hub.getAllJax()).map(function(index, elem) {
+              return(elem.SourceElement());
+          }).parent().addClass('has-jax');
+      });
+
+      MathJax.Hub.Configured();
+      
+      //Terminal style highligting code
+      var highlighted = document.querySelectorAll("code.terminal span.hljs-ansi");
+      Array.prototype.forEach.call(highlighted, function(next) {
+        next.insertAdjacentHTML("beforebegin", next.textContent);
+        next.parentNode.removeChild(next);
+      });
+
+      window.addEventListener('load', function() {
+      RemarkSearch.create({'position': 'top-left', 'caseSensitive' : false, 'showIcon': true, 'autoSearch': true});
+      });
+
+    </script>
+  </body>
+</html>
