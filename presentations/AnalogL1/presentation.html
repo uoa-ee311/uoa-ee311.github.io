@@ -357,12 +357,32 @@ name: S7
 - In our transformer model, L<sub>p</sub> and L<sub>s</sub> are the self-inductances of primary and secondary windings
  - k, the coupling factor between the two windings is typically greater than 0.98 and also,
 
-\\[ \acute{V}\_s = \frac{1}{n} V\_s \quad \text{and} \quad \acute{I}\_s = n I\_s \quad \text{and} \quad \acute{R}\_s = n^2 R\_s \\]
+\\[ \acute{V}\_s = n V\_s \quad \text{and} \quad \acute{I}\_s = \frac{1}{n} I\_s \quad \text{and} \quad \acute{R}\_s = n^2 R\_s \\]
 \\[ \text{where for T-model} \quad n = \sqrt{ \frac{L\_p}{L\_s} } = \frac{N\_p}{N\_s} \quad \text{and for cantilever model} \quad n = k\sqrt{ \frac{L\_p}{L\_s} } \approx \sqrt{ \frac{L\_p}{L\_s} } \approx \frac{N\_p}{N\_s}\\]
 
 .zoom175[
 .center[<img src="img/Tx_Models.png" height="120px">]
 ]
+
+---
+name: S8
+
+# A Model of the Flyback
+
+.center[<img src="img/Flyback_Model.png" height="190px">]
+
+- Lets replace the flyback transformer with its equivalent cantilever model to help our mathematical analysis
+ - For now we are going to **assume k is 1** (later we will investigate the impact of a k less than 1)
+- In an SMPS, such as this flyback converter, the switch, S<sub>p</sub>, can only be either on or off
+ - We can draw two equivelent circuits, one for when S<sub>p</sub> is on and other for when S<sub>p</sub> is off
+- We will analyse the circuit assuming it has reached a steady-state 
+ - The average change in current through L<sub>p</sub> and voltage across C<sub>o</sub> over one swtiching period is 0
+
+---
+name: S9
+
+# Equivalent Circuits for S<sub>p</sub> On & Off
+
 
 ---
 
