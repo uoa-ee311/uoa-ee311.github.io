@@ -140,7 +140,7 @@
       }
 
       .zoom175:hover {
-        transform: scale(1.75) translateY(-20%) translateX(-20%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        transform: scale(1.5) translateY(10%) translateX(0%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
       }
 
     </style>
@@ -322,15 +322,11 @@ name: S6
 - To transfer more power (i.e., higher V<sub>out</sub> at smaller R<sub>L</sub>) we can 
  - Increasing the size of the smaller bucket (i.e., larger E<sub>L</sub>)
  - Filling more frequently (i.e., faster f<sub>s</sub>)
-
 ]
  
 .right-column[
 .center[<img src="img/Analogy_2.png" height="420px">]
 ]
-
----
-
 
 ---
 
@@ -351,7 +347,22 @@ name: template_slide
 .footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
 
 ---
+name: S7
 
+# Transformer Model
+
+- We know how a flyback converter works in general terms, so lets mathematically model its operations
+ - The mathematical model will help us determine the parameters of components we should use
+- To simplify our analysis, we could replace the flyback transformer with it equivalent cantilever model
+- In our transformer model, L<sub>p</sub> and L<sub>s</sub> are the self-inductances of primary and secondary windings
+ - k, the coupling factor between the two windings is typically `\( k > 0.98 \)` and also,
+
+\\[ \acute{V}\_s = \frac{1}{n} V\_s \quad \text{and} \quad \acute{I}\_s = n I\_s \quad \text{and} \quad \acute{R}\_s = n^2 R\_s \\]
+\\[ \text{where for T-model} \quad n = \sqrt{ \frac{L\_p}{L\_s} } = \frac{N\_p}{N\_s} \quad \text{and for cantilever model} \quad n = k\sqrt{ \frac{L\_p}{L\_s} } \approx \sqrt{ \frac{L\_p}{L\_s} } \approx \frac{N\_p}{N\_s}\\]
+
+.zoom175[
+.center[<img src="img/Tx_Models.png" height="120px">]
+]
 
 ---
 
