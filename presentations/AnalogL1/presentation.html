@@ -381,8 +381,21 @@ name: S8
 ---
 name: S9
 
-# Equivalent Circuits for S<sub>p</sub> On & Off
+# Equivalent Circuits - S<sub>p</sub> is On
 
+.center[<img src="img/Flyback_On.png" height="210px">]
+
+- With PWM control, at the beginning of each switching cycle, S<sub>p</sub> will be turned-on for a duration [DT<sub>s</sub>](https://uoa-ee311.github.io/presentations/intro/presentation.html#47)
+ - Turning on S<sub>p</sub> shorts L<sub>p</sub> across V<sub>in</sub> causing I<sub>in</sub> to ramp from 0 to a higher value storing energy in L<sub>p</sub>
+- Since V<sub>in</sub> is directly applied across the primary side of the ideal transformer V<sub>s</sub> is -V<sub>in</sub>/n
+ - This is beacuse the positive end of transformer secondary is reversed as indicated by the dots
+- The anode end of D<sub>s</sub> is negative while the cathode end is positive, thus D<sub>s</sub> is reverse biased (i.e. blocking)
+- We will assume that C<sub>o</sub> is quite large and holds V<sub>out</sub> constant (though it is discharging a bit)
+
+---
+name: S10
+
+# Equivalent Circuits - S<sub>p</sub> is Off
 
 ---
 
