@@ -143,6 +143,14 @@
         transform: scale(1.5) translateY(10%) translateX(0%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
       }
 
+      .zoom15 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom15:hover {
+        transform: scale(1.43) translateY(-6%) translateX(0%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
     </style>
 
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
@@ -374,9 +382,9 @@ name: S8
 - Lets replace the flyback transformer with its equivalent cantilever model to help our mathematical analysis
  - For now we are going to **assume k is 1** (later we will investigate the impact of a k less than 1)
 - In an SMPS, such as this flyback converter, the switch, S<sub>p</sub>, can only be either on or off
- - We can draw two equivelent circuits, one for when S<sub>p</sub> is on and other for when S<sub>p</sub> is off
+ - We can draw two equivalent circuits, one for when S<sub>p</sub> is on and other for when S<sub>p</sub> is off
 - We will analyse the circuit assuming it has reached a steady-state 
- - The average change in current through L<sub>p</sub> and voltage across C<sub>o</sub> over one swtiching period is 0
+ - The average change in current through L<sub>p</sub> and voltage across C<sub>o</sub> over one switching period is 0
 
 ---
 name: S9
@@ -388,14 +396,45 @@ name: S9
 - With PWM control, at the beginning of each switching cycle, S<sub>p</sub> will be turned-on for a duration [DT<sub>s</sub>](https://uoa-ee311.github.io/presentations/intro/presentation.html#47)
  - Turning on S<sub>p</sub> shorts L<sub>p</sub> across V<sub>in</sub> causing I<sub>in</sub> to ramp from 0 to a higher value storing energy in L<sub>p</sub>
 - Since V<sub>in</sub> is directly applied across the primary side of the ideal transformer V<sub>s</sub> is -V<sub>in</sub>/n
- - This is beacuse the positive end of transformer secondary is reversed as indicated by the dots
+ - This is because the positive end of transformer secondary is reversed as indicated by the dots
 - The anode end of D<sub>s</sub> is negative while the cathode end is positive, thus D<sub>s</sub> is reverse biased (i.e. blocking)
 - We will assume that C<sub>o</sub> is quite large and holds V<sub>out</sub> constant (though it is discharging a bit)
 
 ---
 name: S10
 
-# Equivalent Circuits - S<sub>p</sub> is Off
+# Equivalent Circuits - S<sub>p</sub> is Off (PI)
+
+.center[<img src="img/Flyback_Off.png" height="210px">]
+
+- After DT<sub>s</sub>, S<sub>p</sub> will be turned-off until the beginning of the next switching cycle 
+ - Turning off S<sub>p</sub> disconnects L<sub>p</sub> from V<sub>in</sub> and thus I<sub>in</sub> is 0A
+- Since current in L<sub>p</sub> cannot change abruptly, it finds a path to continue through the transformer and D<sub>s</sub>
+ - Energy that was stored in L<sub>p</sub> during DT<sub>s</sub> now replenishes C<sub>o</sub>
+- As L<sub>p</sub> losses energy, I<sub>D</sub> as well as I<sup>'</sup><sub>D</sub> ramps down to 0A before the end of the switching cycle
+ - We call this **discountinuous mode** operation since current in L<sub>p</sub> is 0 during part of T<sub>s</sub>
+
+---
+name: S11
+
+# Equivalent Circuits - S<sub>p</sub> is Off (PII)
+
+.center[<img src="img/Flyback_Disc.png" height="210px">]
+
+- After I<sub>D</sub> reach 0A, apart from C<sub>o</sub>, the other components do not contribute to the functionality until the beginning of the next switching cycle
+ - We will call this time the **discountinuous time**
+- Having a discountinuous time ensures, all the energy we stored in L<sub>p</sub> is delivered to the output
+- One of our design goals will be to select components that ensure discountinuous mode operation
+ - This is the preferred operation mode for a flyback converter 
+
+---
+name: S12
+
+# Operating Waveforms
+
+.zoom15[
+.center[<img src="img/Waveforms.png" height="440px">]
+]
 
 ---
 
