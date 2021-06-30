@@ -448,7 +448,7 @@ name: S13
 \\[ E\_{Lp(pk)} = \frac{1}{2} L I\_{Lp(pk)}^2 = \frac{V^2\_{in}}{2L\_p} D^2T^2\_{s}   \\]
 - Thus, we can use D to control the peak energy we store in L<sub>p</sub> 
  - L<sub>p</sub>, V<sub>in</sub> and T<sub>s</sub> are fixed in a given design
- - The PWM controller sets the D of S<sub>p</sub> to regulate V<sub>out</sub> by controlling E<sub>Lp(pk)</sub>
+ - PWM controller sets D to regulate V<sub>out</sub> by controlling E<sub>Lp(pk)</sub>
 ]
  
 .right-column[
@@ -480,11 +480,11 @@ name: S14
 
 - Since P<sub>out</sub> is proportional to D<sup>2</sup>, maximum P<sub>out</sub> is achieved at maximum D we choose to operate our flyback converter 
 - Therefore, we can determine the value of L<sub>p</sub> that should be used in a flyback converter designed to deliver up to P<sub>out(max)</sub> 
-\\[ L\_{p(selected)} \leqslant \frac{V^2\_{in}}{2f\_s P\_{out(max)}} D^2\_{max} \\]
-- We can obtain P<sub>out(max)</sub>, V<sub>in</sub> and f<sub>s</sub> from design specifications
+\\[ L\_{p(req)} \leqslant \frac{V^2\_{in}}{2f\_s P\_{out(max)}} D^2\_{max} \\]
+- We know P<sub>out(max)</sub>, V<sub>in</sub> and f<sub>s</sub> from design specifications
  - D<sub>max</sub> can be selected to be 0.5 as it simplifies the design
 - Since we assumed a lossless flyback converter for this analysis, when designing your converter pick a L<sub>p</sub> value that is slightly smaller than what you calculate
-
+ - If V<sub>in</sub> is not constant, use the smallest V<sub>in</sub> you expect to operate at (in your design V<sub>in</sub> is constant)
 
 ---
 
