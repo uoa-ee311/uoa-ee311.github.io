@@ -430,11 +430,61 @@ name: S11
 ---
 name: S12
 
-# Operating Waveforms
+# Steady-State Waveforms
 
 .zoom15[
 .center[<img src="img/Waveforms.png" height="440px">]
 ]
+
+---
+name: S13
+
+# Energy Stored in L<sub>p</sub>
+
+.left-column[
+- During DT<sub>s</sub> (i.e., when S<sub>p</sub> is on), current in L<sub>p</sub>, which is the same as I<sub>in</sub>, ramps-up from 0 and reaches I<sub>Lp(pk)</sub> when S<sub>p</sub> is turning off,
+\\[ I\_{Lp(pk)} = \frac{1}{L\_p} \int\_{0}^{DT\_s} V\_{in} \mathrm{d}t = \frac{V\_{in}}{L\_p} DT\_{s} \quad \because V\_{p} = V\_{in} \equiv \textrm{ constant} \\]
+- Using I<sub>Lp(pk)</sub> we can find peak energy stored in L<sub>p</sub>,
+\\[ E\_{Lp(pk)} = \frac{1}{2} L I\_{Lp(pk)}^2 = \frac{V^2\_{in}}{2L\_p} D^2T^2\_{s}   \\]
+- Thus, we can use D to control the peak energy we store in L<sub>p</sub> 
+ - L<sub>p</sub>, V<sub>in</sub> and T<sub>s</sub> are fixed in a given design
+ - The PWM controller sets the D of S<sub>p</sub> to regulate V<sub>out</sub> by controlling E<sub>Lp(pk)</sub>
+]
+ 
+.right-column[
+.center[<img src="img/Lp_Energy.png" height="420px">]
+]
+
+---
+name: S14
+
+# Output Power
+
+.left-column[
+- All of the energy stored in L<sub>p</sub> (i.e., E<sub>Lp(pk)</sub>), is delivered to the output between DT<sub>s</sub> and T<sub>s</sub>
+- All this energy is consumed by R<sub>Load</sub> because the average voltage across C<sub>o</sub> is not changing 
+ - In steady-state C<sub>o</sub> is effectively not absorbing/loosing energy when averaged over one time period
+ - However, inside each time period C<sub>o</sub> charge and discharge by the same amount leading to a small ripple in V<sub>out</sub>
+- So we can relate output power to E<sub>Lp(pk)</sub> assuming all components are lossless,
+\\[ P\_{out} = E\_{Lp(pk)} f\_s = \frac{V^2\_{in}}{2f\_s L\_p} D^2 \quad \because T\_{s} = 1/f\_{s} \\]
+]
+ 
+.right-column[
+.center[<img src="img/Lp_Energy.png" height="420px">]
+]
+
+---
+name: S14
+
+# Calculating Required L<sub>p</sub>
+
+- Since P<sub>out</sub> is proportional to D<sup>2</sup>, maximum P<sub>out</sub> is achieved at maximum D we choose to operate our flyback converter 
+- Therefore, we can determine the value of L<sub>p</sub> that should be used in a flyback converter designed to deliver up to P<sub>out(max)</sub> 
+\\[ L\_{p(selected)} \leqslant \frac{V^2\_{in}}{2f\_s P\_{out(max)}} D^2\_{max} \\]
+- We can obtain P<sub>out(max)</sub>, V<sub>in</sub> and f<sub>s</sub> from design specifications
+ - D<sub>max</sub> can be selected to be 0.5 as it simplifies the design
+- Since we assumed a lossless flyback converter for this analysis, when designing your converter pick a L<sub>p</sub> value that is slightly smaller than what you calculate
+
 
 ---
 
