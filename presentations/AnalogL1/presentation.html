@@ -257,7 +257,7 @@ name: S2
  - Energy is stored in the magnetic field that is generated when there is a current flowing through the windings of an inductor,
 \\[ E\_L = \frac{1}{2} L I\_L^2 \\]
 - To store energy we can connect an inductor across a DC voltage source and let the current ramp-up to a desired value since,
-\\[ I\_L = \frac{1}{L} \int\_{0}^{T\_{dur}} V\_{in} \mathrm{d}t = \frac{V\_{in}}{L} T\_{dur} \quad \because V\_{in} \textrm{ is constant} \\]
+\\[ I\_L = \frac{1}{L} \int\_{0}^{T\_{dur}} V\_{in} \, \mathrm{d}t = \frac{V\_{in}}{L} T\_{dur} \quad \because V\_{in} \textrm{ is constant} \\]
  - Assume initial current in L is 0A and S<sub>p</sub> turned-off at T<sub>dur</sub>
  - **I<sub>L</sub> cannot change abruptly** so D circulates I<sub>L</sub> when S<sub>p</sub> is off
 ]
@@ -277,7 +277,7 @@ name: S3
  - Energy is stored in the electric field that is generated when there is a voltage across the terminals of a capacitor,
 \\[ E\_C = \frac{1}{2} C V\_C^2 \\]
 - To store energy we can connect a capacitor across a DC current source and let the voltage ramp-up to a desired value since,
-\\[ V\_C = \frac{1}{C} \int\_{0}^{T\_{dur}} I\_{in} \mathrm{d}t = \frac{I\_{in}}{C} T\_{dur} \quad \because I\_{in} \textrm{ is constant} \\]
+\\[ V\_C = \frac{1}{C} \int\_{0}^{T\_{dur}} I\_{in} \, \mathrm{d}t = \frac{I\_{in}}{C} T\_{dur} \quad \because I\_{in} \textrm{ is constant} \\]
  - Assume initial voltage of C is 0V and S<sub>p</sub> turned-on at T<sub>dur</sub>
  - **V<sub>C</sub> cannot change abruptly** so D isolates V<sub>C</sub> when S<sub>p</sub> is off
 ]
@@ -443,7 +443,7 @@ name: S13
 
 .left-column[
 - During DT<sub>s</sub> (i.e., when S<sub>p</sub> is on), current in L<sub>p</sub>, which is the same as I<sub>in</sub>, ramps-up from 0 and reaches I<sub>Lp(pk)</sub> when S<sub>p</sub> is turning off,
-\\[ I\_{Lp(pk)} = \frac{1}{L\_p} \int\_{0}^{DT\_s} V\_{in} \mathrm{d}t = \frac{V\_{in}}{L\_p} DT\_{s} \quad \because V\_{p} = V\_{in} \equiv \textrm{ constant} \\]
+\\[ I\_{Lp(pk)} = \frac{1}{L\_p} \int\_{0}^{DT\_s} V\_{in} \, \mathrm{d}t = \frac{V\_{in}}{L\_p} DT\_{s} \quad \because V\_{p} = V\_{in} \equiv \textrm{ constant} \\]
 - Using I<sub>Lp(pk)</sub> we can find peak energy stored in L<sub>p</sub>,
 \\[ E\_{Lp(pk)} = \frac{1}{2} L I\_{Lp(pk)}^2 = \frac{V^2\_{in}}{2L\_p} D^2T^2\_{s}   \\]
 - Thus, we can use D to control the peak energy we store in L<sub>p</sub> 
@@ -474,7 +474,7 @@ name: S14
 ]
 
 ---
-name: S14
+name: S15
 
 # Calculating Required L<sub>p</sub>
 
@@ -485,6 +485,110 @@ name: S14
  - D<sub>max</sub> can be selected to be 0.5 as it simplifies the design
 - Since we assumed a lossless flyback converter for this analysis, when designing your converter pick a L<sub>p</sub> value that is slightly smaller than what you calculate
  - If V<sub>in</sub> is not constant, use the smallest V<sub>in</sub> you expect to operate at (in your design V<sub>in</sub> is constant)
+
+---
+name: S16
+
+# Calculating Required Turns Ratio (PI)
+
+.left-column[
+- n determines whether we operate in the discountinuous mode
+ - Note that if in discountinuous mode `\(  \lgroup D + D' \rgroup \leqslant 1 \)`
+- Since the average value of I<sub>Lp</sub> doesn't change in steady-state,
+\\[  \int\_{0}^{T\_s} V\_p \, \mathrm{d}t = V\_{in}DT\_s - nV\_{out}D'T\_s = 0\\]
+- Substituting `\( D' = V_{in}D \, / \, nV_{out} \)` in `\(  \lgroup D + D' \rgroup \leqslant 1 \)` we get,
+\\[  n \geq \frac {V\_{in}D} {V\_{out}(1-D)} \\]
+- Thus, to guarantee discountinuous operation, select an n that is greater than the max value of `\( V_{in}D \, / \, V_{out} (1-D)\)`
+]
+ 
+.right-column[
+.center[<img src="img/Voltage_Stress.png" height="420px">]
+]
+
+---
+name: S17
+
+# Calculating Required Turns Ratio (PII)
+
+.left-column[
+- n also directly influences maximum voltage stress experienced by S<sub>p</sub> and D<sub>s</sub>
+\\[ V\_{Sp(max)} = V\_{in} + nV\_{out} \quad \text{and} \quad V\_{Ds(max)} = V\_{in}/n + V\_{out} \\]
+- When selecting devices to implement S<sub>p</sub> and D<sub>s</sub> we need to make sure they have voltage ratings greater than the maximum voltage stress they experience
+- Higher voltage rated devices are more expensive
+ - Performance tends to be also poor (e.g., higher losses) 
+- Smaller n leads to lower voltage stress across S<sub>p</sub> at the expense of the voltage stress across D<sub>s</sub>
+ - We need to find a balance between these contradicting needs
+]
+ 
+.right-column[
+.center[<img src="img/Voltage_Stress.png" height="420px">]
+]
+
+---
+name: S18
+
+# Average Currents
+
+.left-column[
+- Since ripple voltage at V<sub>out</sub> is negligible, I<sub>out</sub> is a constant DC value give by,
+\\[ I\_{out} = \frac{V\_{out}}{R\_{Load}} \\]
+- The average value of I<sub>in</sub> is,
+\\[ I\_{in(av)} = \frac{1}{T\_{s}} \int\_{0}^{T\_s} I\_{in} \, \mathrm{d}t = \frac{1}{2} DI\_{L(pk)} = \frac{V\_{in}}{2L\_p} D^2T\_{s} \\]
+- The average value of I<sub>D</sub> should be the same as I<sub>out</sub> and is,
+\\[ I\_{D(av)} = \frac{1}{T\_{s}} \int\_{0}^{T\_s} I\_{D} \, \mathrm{d}t = \frac{1}{2} nD'I\_{L(pk)} = I\_{out} \\]
+]
+ 
+.right-column[
+.center[<img src="img/Average_Currents.png" height="400px">]
+]
+
+---
+name: S19
+
+# RMS Currents
+
+.left-column[
+- RMS currents dictate conduction loss in transformer and S<sub>p</sub>
+- To calculate RMS of I<sub>in</sub>, which is a linear function, it can be written as `\(  I_{Lp(pk)} t /DT_s \)` for `\(  0 \leq t \leq DT_s\)`
+- RMS of I<sub>in</sub> is therefore give by,
+\\[ I\_{in(RMS)} = \sqrt { \frac{1}{T\_s} \int\_{0}^{T\_s} I^2\_{in} \, \mathrm{d}t } = \sqrt { \frac{1}{T\_s} \int\_{0}^{DT\_s} \left( \frac {I\_{Lp(pk)}} {DT\_s} t \right)^2 \, \mathrm{d}t } \\]
+\\[ I\_{in(RMS)} = \sqrt { \frac{1}{T\_s} \left( \frac {I\_{Lp(pk)}} {DT\_s} \right)^2 \left[ \frac{t^3} {3} \right]^{DT\_s}\_0 } = I\_{Lp(pk)} \sqrt {\frac {D} {3}} \\]
+- Similarly we can show that `\(  I_{D(RMS)} = I_{Lp(pk)} \sqrt{D' \, / \, 3 } \)`
+]
+ 
+.right-column[
+.center[<img src="img/Average_Currents.png" height="400px">]
+]
+
+
+---
+name: S20
+
+# Output Voltage
+
+.left-column[
+- In a flyback converter, like in any switched-mode converter, we use D to control the output voltage across a load R<sub>load</sub>
+- Since we already know what [P<sub>out</sub>](#S14) is, we can derive the relation between V<sub>out</sub> and D,
+\\[ P\_{out} = \frac {V^2\_{out}} {R\_{Load}} = \frac{V^2\_{in}}{2f\_s L\_p} D^2 \quad \Rightarrow \quad V\_{out} = \sqrt{ \frac{R\_{Load}}{2f\_s L\_p} } \, V\_{in}D \\]
+
+]
+ 
+.right-column[
+.center[<img src="img/Average_Currents.png" height="400px">]
+]
+
+---
+name: S20
+
+# Demo: A Conceptual Flyback Converter
+
+.questions[
+When f<sub>s</sub>=100kHz, D=0.5 and R<sub>load</sub>=100&#8486;, derive what I<sub>Lp(pk)</sub>, P<sub>out</sub>, V<sub>out</sub>, D', V<sub>Sp(max)</sub>, V<sub>Ds(max)</sub>, I<sub>in(av)</sub>, I<sub>D(av)</sub>, I<sub>in(RMS)</sub>, I<sub>D(RMS)</sub> and V<sub>out</sub> should be. Show answers match simulation. Explore the behavior when D and R<sub>load</sub> change. 
+]
+
+.center[
+<iframe src="example2.html" width="900" height="420" frameborder="0"></iframe> 
+]
 
 ---
 
@@ -525,13 +629,7 @@ name: template_slide
 
 ---
 
----
 
-# Demo: A Conceptual Flyback Converter
-
-.center[
-<iframe src="example2.html" width="900" height="420" frameborder="0"></iframe> 
-]
 
 ---
 
