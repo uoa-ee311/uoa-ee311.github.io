@@ -553,7 +553,7 @@ name: S19
 - RMS of I<sub>in</sub> is therefore give by,
 \\[ I\_{in(RMS)} = \sqrt { \frac{1}{T\_s} \int\_{0}^{T\_s} I^2\_{in} \, \mathrm{d}t } = \sqrt { \frac{1}{T\_s} \int\_{0}^{DT\_s} \left( \frac {I\_{Lp(pk)}} {DT\_s} t \right)^2 \, \mathrm{d}t } \\]
 \\[ I\_{in(RMS)} = \sqrt { \frac{1}{T\_s} \left( \frac {I\_{Lp(pk)}} {DT\_s} \right)^2 \left[ \frac{t^3} {3} \right]^{DT\_s}\_0 } = I\_{Lp(pk)} \sqrt {\frac {D} {3}} \\]
-- Similarly we can show that `\(  I_{D(RMS)} = I_{Lp(pk)} \sqrt{D' \, / \, 3 } \)`
+- Similarly we can show that `\(  I_{D(RMS)} = nI_{Lp(pk)} \sqrt{D' \, / \, 3 } \)`
 ]
  
 .right-column[
@@ -570,20 +570,41 @@ name: S20
 - In a flyback converter, like in any switched-mode converter, we use D to control the output voltage across a load R<sub>load</sub>
 - Since we already know what [P<sub>out</sub>](#S14) is, we can derive the relation between V<sub>out</sub> and D,
 \\[ P\_{out} = \frac {V^2\_{out}} {R\_{Load}} = \frac{V^2\_{in}}{2f\_s L\_p} D^2 \quad \Rightarrow \quad V\_{out} = \sqrt{ \frac{R\_{Load}}{2f\_s L\_p} } \, V\_{in}D \\]
-
+- As we expected, V<sub>out</sub> is proportional to D
+- However, V<sub>out</sub> also depends on R<sub>load</sub> unlike in some other switched-mode converters
+ - An open circuit at output (i.e., R<sub>load</sub> &#8594; &#8734;) causes V<sub>out</sub> to reach &#8734; as predicted by the [water bucket](#S6) analogy 
 ]
  
 .right-column[
-.center[<img src="img/Average_Currents.png" height="400px">]
+.center[<img src="img/OutputWaveforms.png" height="400px">]
 ]
 
 ---
-name: S20
+name: S21
+
+# Output Voltage Ripple
+
+.left-column[
+- In practice C<sub>o</sub> is a finite value and the AC current, I<sub>Co</sub>, flowing through it cause a very small ripple voltage, &Delta;V<sub>out</sub>, at output
+ - From KCL we know that I<sub>Co</sub> = I<sub>D</sub> - I<sub>out</sub>
+- Assume &Delta;V<sub>out</sub> is negligible so V<sub>out</sub> and I<sub>out</sub> are DC signals
+- Using trigonometry we can determine duration C<sub>o</sub> is charging,
+\\[ \frac {nI\_{Lp(pk)} - I\_{out}} {nI\_{Lp(pk)}} = \frac {T\_{Chrg}} {D'T\_s} \quad \Rightarrow \quad T\_{Chrg} = \frac { (nI\_{Lp(pk)} - I\_{out}) D'T\_s} {nI\_{Lp(pk)}} \\]
+- Using this information we can evaluate &Delta;V<sub>out</sub> since,
+\\[ \Delta V\_{out} = \frac {1} {C\_o} \int\_{0}^{T\_{Chrg}} I\_{Co} \, \mathrm{d}t =  \frac {1} {2C\_o} \left( nI\_{Lp(pk)} - I\_{out} \right)T\_{Chrg} \\]
+]
+ 
+.right-column[
+.center[<img src="img/RippleVout.png" height="425px">]
+]
+
+---
+name: S22
 
 # Demo: A Conceptual Flyback Converter
 
 .questions[
-When f<sub>s</sub>=100kHz, D=0.5 and R<sub>load</sub>=100&#8486;, derive what I<sub>Lp(pk)</sub>, P<sub>out</sub>, V<sub>out</sub>, D', V<sub>Sp(max)</sub>, V<sub>Ds(max)</sub>, I<sub>in(av)</sub>, I<sub>D(av)</sub>, I<sub>in(RMS)</sub>, I<sub>D(RMS)</sub> and V<sub>out</sub> are. Show answers match simulation. Explore behavior when D and R<sub>load</sub> change. 
+When f<sub>s</sub>=100kHz, D=0.5 and R<sub>load</sub>=100&#8486;, calculate I<sub>Lp(pk)</sub>, P<sub>out</sub>, V<sub>out</sub>, D', V<sub>Sp(max)</sub>, V<sub>Ds(max)</sub>, I<sub>in(av)</sub>, I<sub>D(av)</sub>, I<sub>in(RMS)</sub>, I<sub>D(RMS)</sub> and &Delta;V<sub>out</sub>. Show answers match simulation. Explore behavior when D and R<sub>load</sub> change. 
 ]
 
 .center[
@@ -610,6 +631,61 @@ name: template_slide
 
 ---
 
+name: S22
+
+# Design Specifications
+
+
+.left-column[
+- Using what we learnt so far lets design a flyback converter that meets the specifications listed in the table
+- In this design both the input and output voltages are fixed
+ - In many cases you will need to cater for a range of input/output voltages 
+- We are going to take as D<sub>max</sub> = 0.5, &eta; = 100% and design for discountinuous mode operation
+- To 'Design' this converter first we have to determine suitable values for L<sub>p</sub>, n, L<sub>s</sub> and C<sub>o</sub>
+- Then we analyse the voltage stress across S<sub>p</sub> and D<sub>s</sub>, average and RMS current stresses as well as operating D 
+ - We will do this analysis at P<sub>out</sub> = 50W and P<sub>out</sub> = 100W
+]
+
+.right-column[
+.center[<img src="img/FlybackDesign.png" height="170px">]
+
+<table class="tg" style="undefined;table-layout: fixed; width: 300px; margin-left:auto; margin-right:auto;">
+  <colgroup>
+  <col style="width: 150px">
+  <col style="width: 150px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="tg-dzaw"><span style="color:white">Parameter</span></th>
+      <th class="tg-dzaw"><span style="color:white">Specification</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-jayl">V<sub>in</sub></td>
+      <td class="tg-jayl"> 20V </td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">V<sub>out</sub></td>
+      <td class="tg-sabo"> 200V </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71"> P<sub>out</sub></td>
+      <td class="tg-ig71"> 0W to 100W </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">f<sub>s</sub></td>
+      <td class="tg-ig71">100kHz</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">&Delta;V<sub>out</sub></td>
+      <td class="tg-sabo">2V</td>
+    </tr>
+  </tbody>
+</table> 
+]
+
+---
 
 ---
 class: title-slide
@@ -628,6 +704,7 @@ name: template_slide
 .footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
 
 ---
+
 
 
 
