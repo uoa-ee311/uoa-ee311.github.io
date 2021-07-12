@@ -767,7 +767,17 @@ name: template_slide
 
 ---
 
+name: S28
 
+# Leakage Inductance
+
+.center[<img src="img/Real_Flyback.png" height="220px">]
+
+- It is impossible to build a transformer that has perfect coupling (i.e., k = 1) as we assumed earlier
+- k of a flyback transformer is quite high and is typically over 0.98
+ - This means the analysis we conducted assuming k = 1 is still very accurate
+- Having a k of less than 1 means that there is going to be leakage inductance 
+ - We can use the Cantilever model to explore impact of leakage inductance on the operation of the flyback converter 
 
 
 ---
