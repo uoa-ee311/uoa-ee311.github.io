@@ -90,6 +90,18 @@
         word-wrap: break-word;
       }
 
+      .left-column-50 {
+        width: 47%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column-50 {
+        width: 47%;
+        float: right;
+        word-wrap: break-word;
+      }
+
       .footer {
         content: "";
         position: absolute;
@@ -631,7 +643,7 @@ name: template_slide
 
 ---
 
-name: S22
+name: S23
 
 # Design Specifications
 
@@ -686,6 +698,56 @@ name: S22
 ]
 
 ---
+
+name: S24
+
+# Parameters of the Transformer 
+
+- Since we know the maximum power the converter is expected to deliver from the specifications (i.e., 100W) we can calculate the [required L<sub>p</sub>](#S15),
+\\[ L\_{p(req)} \leqslant \frac{V^2\_{in}}{2f\_s P\_{out(max)}} D^2\_{max} = 5 \mu H \\]
+- Since we are assuming our converter has no losses, to be on the safe side lets **choose L<sub>p</sub> = 4.5&micro;H**
+- We can also determine the [minimum turns-ratio](#S16) of the transformer,
+\\[  n \geq \left [ \frac {V\_{in}D} {V\_{out}(1-D)} \right]\_{(max)} \quad \Rightarrow \quad n \geq 0.1 \\]
+- Noting that a smaller *n* results in [larger V<sub>Ds(max)</sub> and a larger *n* in larger V<sub>Sp(max)</sub>](#S17) lets **choose *n* = 0.5**
+\\[ V\_{Sp(max)} = V\_{in} + nV\_{out} = 120V \quad \text{and} \quad V\_{Ds(max)} = V\_{in}/n + V\_{out} = 240V \\]
+
+---
+
+name: S25
+
+# Operating Conditions (PI) 
+
+- Since we have now determined the parameters of the transformer (i.e., L<sub>p</sub> = 4.5&micro;H & *n* = 0.5) next will be determine [operating D and D'](#S14) at each output power level 
+\\[ D = \sqrt{ \frac {2 P\_{out} f\_s L\_p} {V^2\_{in}} }  \quad \Rightarrow \quad D\_{@100W} = 0.47 \quad \& \quad D\_{@50W} = 0.34 \\]
+- Now we can determine both [I<sub>Lp(pk)</sub>](#S13) (i.e., same as I<sub>in(pk)</sub>) and I<sub>Ls(pk)</sub> (i.e., same as I<sub>D(pk)</sub>),
+\\[ I\_{Lp(pk)} = \frac{V\_{in}}{L\_p} DT\_{s}  \quad \Rightarrow \quad I\_{Lp(pk@100W)} = 21.08A \quad \& \quad I\_{Lp(pk@50W)} = 14.91A \\]
+\\[ I\_{Ls(pk)} = nI\_{Lp(pk)} \quad \Rightarrow \quad I\_{Ls(pk@100W)} = 10.54A \quad \& \quad I\_{Ls(pk@50W)} = 7.45A \\]
+
+---
+
+name: S26
+
+# Operating Conditions (PII) 
+
+- [Average currents](#S18) can be calculated as,
+\\[ I\_{in(av)} = \frac{1}{2} DI\_{L(pk)} \quad \Rightarrow \quad I\_{in(av@100W)} = 5A \quad \& \quad I\_{in(av@50W)} = 2.5A \\]
+\\[ I\_{D(av)} = I\_{out} = \frac{V\_{out}}{R\_{Load}} \quad \Rightarrow \quad I\_{D(av@100W)} = 0.50A \quad \& \quad I\_{D(av@50W)} = 0.25A\\]
+- [RMS currents](#S19) can be calculated as,
+\\[ I\_{in(RMS)} = I\_{Lp(pk)} \sqrt {\frac {D} {3}} \quad \Rightarrow \quad I\_{in(RMS@100W)} = 8.38A \quad \& \quad I\_{in(RMS@50W)} = 4.38A \\]
+\\[ I\_{D(RMS)} = nI\_{Lp(pk)} \sqrt {\frac {D'} {3}} \quad \Rightarrow \quad I\_{D(RMS@100W)} = 1.87A \quad \& \quad I\_{D(RMS@50W)} = 1.11A \\]
+
+---
+
+name: S27
+
+# Capacitor Size and Ripple Voltage 
+
+- We can now calculate the [C<sub>out</sub> required](#S21) to ensure a voltage ripple less than what is specified (i.e., 2V),
+\\[  C\_o \geqslant  \frac {1} {2 \Delta V\_{out} } \frac { \left( nI\_{Lp(pk)} - I\_{out} \right)^2 } {nI\_{Lp(pk)}} D'T\_s  \quad \Rightarrow \quad C\_o \geqslant 2.26 \mu F \\]
+- As the size and cost targets are not specified we can use a larger capacitor and in this example lets **choose C<sub>out</sub> = 10&micro;F**
+- Lets calculate ripple voltage at each power level to make sure it is acceptable 
+\\[  \Delta V\_{out} =  \frac {1} {2 C\_o} \frac { \left( nI\_{Lp(pk)} - I\_{out} \right)^2 } {nI\_{Lp(pk)}} D'T\_s  \quad \Rightarrow \quad  \Delta V\_{out(@100W)} = 0.45V \quad \& \quad \Delta V\_{out(@50W)} = 0.23V\\]
+- As a percentage our voltage ripple is less than 0.23% of V<sub>out</sub> (i.e., our assumption of V<sub>out</sub> being a DC voltage is accurate)
 
 ---
 class: title-slide
