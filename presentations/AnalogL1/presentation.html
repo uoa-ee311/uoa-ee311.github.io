@@ -422,7 +422,7 @@ name: S10
 - After DT<sub>s</sub>, S<sub>p</sub> will be turned-off until the beginning of the next switching cycle 
  - Turning off S<sub>p</sub> disconnects L<sub>p</sub> from V<sub>in</sub> and thus I<sub>in</sub> is 0A
 - Since current in L<sub>p</sub> cannot change abruptly, it finds a path to continue through the transformer and D<sub>s</sub>
- - Energy that was stored in L<sub>p</sub> during DT<sub>s</sub> now replenishes C<sub>o</sub>
+ - This is called **flyback time** and energy that was stored in L<sub>p</sub> during DT<sub>s</sub> now replenishes C<sub>o</sub>
 - As L<sub>p</sub> losses energy, I<sub>D</sub> as well as I<sup>'</sup><sub>D</sub> ramps down to 0A before the end of the switching cycle
  - We call this **discountinuous mode** operation since current in L<sub>p</sub> is 0 during part of T<sub>s</sub>
 
@@ -712,7 +712,6 @@ name: S24
 \\[ V\_{Sp(max)} = V\_{in} + nV\_{out} = 120V \quad \text{and} \quad V\_{Ds(max)} = V\_{in}/n + V\_{out} = 240V \\]
 
 ---
-
 name: S25
 
 # Operating Conditions (PI) 
@@ -724,7 +723,6 @@ name: S25
 \\[ I\_{Ls(pk)} = nI\_{Lp(pk)} \quad \Rightarrow \quad I\_{Ls(pk@100W)} = 10.54A \quad \& \quad I\_{Ls(pk@50W)} = 7.45A \\]
 
 ---
-
 name: S26
 
 # Operating Conditions (PII) 
@@ -737,7 +735,6 @@ name: S26
 \\[ I\_{D(RMS)} = nI\_{Lp(pk)} \sqrt {\frac {D'} {3}} \quad \Rightarrow \quad I\_{D(RMS@100W)} = 1.87A \quad \& \quad I\_{D(RMS@50W)} = 1.11A \\]
 
 ---
-
 name: S27
 
 # Capacitor Size and Ripple Voltage 
@@ -766,18 +763,80 @@ name: template_slide
 .footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
 
 ---
-
 name: S28
 
-# Leakage Inductance
+# Leakage Inductance (PI)
 
 .center[<img src="img/Real_Flyback.png" height="220px">]
 
 - It is impossible to build a transformer that has perfect coupling (i.e., k = 1) as we assumed earlier
-- k of a flyback transformer is quite high and is typically over 0.98
+- k of a flyback transformer is quite high and is typically over 0.998
  - This means the analysis we conducted assuming k = 1 is still very accurate
-- Having a k of less than 1 means that there is going to be leakage inductance 
+- Having a k of less than 1 means that there is going to be leakage inductance (i.e., `\( L_{lk} = (1-k^2)L_p \)`)
  - We can use the Cantilever model to explore impact of leakage inductance on the operation of the flyback converter 
+
+---
+name: S29
+
+# Leakage Inductance (PII) 
+
+.center[<img src="img/Real_FlybackW.png" height="170px">]
+
+- From Cantilever model we can see that the I<sub>in</sub> flows through the leakage inductance (i.e., `\( L_{lk} = (1-k^2)L_p \)`) when S<sub>p</sub> is turned-on storing energy in it
+- When S<sub>p</sub> is turning-off I<sub>in</sub> rapidly fall from I<sub>Lp(pk)</sub> to 0A over a few 10s of nano-seconds because a real switch cannot turn-off instantaneously 
+- V<sub>lk</sub> can be very large since the time S<sub>p</sub> takes to turn-off, t<sub>off</sub>, is very small, 
+\\[  V\_{lk} = L\_{lk} \, \frac {\mathrm{d}I\_{in}} {\mathrm{d}t} = -(1-k^2)L\_p \frac {I\_{Lp(pk)}} {t\_{off}} \\]
+
+---
+name: S30
+
+# Parasitic Capacitance of Switch (PI)
+
+.center[<img src="img/Real_FlybackW2.png" height="170px">]
+
+- A practical switch also has a small inbuilt capacitance across it due to the way it is manufactured
+ - Size of C<sub>Sp</sub> depends on the switch and you will learn more about this later
+- When S<sub>p</sub> turns-off, this parasitic capacitance, C<sub>Sp</sub>, absorbs the energy stored in the leakage inductance
+ - As a result V<sub>Sp</sub> rises up to a voltage greater than V<sub>in</sub> + nV<sub>out</sub>
+- The large voltage across V<sub>Sp</sub> when S<sub>p</sub> is off causes this parasitic energy to circulate between C<sub>Sp</sub> and the leakage inductance at their resonant frequency
+ - The circulating energy is dissipated as losses and the resonance eventually disappears  
+
+---
+name: S31
+
+# Parasitic Capacitance of Switch (PII)
+
+.center[<img src="img/Real_FlybackW3.png" height="170px">]
+
+- After the energy stored in k<sup>2</sup>L<sub>p</sub> is delivered to output, the flyback enters [discontinuous time](#S11) 
+- Note that during the [flyback time](#S10) C<sub>Sp</sub> is charged to V<sub>in</sub> + nV<sub>out</sub> 
+- In the ideal converter I<sub>in</sub> and therefore V<sub>p</sub> was 0 during [discontinuous time](#S11)
+ - This causes C<sub>Sp</sub> that is charged to V<sub>in</sub> + nV<sub>out</sub> to discharge in to V<sub>in</sub>
+ - However L<sub>p</sub> is in this discharge path thus causing this parasitic energy to circulate between C<sub>Sp</sub> and L<sub>p</sub> at their resonant frequency
+- As this circulating energy is dissipated in losses the resonance starts decaying   
+
+---
+name: S32
+
+# Practical Steady State Waveforms
+
+.zoom15[
+.center[<img src="img/Real_FlybackW_Summary.png" height="453px">]
+]
+
+
+---
+name: S33
+
+# Demo: A Practical Flyback Converter
+
+.questions[
+Calculate the resonant frequency of the parasitic circulating energy during the flyback time and the discontinuous time. Show answers match simulation. Explore behavior when D and R<sub>load</sub> change. 
+]
+
+.center[
+<iframe src="example2.html" width="900" height="350" frameborder="0"></iframe> 
+]
 
 
 ---
