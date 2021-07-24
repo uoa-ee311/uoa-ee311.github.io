@@ -449,6 +449,13 @@ name: S17
 
 # Proportional Integral Controller (PI)
 
+.center[<img src="img/PI_Control.png" height="180px">]
+
+- We can combine the proportional and the integral controllers to implement a much better controller
+ - This type of controllers are referred to as Proportional Integral or **PI** controllers
+- K<sub>p</sub> sets the **proportional gain** while K<sub>i</sub> sets the **integral gain**
+\\[ D = K\_p V\_{err} + K\_i \int {V\_{err}} \, \mathrm{d}t  \\]
+- Increasing K<sub>p</sub> and K<sub>i</sub> helps V<sub>out</sub> to reach towards the target faster but can create overshoot
 
 ---
 name: S18
