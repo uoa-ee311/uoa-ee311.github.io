@@ -6,7 +6,7 @@ Plecs {
   TimeSpan      "1"
   Timeout       ""
   Solver        "radau"
-  MaxStep       "1e-6"
+  MaxStep       "1e-3"
   InitStep      "-1"
   FixedStep     "1e-3"
   Refine        "1"
@@ -47,7 +47,7 @@ Plecs {
   ScriptsDialogGeometry "[746 360 456 272]"
   ScriptsDialogSplitterPos "46"
   Schematic {
-    Location      [319, 241; 2031, 1118]
+    Location      [736, 236; 2448, 1113]
     ZoomFactor    1.33333
     SliderPosition [0, 0]
     ShowBrowser   off
@@ -67,9 +67,9 @@ Plecs {
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAB"
-"AAAAGQAAAAFAAAAZAAAAAIAAABkAAAAAwAAAGQAAAABAAAAZAAAAAgAAABkAAAACQAAAGQAAAAGAA"
-"AAZAAAAAcAAABkAAADJgAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAADXAAA"
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
+"QAAAGQAAAADAAAAZAAAAAIAAABkAAAABQAAAGQAAAAEAAAAZAAAAAcAAABkAAAABgAAAGQAAAAJAA"
+"AAZAAAAAgAAABkAAADJgAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAADXAAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
 "AJPAAAAAQAAAAAAAAPoAAAAABM="
@@ -79,13 +79,13 @@ Plecs {
       TimeRange     "0"
       ScrollingMode "2"
       SingleTimeAxis "1"
-      Open          "1"
+      Open          "0"
       Ts            "-1"
       SampleLimit   "0"
       XAxisLabel    "Time (s)"
       ShowLegend    "1"
       Axis {
-        Name          "Switch Voltage"
+        Name          "Vout"
         AutoScale     1
         MinValue      0
         MaxValue      1
@@ -97,7 +97,7 @@ Plecs {
         BaselineValue 0
       }
       Axis {
-        Name          "Tx Primary & Secondary Current"
+        Name          "D"
         AutoScale     1
         MinValue      0
         MaxValue      1
@@ -138,7 +138,7 @@ Plecs {
     Component {
       Type          Gain
       Name          "Vin/sqrt(2fsL)"
-      Show          on
+      Show          off
       Position      [270, 165]
       Direction     right
       Flipped       off
@@ -161,7 +161,7 @@ Plecs {
     Component {
       Type          Gain
       Name          "M2"
-      Show          on
+      Show          off
       Position      [355, 165]
       Direction     right
       Flipped       off
@@ -343,6 +343,14 @@ Plecs {
     Annotation {
       Name          "|\n|\n|\n|\n|"
       Position      [390, 170]
+    } 
+    Annotation {
+      Name          "sqrt(RL)"
+      Position      [355, 190]
+    } 
+    Annotation {
+      Name          "Vin/sqrt(2fsL)"
+      Position      [270, 190]
     } 
   }
   Script {
