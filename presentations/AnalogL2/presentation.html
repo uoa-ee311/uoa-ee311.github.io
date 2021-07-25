@@ -85,7 +85,7 @@
       }
      
       .right-column {
-        width: 30%;
+        width: 33%;
         float: right;
         word-wrap: break-word;
       }
@@ -468,11 +468,12 @@ name: S18
 - To understand how K<sub>p</sub> and K<sub>i</sub> impacts the closed-loop operation, we can use the S-domain transfer function of a PI controller, 
 \\[ D = K\_p V\_{err} + \frac {K\_i } {s} V\_{err} \quad \Rightarrow \quad \frac {D} {V\_{err}} = T\_{PI} = K\_p + \frac {K\_i } {s} \\]
 - To help sketch T<sub>PI</sub> bode plot, we can rewrite as,
-
+\\[ T\_{PI} = K\_p \frac { s + K\_i / K\_p} {s} = K\_p \frac { s + \omega\_z } {s} \quad \text {where} \quad \omega\_z = \frac {K\_i} {K\_p} \\]
+- &omega;<sub>z</sub> sets the frequency at which phase delay drops to 0<sup>0</sup> 
 ]
 
 .right-column[
-
+<img src="img/Bode_PI.png" width="400px">
 ]
 
 ---
