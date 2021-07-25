@@ -578,6 +578,31 @@ name: S25
  - If control circuitry sends logic '0' OUTPUT is VCC (i.e., MOSFET switch is on)
 
 ---
+name: S26
+
+# Control Circuitry - Oscillator
+
+.center[<img src="img/UC3843_Osc.png" height="180px">]
+
+- Connecting a resistor, R<sub>T</sub>, and a capacitor, C<sub>T</sub>, at the RT/CT pin configures the oscillator to operate at the required PWM frequency, f<sub>s</sub>
+- Voltage at the RT/CT pin is a sawtooth waveform that has a frequency f<sub>s</sub>
+ - Every time this sawtooth waveform reach its peak voltage the oscillator generates an output pulse that 'sets' the PWM latch
+- When PWM latch is 'set' it outputs logic '0' making the 'OR' gate output a logic '0' causing MOSFET switch of the flyback converter to turn-on
+
+---
+name: S27
+
+# Selecting R<sub>T</sub> & C<sub>T</sub> Values
+
+.center[<img src="img/RTCT_Selection.png" height="220px">]
+
+- The values of R<sub>T</sub> and C<sub>T</sub> determines f<sub>s</sub> (i.e., PWM frequency)
+- The [datasheet](https://www.ti.com/lit/ds/symlink/uc3843.pdf?ts=1627207030483&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FUC3843) provides a plot that shows the relation between R<sub>T</sub>, C<sub>T</sub> and f<sub>s</sub>
+ - E.g., To setup a 100kHz we can use a 1nF capacitor for C<sub>T</sub> and approximately a 18k&ohm; resistor for R<sub>T</sub>
+- Once you connect the selected R<sub>T</sub> and C<sub>T</sub>, the UC3843 will generate a PWM signal at the OUTPUT pin
+ - The duty-cycle, D, of this PWM signal is controlled by the internal comparator that compares I<sub>Lp</sub> with I<sub>Lp(pk)_ref</sub> we generate from the ATmega328PB
+
+---
 
 class: title-slide
 layout: false
