@@ -487,12 +487,18 @@ Lets consider the same flyback converter where V<sub>in</sub>=20V, L<sub>p</sub>
 
 .center[<img src="img/PH5.png" height="310px">]
 
-
 ---
-name: S19
+name: S20
 
 # Peak Current Model Controller (PI)
 
+.center[<img src="img/PeakCMC.png" height="160px">]
+
+- Our [analysis of a flyback converter](https://uoa-ee311.github.io/presentations/AnalogL1/presentation.html#16) showed that I<sub>Lp(pk)</sub> is proportional to D
+\\[ I\_{Lp(pk)} = \frac{V\_{in}}{L\_p} DT\_{s} \quad \Rightarrow  \quad D = \frac {f\_s L\_p} {V\_{in}} I\_{Lp(pk)} \\]
+- As such, instead of directly controlling D, we can control I<sub>Lp(pk)</sub> to achieve a similar outcome
+ - We refer to this as **peak current mode control**
+- Since I<sub>Lp(pk)</sub> provide additional information we can now improve the functionality (e.g., implement input over current protection)
 
 ---
 name: S20
