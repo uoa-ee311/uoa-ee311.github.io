@@ -645,7 +645,7 @@ Plecs {
     } 
     Annotation {
       Name          "Model of Flyback Converter"
-      Position      [405, 125]
+      Position      [415, 130]
     } 
     Annotation {
       Name          "---------------------------"
