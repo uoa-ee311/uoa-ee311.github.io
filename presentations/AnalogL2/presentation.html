@@ -501,7 +501,7 @@ name: S20
 - The output of the PI controller now sets the reference peak current, I<sub>Lp(pk)_ref</sub>
 
 ---
-name: S20
+name: S21
 
 # Peak Current Model Controller (PII)
 
@@ -530,6 +530,17 @@ name: template_slide
 
 .logo-slide[]
 .footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S22
+
+# Proposed Controller Implementation
+
+.center[<img src="img/System.png" height="250px">]
+
+- In your project, we will use a UC3843 peak current mode controller IC to drive S<sub>p</sub> in order to generate V<sub>out</sub> requested by the user
+- The PI controller will be implemented on an ATmega328PB and it will generate I<sub>Lp(pk)_ref</sub> for the UC3843
+ - Since ATmega328PB does not have a digital-to-analog converter (DAC), we will use its PWM unit with an RC filter to implement a DAC
 
 ---
 name: S7
