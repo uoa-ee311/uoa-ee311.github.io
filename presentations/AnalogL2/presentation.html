@@ -492,19 +492,26 @@ name: S20
 
 # Peak Current Model Controller (PI)
 
-.center[<img src="img/PeakCMC.png" height="160px">]
+.center[<img src="img/PeakCMC.png" height="180px">]
 
 - Our [analysis of a flyback converter](https://uoa-ee311.github.io/presentations/AnalogL1/presentation.html#16) showed that I<sub>Lp(pk)</sub> is proportional to D
 \\[ I\_{Lp(pk)} = \frac{V\_{in}}{L\_p} DT\_{s} \quad \Rightarrow  \quad D = \frac {f\_s L\_p} {V\_{in}} I\_{Lp(pk)} \\]
 - As such, instead of directly controlling D, we can control I<sub>Lp(pk)</sub> to achieve a similar outcome
- - We refer to this as **peak current mode control**
-- Since I<sub>Lp(pk)</sub> provide additional information we can now improve the functionality (e.g., implement input over current protection)
+ - This is **peak current mode control** and is a very common/preferred control method 
+- The output of the PI controller now sets the reference peak current, I<sub>Lp(pk)_ref</sub>
 
 ---
 name: S20
 
 # Peak Current Model Controller (PII)
 
+.center[<img src="img/PeakCMC.png" height="180px">]
+
+- A comparator is commonly used to compare I<sub>Lp</sub> fed to its non-inverting input with I<sub>Lp(pk)_ref</sub> fed to its inverting input
+ - When I<sub>Lp</sub> rises above I<sub>Lp(pk)_ref</sub>, comparator outputs 0 indicating switch should be turned-off
+- A latch is typically used to hold the off-state of the switch until the end of the time-period 
+ - An oscillator connected to the latch sets the switching frequency
+- Since I<sub>Lp(pk)</sub> provide additional information we can now improve the functionality (e.g., implement input over current protection)
 
 ---
 
