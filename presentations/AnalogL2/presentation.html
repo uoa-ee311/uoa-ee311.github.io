@@ -543,9 +543,39 @@ name: S22
  - Since ATmega328PB does not have a digital-to-analog converter (DAC), we will use its PWM unit with an RC filter to implement a DAC
 
 ---
-name: S7
+name: S23
 
-# Internal Diagram
+# UC3843 Internal Diagram
+
+.center[<img src="img/UC3843_Internals.png" height="450px">]
+
+---
+name: S24
+
+# Internal Power Supply Circuitry
+
+.center[<img src="img/UC3843_Power.png" height="190px">]
+
+- To power the IC connect a voltage source between VCC (+) and GNG (-) pins 
+ - Needs to be more than 8.4V as the undervoltage lockout (UVLO) protection will otherwise turn-off due to insufficient input voltage
+ - Input voltage needs to be less than 30V to avoid damaging the IC
+ - 15V to 20V is a good input voltage to aim for
+- IC generates its own 5V to power internal circuitry and this is also available at VREF
+- IC also generate its own 2.5V but this is not made available for us to use
+
+---
+name: S25
+
+# Output Circuitry
+
+.center[<img src="img/UC3843_Output.png" height="190px">]
+
+- We call this output circuit configuration a **Totem Pole** or a **Push-Pull** configuration
+ - OUTPUT pin can be connected directly to the gate of the MOSFET switch used in our flyback converter through a small resistor
+ - This resistor limits the current drawn from OUTPUT pin to less than 1A
+- The output of the control circuitry determines if the OUTPUT pin is 0V or VCC
+ - If control circuitry sends logic '1' OUTPUT is 0V (i.e., MOSFET switch is off)
+ - If control circuitry sends logic '0' OUTPUT is VCC (i.e., MOSFET switch is on)
 
 ---
 
