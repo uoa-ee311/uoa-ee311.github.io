@@ -234,10 +234,10 @@ name: S1
 - PI controllers 
 - Peak current mode control 
 - UC3843 control IC
- - How do we provide a feedback of current?
- - How is peak current determined?
+ - Functional diagram of a UC3843
+ - How is peak current mode control achieved?
  - How to setup the oscillator?
- - How do we use the output to control the flyback converter?
+ - How do we provide a feedback of current?
 
 ---
 
@@ -287,7 +287,7 @@ name: S4
 # Demo: Open-Loop Control
 
 .questions[
-Lets consider the same flyback converter where V<sub>in</sub>=20V, L<sub>p</sub>=5&micro;H, f<sub>s</sub>=100kHz and R<sub>load</sub>=100&#8486;. If D is held at 0.5 by a microcontroller then it will be generating a 100V output. What will be the output if R<sub>load</sub> increases to 200&#8486;? Is there a way for the microcontroller to learn the load has changed?
+Lets consider the same flyback converter from previous lecture where V<sub>in</sub>=20V, L<sub>p</sub>=5&micro;H, f<sub>s</sub>=100kHz and R<sub>load</sub>=100&#8486;. If D is held at 0.5 by a microcontroller then it will be generating a 100V output. What will be the output if R<sub>load</sub> increases to 200&#8486;? Is there a way for the microcontroller to learn the load has changed?
 ]
 
 .center[<img src="img/PH1.png" height="310px">]
@@ -301,10 +301,10 @@ name: S5
 
 - One way to know if the load or other circuit parameters that impacts V<sub>out</sub> has changed is to measure V<sub>out</sub> and use this information inside the microcontroller to help deduce an appropriate D to use
  - This means we monitor and use V<sub>out</sub> as a **feedback** to **control** V<sub>out</sub>
-- There many ways to use V<sub>out</sub> feedback to derive D but it is not a straightforward task
  - We call this type of control **closed-loop** control
+- There are many ways to use V<sub>out</sub> feedback to derive D but it is not a straightforward task
 - This is because V<sub>out</sub> is not only a function of R<sub>load</sub> but it also depends on other circuit parameters
- - A feedback of just only V<sub>out</sub> would not tell us which of those parameters has changed 
+ - A feedback of just only V<sub>out</sub> would not tell us which of those parameters have changed 
 
 ---
 name: S6
@@ -339,7 +339,7 @@ name: S8
 
 .center[<img src="img/PropotionalGain.png" height="170px">]
 
-- From our [analysis](#S7), we could see that if K<sub>p</sub> is chosen to be very large such that K<sub>p</sub>T<sub>flybk</sub> &#62;&#62; 1, then V<sub>out</sub> &#8776; V<sub>ref</sub>
+- From our [analysis](#S7), we could see that if K<sub>p</sub> is chosen to be large such that K<sub>p</sub>T<sub>flybk</sub> &#62;&#62; 1, then V<sub>out</sub> &#8776; V<sub>ref</sub>
 - We could also observe this in our system diagram where D = K<sub>p</sub>V<sub>err</sub>
  - Since 0 &leq; D &leq; 1, larger the K<sub>p</sub> smaller the V<sub>err</sub>
 - Thus, a proportional controller with a sufficiently large K<sub>p</sub> will help achieve an V<sub>out</sub> that closely follow a target voltage set by V<sub>ref</sub>
@@ -365,7 +365,7 @@ name: S10
  - Disturbances we make to the system, e.g., changing V<sub>ref</sub> or R<sub>load</sub>, can be considered to generate a spectrum of frequencies 
 - In a real flyback converter, to store energy in L<sub>p</sub> and to charge/discharge C<sub>o</sub> takes time, and thus a change in D does not result in an immediate change in V<sub>out</sub>
  - The oversimplified T<sub>flybk</sub> ignored these delays
-- Lets exaggerate these delays and assume that at the frequency of V<sub>ref</sub>, which will be the same as the frequency of D, the flyback converter introduce a half-cycle delay (i.e. 180<sup>0</sup> delay)
+- Lets exaggerate these delays and assume that at the frequency of V<sub>ref</sub> the flyback converter introduce a half-cycle delay (i.e. 180<sup>0</sup> delay)
  - A 180<sup>0</sup> delay to a sinusoidal wave represents a negative gain
 - Thus, T<sub>flybk</sub> at this specific frequency can be written as -T<sub>flybk</sub>
  - Note, |T<sub>flybk</sub>| at this frequency might be much less than,
@@ -381,7 +381,7 @@ name: S11
 - We can express V<sub>out</sub> under the specific conditions mentioned in the previous slide,
 \\[ V\_{out} = -V\_{ref} \frac {K\_p T\_{flybk}} {1 - K\_p T\_{flybk}}  \\]
 - From this analysis we can see that V<sub>out</sub> tends to infinity when K<sub>p</sub>T<sub>flybk</sub> approaches 1
-- Thus to ensure the closed-loop controlled system is **stable**, K<sub>p</sub> needs to be sufficiently small to ensure K<sub>p</sub>T<sub>flybk</sub> &#60; 1, if T<sub>flybk</sub> introduce a 180<sup>0</sup> delay at a certain frequency
+- Thus to ensure the closed-loop controlled system is **stable**, K<sub>p</sub> needs to be sufficiently small and satisfy K<sub>p</sub>T<sub>flybk</sub> &#60; 1, if T<sub>flybk</sub> introduce a 180<sup>0</sup> delay at a certain frequency
  - In real life, T<sub>flybk</sub> will have a frequency dependent gain and a phase  
 
 ---
@@ -403,7 +403,7 @@ name: S13
 .center[<img src="img/Noise.png" height="180px">]
 
 - A flyback converter, like any other SMPS, generate significant electromagnetic noise during operation
-- In addition, V<sub>out</sub> itself has a ripple across it that results from physical nature of the circuit
+- In addition, V<sub>out</sub> itself has a ripple across it that results from the physical nature of the circuit
 - A larger K<sub>p</sub> can amplify these unwanted components to a point that they interfere with the closed-loop controller operation
  - Both the noise and V<sub>out</sub> ripple components couples in with the closed-loop controller mainly though the feedback signal
 - The selected K<sub>p</sub> must ensure the system is not reacting to noise 
@@ -545,7 +545,7 @@ name: S22
 ---
 name: S23
 
-# UC3843 Internal Diagram
+# UC3843 Functional Diagram
 
 .center[<img src="img/UC3843_Internals.png" height="450px">]
 
@@ -561,7 +561,7 @@ name: S24
  - Input voltage needs to be less than 30V to avoid damaging the IC
  - 15V to 20V is a good input voltage to aim for
 - IC generates its own 5V to power internal circuitry and this is also available at VREF
-- IC also generate its own 2.5V but this is not made available for us to use
+- IC also generate its own 2.5V as a reference but this is not made available for us to use
 
 ---
 name: S25
