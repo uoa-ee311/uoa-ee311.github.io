@@ -91,13 +91,13 @@
       }
 
       .left-column-50 {
-        width: 47%;
+        width: 45%;
         float: left;
         word-wrap: break-word;
       }
      
       .right-column-50 {
-        width: 47%;
+        width: 50%;
         float: right;
         word-wrap: break-word;
       }
@@ -160,7 +160,7 @@
       }
 
       .zoom15:hover {
-        transform: scale(1.43) translateY(-6%) translateX(0%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        transform: scale(1.43) translateY(-6%) translateX(-4%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
       }
 
     </style>
@@ -632,7 +632,7 @@ name: S29
  - In this case V<sub>pi_out</sub> changes roughly from 0V to 5V when V<sub>pi_in</sub> changes from 4V to 1V
 
 ---
-name: S31
+name: S30
 
 # Control Circuitry - Comparator (PI)
 
@@ -645,7 +645,7 @@ name: S31
 - When the PI controller output, V<sub>pi_in</sub> is 1V (i.e., V<sub>pi_out</sub> &approx; 5V), I<sub>Lp(pk)_ref</sub> will be 1V 
 
 ---
-name: S32
+name: S31
 
 # Control Circuitry - Comparator (PII)
 
@@ -657,6 +657,68 @@ name: S32
 - However, in the generic current mode controller implementation we investigated [earlier](#S21) a larger V<sub>pi_in</sub> should result in a larger peak current
 - This issue is introduced because V<sub>pi_in</sub> goes through the inverting OpAmp in the UC3843 
  - We can account for this in our ATmega328PB program 
+
+---
+name: S32
+
+# Designing the Current Sensor (PI)
+
+.left-column-50[
+<img src="img/CurrentSens.png" height="400px">
+]
+.right-column-50[
+- A measurement of I<sub>Lp</sub> needs to be provided at the ISENS pin to enable UC3843 to control I<sub>Lp(pk)</sub>
+- A current sense resistor, R<sub>i</sub>, can be used to measure I<sub>in</sub>, which is the same as I<sub>Lp</sub>,
+\\[ V\_{ILp} = I\_{in}R\_i = I\_{Lp}R\_i \\]
+- Since the maximum value of I<sub>Lp(pk)_ref</sub> is 1V, the **maximum I<sub>Lp(pk)</sub>** allowed is,
+
+\\[ I\_{Lp(pk)\\\_{max}} = 1 / R\_i \\]
+- We should design I<sub>Lp(pk)_max</sub> to be larger than maximum I<sub>Lp(pk)</sub> of our design
+]
+
+---
+name: S33
+
+# Designing the Current Sensor (PII)
+
+.left-column-50[
+<img src="img/CurrentSensF.png" height="400px">
+]
+.right-column-50[
+- V<sub>ILp</sub> measurement in practice will have a significant noise content
+- A RC lowpass filter is used to filter this noise before feeding V<sub>ILp</sub> to ISENSE
+- Filter needs to pass I<sub>Lp</sub>, which is at f<sub>s</sub>, without attenuation
+ - So the cutoff frequency of the filter could be at about 100 times f<sub>s</sub>
+\\[ \frac {1} {2 \pi R\_{if}C\_{if} } \geqslant 100f\_s \\]
+- For practical reasons C<sub>if</sub> should be 100pF or larger
+]
+
+---
+name: S34
+
+# The Recommended Design
+.zoom15[
+.center[<img src="img/Design.png" height="450px">]
+]
+
+---
+name: S35
+
+# Improvements to Consider
+
+- While keeping f<sub>s</sub> at 100kHz, can we reduce the size of the transformer? 
+ - How small can it be?
+- Can we reduce the loss in R<sub>i</sub>?
+ - What options are there to reduce loss in R<sub>i</sub>?
+- Do we need the isolated power module, U2, to power the ATmega328PB?
+ - Can we not power it from V<sub>out</sub>?
+- Why is the ATmega328PB on the isolated side of the circuit?
+ - Would the design simplifies if the ATmeag328PB is on the input side of the circuit?
+- Do we need the digital isolator, IC1, in the design?
+ - Are there cost effective alternatives? 
+- Can we design the circuit without the digital isolator?
+ - If so how can we isolate the V<sub>out</sub> measurement?
+- What other improvements can we do?
 
 ---
 
