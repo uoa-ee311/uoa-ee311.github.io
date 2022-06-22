@@ -1,0 +1,91 @@
+{
+
+
+
+"schematics":
+[
+   {
+      "path": "",
+      "height": 270
+   }
+],
+
+
+"scopes" :
+[
+   {
+      "path": "Scope",
+      "height": 270,
+      "width":500,
+      "analysis":
+      {
+         "cursor1": { "time": 0.1},
+         "cursor2": { "time": 0.6},
+         "rms": true,
+         "mean": true
+      }
+   }
+
+],
+
+"paramtables":
+[
+   {
+      "display": "dialog",
+      "component": "M2",
+      "labelpos": "bottom",
+      "parameters":
+      [
+         {
+            "variable": "RL",
+            "label": "RL",
+            "unit": "Ω",
+            "min": 100,
+            "max": 200,
+            "value": 100
+         }
+      ]
+   },
+   {
+      "display": "dialog",
+      "component": "Ki",
+      "labelpos": "bottom",
+      "parameters":
+      [
+         {
+            "variable": "Ki",
+            "label": "Ki",
+            "unit": "",
+            "min": 0.001,
+            "max": 1,
+            "value": 0.1
+         }
+      ]
+   },
+   {
+      "display": "dialog",
+      "component": "Vref",
+      "labelpos": "bottom",
+      "parameters":
+      [
+         {
+            "variable": "Vref",
+            "label": "Vref",
+            "unit": "",
+            "min": 50,
+            "max": 150,
+            "value": 100
+         }
+      ]
+   }
+],
+
+"simulations":
+[
+{
+"label": "Simulate",
+"analysis": ""
+}
+]
+
+}

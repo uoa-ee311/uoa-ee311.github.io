@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="plecsModel">
+  <head>
+    <title>Voltage Feedback</title>
+    <meta charset="utf-8">
+
+    <!--Plecs WBS--->
+    <link href="//demo.plexim.com/css/plecs.css" rel="stylesheet" type="text/css" />
+    <script src="//demo.plexim.com/js/xdomain.min.js" slave="//demo.plexim.com/proxy.html"></script>
+    <script src="//demo.plexim.com/js/angular.min.js">
+    </script>
+    <script src="//demo.plexim.com/js/plecs.min.js">
+    </script>
+
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { 
+        font-family: 'Droid Serif'; 
+        line-height: 1.6 !important;
+        }
+
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: bold;
+        color: #00467F;
+      }
+
+      h1{
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+      }
+
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+      .TitleAuthor {
+        color:white; 
+        font-weight: normal;
+      }
+
+      .title-slide .remark-slide-number {
+        display: none;
+      }
+      .title-slide h1, h2, h3, h4 {
+        text-align: left;
+        color:white;
+        line-height: 0.7;
+        font-weight: bold;
+      }
+
+      .title-slide {
+        vertical-align: middle;
+        background-color: #00467F;
+      }
+
+      .logo-title {
+        content: "";
+        position: absolute;
+        top: 15px;
+        right:   15px;
+        height: 88px;
+        width: 267px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cdn.auckland.ac.nz/assets/central/central-services/mediaandmarketing/uoa-logos-2015/uoa-logo-2015-reverse.png);
+      }
+      .logo-slide {
+        content: "";
+        position: absolute;
+        top: 35px;
+        right:   15px;
+        height: 96px;
+        width: 100px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cpb-ap-se2.wpmucdn.com/blogs.auckland.ac.nz/dist/d/79/files/2015/10/uoa-v-colour2.png);
+      }
+
+      .left-column {
+        width: 65%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column {
+        width: 33%;
+        float: right;
+        word-wrap: break-word;
+      }
+
+      .left-column-50 {
+        width: 45%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column-50 {
+        width: 50%;
+        float: right;
+        word-wrap: break-word;
+      }
+
+      .footer {
+        content: "";
+        position: absolute;
+        bottom: 17px;
+        color:gray;
+        font-size: 10pt;
+      }
+      
+      @page {
+        size: 1210px 681px;
+        margin: 0;
+      }
+
+      @media print {
+        .remark-slide-scaler {
+          width: 100% !important;
+          height: 100% !important;
+          transform: scale(1) !important;
+          top: 0 !important;
+          left: 0 !important;
+        }
+      }
+      
+      .credits {
+        font-size: 12px;
+        line-height: 4px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .codes {
+        
+        line-height: 20px !important;
+      }
+
+      .codes_dense {
+        
+        line-height: 15px !important;
+      }
+
+      .questions {
+        font-size: 20px;
+        line-height: 28px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .zoom175 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom175:hover {
+        transform: scale(1.5) translateY(10%) translateX(0%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+      .zoom15 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom15:hover {
+        transform: scale(1.43) translateY(-6%) translateX(-4%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+    </style>
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <style>
+    .smaller-font { font-size:14px } 
+    </style>
+
+    <!-- KaTeX and Mathjax support refer to below for syntax -->
+    <!-- https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+    
+    <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style>
+      /* Table Style */
+      .tg  {border-collapse:collapse;border-color:#9ABAD9;border-spacing:0;}
+      .tg td{background-color:#EBF5FF;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#444;
+        font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:3px 10px;word-break:normal;}
+      .tg th{background-color:#409cff;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#fff;
+        font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:3px 10px;word-break:normal;}
+      .tg .tg-dzaw{background-color:#4F81BD;color:#FFF;font-weight:bold;text-align:left;vertical-align:top}
+      .tg .tg-sabo{background-color:#ebf5ff;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-096r{color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-jayl{background-color:#d2e4fc;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-ig71{background-color:#D2E4FC;color:#000000;text-align:left;vertical-align:top}
+    </style>
+
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide
+count: false
+.logo-title[]
+
+## ELECTENG 311
+# Electronics Systems Design 
+### Voltage Feedback Design
+
+.TitleAuthor[Duleepa J Thrimawithana]
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+
+name: S1
+
+# Learning Objectives
+
+- How do we communicate voltage feedback with the UC3843?
+ - Electrically isolated voltage feedback 
+- Why do we use PWM to communicate voltage feedback?
+- Required functionality of our firmware
+- Why do we intend to use an ATmege328P/ATmega328PB?
+- Fundamentals of PWM generation
+ - Asymmetric and symmetric PWM 
+ - PWM generation methods
+- Using an MCU to generate PWM 
+ - Timers and how they work
+ - Generation PWM using a timer peripheral
+- Learning to configure PWM in the ATmega328P
+- Learning to develop code to generate a PWM output using the ATmega328P
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Isolated Voltage Feedback
+### Implementation Options 
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S2
+
+# Voltage Feedback
+
+.left-column-50[
+<img src="img/CurrentSensF.png" height="380px">
+]
+
+.right-column-50[
+- UC3843 needs to be provided a voltage signal, V<sub>pi_in</sub>, between 1V and 4V from a PI controller
+- For the R<sub>op1</sub> and R<sub>op2</sub> values we selected,
+ - A V<sub>pi_in</sub> of 1V indicate the UC3843 to allow maximum I<sub>Lp(pk)</sub> 
+ - A V<sub>pi_in</sub> of 4V indicate the UC3843 to limit I<sub>Lp(pk)</sub> to almost 0A
+- PI controller needs to be fed the error voltage, V<sub>err</sub> 
+- V<sub>err</sub> is derived by comparing the actual output voltage, V<sub>out</sub>, with a reference voltage, V<sub>ref</sub>
+ - V<sub>ref</sub> indicates the target output voltage we want to generate
+]
+
+---
+name: S3
+
+# Isolation of Feedback
+
+.left-column-50[
+<img src="img/IsoFeedback.png" height="380px">
+]
+
+.right-column-50[
+- Specifications state V<sub>out</sub> needs to be electrically isolated from V<sub>in</sub>
+- Though Tx isolates V<sub>out</sub> from V<sub>in</sub> there exists a non-isolated path through feedback
+- The feedback loop need to be electrically isolated to solve this issue 
+ - We should determine the most suitable point in the feedback path to isolate 
+- We can isolate V<sub>out</sub> and V<sub>ref</sub> signals at "Iso1" or V<sub>pi_in</sub> signal "Iso2"
+ - "Iso2" preferred as one signal and future proof
+- Why not isolate after the UC3843?
+]
+
+---
+name: S4
+
+# Analog Signal Isolation 
+
+.center[
+<img src="img/AnalogIso.png" height="150px">
+]
+
+- The output of the PI controller can be an analog voltage if the it is implemented using analog circuitry  
+ - For our design it will be in the range 1V to 4V
+- An analog isolation amplifier IC (e.g., [ADuM3190s](https://www.analog.com/en/products/adum3190s.html#product-overview)) can be used for isolation
+ - Tend to be expensive as analog isolation requires complex circuitry
+- A low pass filter is usually needed to obtain a clean signal that can be used as V<sub>pi_in</sub>
+- Not a good solution if the PI controller is implemented using a microcontroller since DACs are not a common peripheral found in cheaper microcontrollers
+
+---
+name: S5
+
+# Digital Signal Isolation
+
+.center[
+<img src="img/DigitalIso.png" height="150px">
+]
+
+- The output of the PI controller can be a digital signal if it is implemented using a microcontroller   
+ - For example, it can be a pulse width modulated (PWM) signal, which has an average value representative of the PI controller output (i.e., 1V to 4V)
+ - Alternatively, it can be also a pulse frequency modulated signal (PFM) 
+- A digital isolator IC (e.g., [ADuM110N](https://www.analog.com/en/products/adum110n.html)) can be used for isolation
+ - Tend to be cheaper than analog isolation amplifiers
+ - Can be also implemented with discrete devices using an IR LED and a detector
+- A low pass filter is needed to obtain a clean signal that can be used as V<sub>pi_in</sub>
+
+
+---
+name: S6
+
+# PI Controller Implementation
+
+.center[<img src="img/PIControlConcept.png" height="180px">]
+
+- The PI controller can be implemented digitally on a microcontroller 
+- The PI output could set the duty-cycle of a PWM output generated by the microcontroller 
+ - Most microcontrollers have built in timer peripherals and they support PWM generation 
+- The output voltage, V<sub>out</sub>, can be read using an ADC to compare with a reference voltage, V<sub>ref</sub>
+ - Most microcontrollers have at least a single built in ADC peripheral
+- V<sub>ref</sub>, is provided by the user via a computer that communicates with the microcontroller over UART 
+ - Most microcontrollers have at least a single built in UART peripheral
+
+---
+name: S7
+
+# Why a Digital PI?
+
+.center[<img src="img/Analog_Control.png" height="125px">]
+
+- We can implement a PI controller using only analog hardware 
+ - This is a solution commonly employed in many commercial products 
+ - The cost and complexity of the hardware depends on expected functionality 
+ - As in example above a simple implementation may be used with a volt meter as the display and Z<sub>op2</sub> to implement a compensator 
+ - Adding a user interface can significantly complicate the design and often require a microcontroller
+ - Difficult and costly to modifying the system to add new functionality 
+- Since the design aim to provide a graphical user interface, a digital implementation of the PI controller likely to be the best solution
+
+---
+name: S8
+
+# Firmware Functionality
+
+- Configure the Digital I/O, ADC, UART and Timer peripherals with appropriate settings for the project
+- In the background, listen to messages received via UART to get reference voltage, **V_ref**, sent by the user
+ - Use a message format, similar to "XXXXX\r\n" where XXXXX is **V_ref** in mV 
+ - Use '\r' and/or '\n' to identify end of the message and convert the ASCII characters to a number 
+- Take ADC measurements of the output voltage, **V_out**, that is stepped down using a voltage divider 
+ - Aim to take ADC samples every 0.1ms or faster (can be auto-triggered based on a timer)
+- Implement a PI controller that computes the PI output, **PI_out**, after each **V_out** measurement
+ - First subtract **V_ref** from each measurement of **V_out** to obtain the error voltage, **V_err**
+ - Multiply **V_err** with selected K<sub>i</sub> and add to accumulated integral error, **V_int_err**
+ - Multiply **V_err** with selected K<sub>p</sub> and add to **V_int_err** to obtain **PI_out**
+ - Implement anti-windup to avoid overflow of **V_int_err** and **PI_out**
+- Setup a timer to generate a PWM that has a duty-cycle, **D_pwm**, representative of **PI_out**
+ - Aim for a PWM frequency of 100kHz and use scaling to match **PI_out** to **D_pwm** range
+
+---
+name: S9
+
+# What to Consider when Selecting an MCU (PI)?
+
+- There are three core resources which must be considered when selecting an MCU for our project
+ - Computational Power
+ - Program Memory
+ - RAM
+- Computational Power
+ - This is a measure of how quickly the processor can perform a given task
+ - The more computation you need to perform in a given time, the more computational power you need
+ - It is a function of clock speed (how quickly an instruction is executed), and the Instruction Set Architecture (how much computation is performed by a given instruction)
+ - Different architectures target different levels of computational performance
+ - ATmega 328P vs ARM Cortex-M4 vs C2000 TMS320F28379
+ - Measured in Millions-of-Instructions-Per-Second (MIPS), but this is only a guide
+ - ATmega 16 MIPS of 328P vs 90 MIPS of STM32F334 vs 800 MIPS of C2000 TMS320F28379
+
+---
+name: S10
+
+# What to Consider when Selecting an MCU (PII)?
+
+- Program Memory (Flash)
+ - This is where your code to execute is stored
+ - More tasks your program performs, the more code you will require, and the more flash you will need
+ - For microcontrollers it is usually measured in kilobytes (KB), or megabytes (MB) (e.g. an ATmega328P has 32KB of program memory)
+- Random Access Memory (RAM)
+ - This is where data being processed by the microprocessor is stored, as well as the current microprocessor state
+ - The more data you need to store or operate on at a given time, the more RAM you will require
+ - For microcontrollers it is usually measured in kilobytes (KB), or megabytes (MB) (e.g. an ATmega328P has 2048B of RAM)
+- Different designs require a different mix of computational power, program memory, and RAM
+ - Our design task is simple, and our resource requirements are limited
+
+---
+name: S11
+
+# What MCU I/O Peripherals are Important?
+
+- Microcontrollers come with a wide range of I/O peripheral to perform different tasks
+- The most common ones, which we will need for this project, are
+ - General Purpose Input Output (GPIO)
+ - Universal Asynchronous Receiver Transmitter (UART)
+ - Analog to Digital Converter (ADC)
+ - Timer
+- In COMPSYS 201 and in ELECTENG/COMPSYS 209 you learnt how to use these peripherals 
+- There are many more I/O peripherals that we won’t need but can be important for more complicated projects and these include
+ - Communication peripheral such as I2C, SPI, CAN, USB, and Ethernet
+ - Digital to Analog Converter (DAC)
+ - UI peripheral such as LCD drivers, capacitive touch and audio encoders
+ - AES encryption, brown out protection, watchdog timers and low voltage detection
+
+---
+name: S12
+
+# Other Important Requirements
+
+- A number of other functional and non-functional requirements should be consider to select a MCU 
+ - Power consumption
+ - Operating voltage range
+ - Operating temperature range
+ - Packages available (the size and shape of the actual chip)
+ - Compiler support
+ - Development tools required
+ - Programming tools required
+ - Available software libraries
+ - Certifications (automotive, aerospace and military are common ones)
+- Cost, availability, lead-time and minimum-order-quantity (MoQ) typically are the most important 
+ - Cost should include cost of the devices themselves, licenses for tools, software and libraries as well as cost of learning and setting up a new ecosystem
+
+---
+name: S13
+
+# Why an ATmega328P/ATmega328PB?
+
+- To select an appropriate microcontroller for our project we need to estimate the requirements to implement the functionality we already discussed 
+ - Determining for example the required I/O peripherals and electrical parameters are somewhat straightforward 
+ - Memory and computational power requirements for example are harder to estimate and often our experience with similar previous projects is needed to do make a good estimate 
+- As discussed previously there are many non-functional aspects to think about
+ - Cost, availability and support (e.g. application notes, tutorials, books, development tools, libraries, etc.) are very important
+ - In many situations we may prefer a familiar device or a device that is easier to use and has a shorter learning curve since development time is a big part of the project cost
+- The ATmega328P/ATmega328PB has all the peripherals we need and has sufficient memory and computational power but also more importantly it is one of the easiest to use, we are familiar with it and there is ample support (e.g. https://community.atmel.com)
+
+---
+name: S14
+
+# What Other MCUs Can We Use?
+
+- The STMicroelectronics STM32 and Texas Instruments C2000 family MCUs are quite popular in power electronics applications
+
+<table class="tg" style="undefined;table-layout: fixed; width: 1000px; margin-left:auto; margin-right:auto;">
+  <colgroup>
+  <col style="width: 250px">
+  <col style="width: 250px">
+  <col style="width: 250px">
+  <col style="width: 250px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="tg-dzaw"><span style="color:white">Feature</span></th>
+      <th class="tg-dzaw"><span style="color:white">ATmeag328P</span></th>
+      <th class="tg-dzaw"><span style="color:white">STM32F334</span></th>
+      <th class="tg-dzaw"><span style="color:white">TMS320F28379</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-sabo">Core</td>
+      <td class="tg-sabo">8-bit CPU</td>
+      <td class="tg-sabo">ARM M4 32-bit CPU with FPU</td>
+      <td class="tg-sabo">Dual 32-bit CPUs with FPU</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Clock Frequency & MIPS</td>
+      <td class="tg-ig71">16MHz & 16 MIPS</td>
+      <td class="tg-ig71">72MHz & 90 MIPS</td>
+      <td class="tg-ig71">200MHz & 800 MIPS</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Flash & RAM Sizes</td>
+      <td class="tg-sabo">32KB & 2KB</td>
+      <td class="tg-sabo">64KB & 12KB</td>
+      <td class="tg-sabo">1024KB & 204KB</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Cost for 1k+ Qty</td>
+      <td class="tg-ig71">~1.90 USD</td>
+      <td class="tg-ig71">~3.40 USD</td>
+      <td class="tg-ig71">~12.00 USD</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Number of ADC & Resolution</td>
+      <td class="tg-sabo">Single 10-Bit ADC up to 15 KSPS</td>
+      <td class="tg-sabo">Two 12-bit ADCs up to 5 MSPS</td>
+      <td class="tg-sabo">Four 16-bit ADCs up to 3.5 MSPS</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Number of Timers</td>
+      <td class="tg-ig71">3</td>
+      <td class="tg-ig71">12</td>
+      <td class="tg-ig71">24</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Number of USARTs</td>
+      <td class="tg-sabo">1</td>
+      <td class="tg-sabo">3</td>
+      <td class="tg-sabo">4</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Operating Voltage Range</td>
+      <td class="tg-ig71">2.7V to 5.5V</td>
+      <td class="tg-ig71">2.0V to 3.6V</td>
+      <td class="tg-ig71">1.2V Core and 3.3V I/O</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">Other Useful Features</td>
+      <td class="tg-sabo">None</td>
+      <td class="tg-sabo">DACs, PGA, RTC, DMA </td>
+      <td class="tg-sabo">DACs, DMA, CLA, CLB</td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">Learning Curve</td>
+      <td class="tg-ig71">Easy</td>
+      <td class="tg-ig71">Moderate</td>
+      <td class="tg-ig71">Challenging</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+name: S15
+
+# The ATmega328P MCU & Tools
+
+- The ATmega328P offers the following 
+ - 8-bit processor implementing the Atmel AVR RISC architecture
+ - 16 MIPS throughput at 16MHz clock
+ - 32 KB of program memory (flash) which is programmable in-system (the ability of microcontrollers to be programmed while installed in a complete system)
+ - 2 KB of RAM
+ - 3 timers, 8 channel 10-bit SAR type ADC, a USART, and 23 GPIO
+ - External and internal interrupt sources
+ - Operates from 2.7V to 5.5V from -40°C to 125°C 
+- As with previous courses we will use the Atmel Studio IDE for development
+- When getting started, the most important resource available is the [ATmega328P](http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf) datasheet
+ - Lists all of the parameters and explains how the I/O peripherals work and how to use them
+
+---
+name: S16
+
+# ATmega328P vs ATmega328PB
+
+- Proteus VSM, which we will use to simulate and debug modules of the embedded software program, only provide an ATmega328P model 
+- However, we will use the ATmega328PB Xplained Mini evaluation kit in our prototype to avoid having to build additional circuitry
+- Fortunately, code written for the ATmega328P is forward compatible with ATmega328PB
+ - Some inbuilt macros might need minor modifications so alway test your modules on an ATmega328PB Xplained Mini after validating it in Proteus VSM
+- The main differences between the ATmega328P and the ATmega328PB are
+ - ATmega328PB has an additional USART module, SPI module and a TWI module
+ - ATmega328PB has 2 additional Timer/Counters
+ - ATmega328PB has additional IO pin functionalities
+- In the lectures we will only consider the ATmega328P 
+ - Some macros used in lecture examples might need changing before programing the Xplained Mini
+
+---
+name: S17
+
+# ATmega328P Block Diagram & Pinout
+
+.center[
+<img src="img/328PBlock.png" height="450">
+<img src="img/328PPins.png" height="450">
+]
+
+---
+name: S18
+
+# Recommended Implementation
+
+.center[<img src="img/RecomendedConcept.png" height="180px">]
+
+- The PI controller is implemented digitally on a ATmega328P/ATmega328PB 
+- The PI output will set the duty-cycle of a PWM output generated by the ATmega328P/ATmega328PB
+ - E.g., Use Timer0 and generate the output at OC0A pin    
+- Measure the output voltage, V<sub>out</sub>, using ADC to compare with the user provided reference voltage
+ - E.g., Use voltage divider to step-down V<sub>out</sub> to be in the range 0-5V for ADC0 channel 
+- Reference voltage is provided by the user via a computer that communicates over UART 
+ - E.g., Configure USART0 to receive message at 9600 baud, 8N1 with no parity scheme
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Pulse Width Modulation
+### Fundamentals 
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+name: S19
+
+# 
+
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Timers
+### Fundamentals 
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+name: S19
+
+# 
+
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# The Timers on ATmega328P
+### Configuring and Using for PWM Generation
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+name: S19
+
+# 
+
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Questions?
+
+
+
+    </textarea>
+
+    
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+      
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript">
+    </script>
+
+    <!-- 
+    <script src="remark/remark.min.js" type="text/javascript">
+    </script>
+    -->  
+
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="remark/terminal.language.js" type="text/javascript"></script>
+
+    <script src="https://kit.fontawesome.com/a405eedf54.js" crossorigin="anonymous"></script>
+    <script src="remark/mark.min.js" type="text/javascript">
+    </script>
+    <link rel="stylesheet" href="remark/remark.search.css">
+    <script src="remark/remark.search.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+      var options = {};
+
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        ]});
+      }
+
+      var slideshow = remark.create({
+        ratio: '16:9',
+        slideNumberFormat: '%current%',
+        countIncrementalSlides: false,
+        renderMath,
+        highlightLanguage: 'c',
+        highlightStyle: 'github',
+        navigation: {
+          // Enable or disable navigating using scroll
+          // Default: true
+          // Alternatives: false
+          scroll: true,
+
+          // Enable or disable navigation using touch
+          // Default: true
+          // Alternatives: false
+          touch: true,
+
+          // Enable or disable navigation using click
+          // Default: false
+          // Alternatives: true
+          click: false,
+        },
+        
+      });
+
+      MathJax.Hub.Config({
+          tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+          processEscapes: true
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          $(MathJax.Hub.getAllJax()).map(function(index, elem) {
+              return(elem.SourceElement());
+          }).parent().addClass('has-jax');
+      });
+
+      MathJax.Hub.Configured();
+      
+      //Terminal style highligting code
+      var highlighted = document.querySelectorAll("code.terminal span.hljs-ansi");
+      Array.prototype.forEach.call(highlighted, function(next) {
+        next.insertAdjacentHTML("beforebegin", next.textContent);
+        next.parentNode.removeChild(next);
+      });
+
+      window.addEventListener('load', function() {
+      RemarkSearch.create({'position': 'top-left', 'caseSensitive' : false, 'showIcon': true, 'autoSearch': true});
+      });
+
+    </script>
+  </body>
+</html>

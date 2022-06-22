@@ -1,0 +1,59 @@
+{
+
+
+
+"schematics":
+[
+   {
+      "path": "",
+      "height": 270
+   }
+],
+
+
+"scopes" :
+[
+   {
+      "path": "Scope",
+      "height": 270,
+      "width":500,
+      "analysis":
+      {
+         "cursor1": { "time": 0.2},
+         "cursor2": { "time": 0.5},
+         "rms": true,
+         "mean": true
+      }
+   }
+
+],
+
+"paramtables":
+[
+   {
+      "display": "dialog",
+      "component": "M2",
+      "labelpos": "bottom",
+      "parameters":
+      [
+         {
+            "variable": "RL",
+            "label": "RL",
+            "unit": "Ω",
+            "min": 100,
+            "max": 200,
+            "value": 100
+         }
+      ]
+   }
+],
+
+"simulations":
+[
+{
+"label": "Simulate",
+"analysis": ""
+}
+]
+
+}
