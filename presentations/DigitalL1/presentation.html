@@ -864,7 +864,7 @@ name: template_slide
 
 
 ---
-name: S32
+name: S33
 
 # ATmega328P Timer Peripherals
 
@@ -882,7 +882,7 @@ name: S32
  - You may also decide to use more than 1 timer peripheral as you may have other tasks that need timing information 
 
 ---
-name: S33
+name: S34
 
 # ATmega328P TC0 Pins
 
@@ -892,14 +892,14 @@ name: S33
 .center[<img src="img/328PPins.png" width="320">]
 
 ---
-name: S34
+name: S35
 
 # ATmega328P TC0 Implementation
 
 .center[<img src="img/328PTimer0.png" width="540">]
 
 ---
-name: S35
+name: S36
 
 # ATmega328P TC0 Registers
 
@@ -954,7 +954,7 @@ name: S35
 - TIMSK0 is used to configure interrupts and TIFR0 contains flags
 
 ---
-name: S36
+name: S37
 
 # TCCR0A Register
 
@@ -965,7 +965,7 @@ name: S36
 - WGM0[1..0]: *Waveform Generation Mode* together with WGM02 in TCCR0B selects 000 = Normal, 001 = Phase Correct PWM with 0xFF as Top, 010 = Clear on Compare Match with OCR0A as Top, 011 = Fast PWM with 0xFF as Top, 101 = Phase Correct PWM with OCR0A as Top, 111 = Fast PWM with OCR0A as Top
 
 ---
-name: S37
+name: S38
 
 # TCCR0B Register
 
@@ -977,7 +977,7 @@ name: S37
 - CS0[2..0]: *Clock Select* where 000 = None (i.e. Timer/Counter Stopped), 001 = I/O Clock, 010 = I/O Clock/8, 011 = I/O Clock/64, 100 = I/O Clock/256, 101 = I/O Clock/1024, 110 = External Clock on Falling Edge, 111 = External Clock on Rising Edge
 
 ---
-name: S38
+name: S39
 
 # TCNTO Register
 
@@ -986,7 +986,7 @@ name: S38
 - TCNT0[7..0]: *Timer/Counter Register* can be read to obtain the counter value but when writing the count value while the timer is running it can introduce the risk of missing compare matches
 
 ---
-name: S39
+name: S40
 
 # OCR0A & OCR0B Registers
 
@@ -996,7 +996,7 @@ name: S39
 - OCR0B[7..0]: *Output Compare Register B* is compared with TCNT0 and a match can be used to generate an interrupt, or to generate a PWM waveform on the OC0B pin
 
 ---
-name: S40
+name: S41
 
 # TIMSK0 Register
 
@@ -1004,10 +1004,10 @@ name: S40
 
 - .color-grey[OCIE0B:	*Output Compare Match B Interrupt Enable* executes corresponding interrupt when OCR0B match TCNT0]
 - .color-grey[OCIE0A:	*Output Compare Match A Interrupt Enable* executes corresponding interrupt when OCR0A match TCNT0]
-- .color-grey[TOIE0:	*Overflow Interrupt Enable* executes corresponding interrupt when TCNT0 overflows]
+- TOIE0:	*Overflow Interrupt Enable* executes corresponding interrupt when TCNT0 overflows
 
 ---
-name: S41
+name: S42
 
 # TIFR0 Register
 
@@ -1015,12 +1015,12 @@ name: S41
 
 - .color-grey[OCF0B:	*Output Compare Match B Flag* is set when OCR0B match TCNT0]
 - .color-grey[OCF0A:	*Output Compare Match A Flag* is set when OCR0A match TCNT0]
-- .color-grey[TOV0:	*Overflow Flag* is set when TCNT0 overflows]
+- TOV0:	*Overflow Flag* is set when TCNT0 overflows
 
 ---
-name: S42
+name: S43
 
-# Fast PWM Mode with OCR0A as Top
+# Fast PWM Mode with OCR0A as Top (PI)
 
 .center[<img src="img/FastPWM.png" height="190">]
 
@@ -1030,8 +1030,19 @@ name: S42
 - TCNT0 value is compared with OCR0A value we will define and when they match, TCNT0 will be set to 0 
  - TOV0 flag will be set when a match occurs and is cleared either by writing a 1 or executing the corresponding interrupt
 
+
 ---
-name: S43
+name: S44
+
+# Fast PWM Mode with OCR0A as Top (PII)
+
+- To setup TC0 to operate in *Fast PWM* mode with OCR0A as Top we need WGM[2..0] set to 111
+ - If TOIE0 bit is set, everytime the counter reaches the Top defined by OCR0A, the TIMER0_OVF_vect ISR will be executed 
+
+.center[<img src="img/FPWMMode.png" height="300">]
+
+---
+name: S45
 
 # Generating PWM Output
 
@@ -1045,29 +1056,58 @@ name: S43
 - For standard PWM generation we need COM0B[1..0] set to 10
 
 ---
-name: S25
+name: S46
 
-# Configuring TC0 in CTC Mode
+# Configuring TC0 in Fast PWM Mode
 
 - First we need to configure TC0 as per our needs
- - Need to set the bits of the [TCCR0A](#S18) and [TCCR0B](#S19) registers 
- - Do this in an initialization function
-- In the lectures, as an example, we will configure the TC0 in CTC mode with a prescaler of 8 
-- We want the timer to have period of 1ms so we can create our own millisecond delay
- - Since the ATmega328P uses a 2MHz system clock, to achieve this we need to load 249 to OCR0A
+ - Need to set the bits of the [TCCR0A](#S37), [TCCR0B](#S38), [OCR0A & OCR0B](#40) and [TIMSK0](#41) registers 
+- In the lectures, as an example, we will configure the TC0 in Fast PWM mode to generate a 100kHz PWM
+ - Since the ATmega328P uses a 16MHz system clock, we can use a clock divider of 1 and a Top value of 159 in order to achieve the best PWM resolution
+- We also want COM0B[1..0] set to 10 to generate a PWM signal at pin PD5
 
 .codes[
 ```c
-//This function configures TC0 to operate in CTC mode with a period of 1ms
-//The prescaler of 8 needed is not loaded to keep timer stopped until it is used 
-void tc0_init(void){
-  TCCR0A = 0b00000010;    //WGM0[2..0] should be set to 010 for CTC mode
-  TCCR0B = 0b00000000;    //Initialize CS0[2..0] to 000 so that timer is stopped until needed
-                          //When running we need to load 010 to CS0[2..0] for a prescaler of 8
-  OCR0A = 249;            //Loading OCR0A with 249 to get a period of 1ms
+//This function configures TC0 to operate in fast PWM mode with a 100kHz frequency and a 50% D
+void tc0_init_FPWM_100k(void){
+	TCCR0A = 2<<COM0B0 | 3<<WGM00;    //WGM0[2..0] set to 111 for Fast PWM mode & COM0B[1..0] set to 10 for output
+	TCCR0B = 1<<WGM02 | 1<<CS00;      //WGM[2..0] to 111 and CS0[2..0] set to 001 for a clock divider of 1
+	OCR0A = 159;                      //Loading OCR0A with 159 to setup a 100kHz PWM
+	OCR0B = 79;                       //Loading OCR0B with 79 to setup 50% D
+	DDRD |= 1<<PIND5;                 //PD5 setup as an output to generate PWM
 }
 ```
 ]
+
+---
+name: S47
+
+# Example: Sine Wave Generator
+
+.questions[
+Develop a program to generate a 500Hz sine wave that has a peak-peak amplitude of about 4.5V and an offset of about 2.5V. Use the code you developed to configure TC0. First using Excel or Matlab, generate a sine lookup table that contains 20 amplitudes of a sine wave. Using *_delay_us()* function for timing, load values from the lookup table to OCR0B to generate a pulse width modulated sine wave at PD5.
+]
+
+.codes[
+```c
+//Sine lookup table with 20 amplitude values within a single period
+uint8_t sin_table[20] = {79, 101, 120, 136, 146, 149, 146, 136, 120, 101, 79, 57, 38, 22, 12, 9, 12, 22, 38, 57};
+	
+int main(void){
+  tc0_init_FPWM_100k();             //Initializing TC0 to generate a 100kHz 50% D PWM
+  uint8_t counter = 0;              //Initialize a counter variable to use as array index
+    while (1){
+      OCR0B = sin_table[counter];   //Loading amplitudes from lookup table to generate PWM
+      counter++;                    //Increment counter to load next amplitude 
+      if(counter>19){               //If counter reaches 19, reset the counter to 0
+        counter=0;
+      }
+      _delay_us(100);               //Wait for 100us, since we have 20 samples and period to generate is 2ms
+    }
+}
+```
+]
+
 
 ---
 
