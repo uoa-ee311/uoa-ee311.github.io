@@ -204,7 +204,7 @@ name: template_slide
 
 ---
 
-name: S1a
+name: S1
 
 # Learning Objectives
 
@@ -241,58 +241,86 @@ name: S2
 
 # Output Voltage Measurement
 
-.center[<img src="img/V_Meas.png" height="300">]
+.center[<img src="img/PIControlConcept.png" height="200">]
 
-- 
+- To implement the digital PI controller a measurement of output voltage is needed to compare against the reference provided by the user
+- ADC peripheral of the MCU is used to convert the output voltage measurement  
+ - The measurable voltage range of the ADC is from 0V to V<sub>ref</sub>, which is 5V for this design
+- The output voltage needs to be stepped down to below 5V
+ - A voltage divider can be used with an anti-aliasing filter 
 
 ---
 
 name: S3
 
-# Sensors and Actuators 
+# Implementation of Voltage Measurement
 
+.center[<img src="img/V_Meas.png" height="300">]
 
-- Often the physical signals/quantities we wish to interact with are not electrical
- - For example, temperature, light, force, torque, etc.
-- An electrical transducer converts a physical signal/quantity into an electrical signal or an electrical signal into a physical signal/quantity
- - Can be categorized as electrical sensors and electrical actuators 
-- Electrical sensors receive a signal from a physical system, and produce an electrical signal as an output
- - For example, a temperature sensor converts temperature into an electrical signal (voltage)
-- Electrical actuators receive an electrical signal as an input, and produce a physical signal as an output
- - For example, a DC motor converts an electrical signal (current) into mechanical torque
-
-&nbsp;
-.center[<img src="img/SensorsActuators.png" width="950">]
+- Voltage divider formed by R<sub>a</sub> and R<sub>b</sub> steps output voltage down to below 5V
+- C<sub>of</sub> with the Thevenin equivalent of R<sub>a</sub> and R<sub>b</sub> setup a 1st order low-pass filter 
+ - Select the cut-off frequency to be below switching frequency and to stop aliasing 
 
 ---
+
 name: S4
 
-# Processing Signals 
+# Selecting Component Values  
 
-- Originally almost all electronics performed analog signal processing
- - Used standard components such as resistors, capacitors, transistors
-- Analog signal processing is often complicated
- - Usually requires custom hardware
- - Designing analog signal processing circuitry takes time and therefore is expensive
-- Specialized application, like fail-safe systems, require analog signal processing
-- For many general applications it is beneficial to move the processing onto a digital platform like a microcontroller
- - Multiple different signal processing operations can be performed by the same hardware
- - It is easy to modify the processing by modifying the code 
-- Since most real-world signals are analog, we must convert them into digital signals before we can process them using a microcontroller
- - When converting analog signals to digital signals we lose some information
+- R<sub>a</sub> and R<sub>b</sub> needs to be selected to step-down the maximum V<sub>out</sub> to below 5V
+\\[ V'\_{out} = V\_{out} \frac {R\_b} {R\_a + R\_b} \quad \Rightarrow \quad V\_{out\_{(max)}} \frac {R\_b} {R\_a + R\_b} \leq 5\\]
+- Ensure the power dissipation in R<sub>a</sub> and R<sub>b</sub> are minimised 
+\\[ P\_{V\_{meas}} = \frac {V^2\_{out}} {R\_a + R\_b} \\]
+- Anti-aliasing filter should have a cut-off frequency lower than ADC sampling frequency, f<sub>sample</sub>
+\\[ f\_{sample} \geq \frac {0.5} {R\_{th} C\_{of}} \quad \text{where} \quad R\_{th} = \frac {R\_a  R\_b} {R\_a + R\_b} \\]
 
 ---
 name: S5
 
-# Signals in Your Project
+# Aliasing 
 
-.center[<img src="img/System.png" height="200">]
+.center[<img src="img/aliasing.png" height="200">]
 
-- The smart energy monitor needs to measure voltage and current to determine power drawn by the load
-- Voltage and current are analog electrical signals and therefore they need to be converted into digital signals in order to use your microcontroller to perform signal processing
-- We will use the ADC peripheral on the ATmega328P to convert analog electrical signals to digital signals
- - The ADC only accepts analog voltage signals that are in the range between 0V and VCC (e.g. 5V)
- - Because of this you designed circuitry to convert the voltage and current you wish to measure into two analog voltage signals that falls within this range
+- If the sampling frequency, f<sub>sample</sub> is less than 2f<sub>s</sub> (i.e., Nyquist Sampling Theory) then an accurate digital representation of the waveform cannot be obtained 
+- As an example, if f<sub>sample</sub> = f<sub>s</sub>, as in the figure above (left), we may see a DC offset in the measured V<sub>out</sub>
+\\[ V\_{out} = V\_{out} + \Delta V\_{out}/2 \\]
+- If f<sub>sample</sub> > 2f<sub>s</sub>, as in figure above (right), we can reconstruct V<sub>out(av)</sub>, by digital filtering the ADC samples
+
+---
+name: S6
+
+# Synchronous Sampling 
+
+.left-column[
+.center[<img src="img/Buck.png" height="130">]
+- ADC sampling can be synchronized with the PWM timer to sample the average of a waveform without needing to filter
+- As an example consider the Buck converter above operating in continuous conduction mode
+ - When using symmetric PWM, the inductor current can be sampled at the MAX and MIN
+ - Naturally these samples will correspond to the average inductor current as shown 
+]
+
+.right-column[
+<img src="img/SyncSampling.png" height="400">
+]
+
+---
+name: S7
+
+# Oversampling 
+
+
+.left-column[
+.center[<img src="img/Buck.png" height="130">]
+- ADC sampling can be at a much higher rate than Nyquist rate 
+- As an example consider the Buck converter above operating in continuous conduction mode
+ - Current waveform is sampled at a rate much faster than 2f<sub>s</sub>
+ - Can be challenging if f<sub>s</sub> is high 
+ - If interested in average current, need to digitally process the samples
+]
+
+.right-column[
+<img src="img/Oversample.png" height="400">
+]
 
 ---
 
@@ -313,92 +341,7 @@ name: template_slide
 .footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2020)]
 
 ---
-name: S6
-
-# Analog to Digital Conversion
-
-- An analog to digital converter (ADC) converts an analog signal to a digital one
-- We know that an analog signal is continuous in both time and amplitude, whereas a digital signal is not
-- Therefore, the analog signal needs to be digitized/discretized  
- - A process known as sampling is used to convert the analog signal into discrete time steps
- - A process known as quantization is used to convert the analog into discrete amplitudes
-- The analog to digital conversion process introduce error
- - For example during quantization information is lost
-
-.center[<img src="img/ADCProcess.png" height="180">]
-
----
-name: S7
-
-# The Sampling Process
-
-- The size of the time intervals the signal is split into, referred to as sample time, is dependent on the sampling frequency (also called sampling rate), measured in hertz
-\\[ t\_{sample} = \frac{1}{f\_{sample}} \\]
-- Higher sampling rates allow the original analog signal to be captured more accurately
- - However this requires faster ADC hardware, and more memory to store the digital data
-- To accurately capture a signal the sampling rate must be greater than the Nyquist frequency
- - Nyquist frequency is equal to twice the highest frequency present in the signal
-
----
 name: S8
-
-# The Quantization Process
-
-- The full voltage range is broken into discrete intervals
-- The number of number of bits available in an ADC to represent the amplitude of a signal determine the number of discrete voltage intervals, as the number of intervals is equal to 2<sup>bits</sup>
-- As an example, lets consider an ADC with a full voltage range of 5V and examine how it will represent a 3.2V analog signal if this ADC had 1-bit, 2-bits and 3-bits to represent an analog signal 
-
-.center[<img src="img/Quantization.png" height="270">]
-
----
-name: S9
-
-# A 3-Bit ADC 
-
-- Lets examine how a 3-bit ADC would represent a sin wave with an amplitude of 2.5V and an offset of 2.5V
- - Assume the ADC has a full voltage range of 5V
- - The analog signal is sampled every 2ms
- - A 3-bit ADC can break the full voltage range into 8 different intervals (i.e. 2<sup>3</sup>) 
- - The analog voltage samples are represented by digital numbers depending on which voltage interval each samples falls into (e.g. 3.97V is represented by '110' while 4.9V is represented by '111')
-- Higher the bits in the ADC the more accurately we can represent an analog signal 
-
-.center[<img src="img/3bitADC.png" height="170">]
-
----
-name: S10
-
-# Characteristics of an ADC (PI)
-
-- Acquisition time
- - How long it takes for the ADC hardware to acquire a sample of the analog signal
- - This includes switching multiplexers, charging internal capacitors, waiting for transients to settle, etc. 
-- Conversion time
- - Time taken by the ADC to convert the sample of the analog signal into a digital number
-- Total sampling time
- - This is the total time taken to make a single ADC reading and is therefore the sum of both the acquisition time and conversion time
- - The maximum sampling rate/frequency is limited by the minimum total sampling time
-\\[ f\_{sample(max)} = \frac{1}{t\_{acquisition(min)} + t\_{conversion(min)}} \\]
-- We will learn more about the acquisition process and the conversion process soon
-
----
-name: S11
-
-# Characteristics of an ADC (PII)
-
-- Resolution (bits)
- - This is determined by the number of bits available in the ADC to represent the signal
- - For example, an ADC that has a 8-bit resolution got 2<sup>8</sup> amplitude intervals
-- Supply voltage (AV<sub>CC</sub>)
- - This is the voltage that is needed to power the internal circuitry of an ADC (e.g. 5V)
-- Reference voltage (V<sub>ref</sub>)
- - This specifies the voltage which the input signal is compared to (e.g. 5V) and therefore signals larger than the reference voltage cannot be accurately converted
-- Step size (V<sub>step</sub>)
- - This is the smallest signal that can be determined by the ADC and is a function of both the resolution and the reference voltage
-\\[ V\_{step} = \frac{V\_{ref}}{2^{resolution}} \\]
-
-
----
-name: S12
 
 # ADC Types
 
@@ -410,46 +353,39 @@ name: S12
  - They have low power consumption
  - They have an adjustable resolution, and generally have mid-range resolution 
  - They are generally mid-range for conversion speed
-- The ATmega328P has an SAR ADC
+- The ATmega328P/PB has an SAR ADC
 
 ---
-name: S13
+name: S9
 
-# Example: Sampling Rate and Resolution
+# ADC Comparison 
 
-.questions[
-An ADC is used to convert an analog signal that is between 0V and 3V to a digital signal. This ADC has a minimum acquisition time of 140ns, and a minimum conversion time of 360ns.   
-- What is the maximum sampling rate for the ADC? 
-- What is the maximum frequency that can be present in a signal such that the ADC could still accurately measure the signal?
-- What should be the minimum reference voltage that could be used in this design? 
-- What should be the minimum supply voltage this ADC should be specified to? 
-- If the ADC should be capable of measuring down to a 10mV signal, what should be the minimum resolution of the ADC? Assume the ADC uses the minimum reference voltage needed for this design. 
+.center[<img src="img/ADCComp.png" height="400">]
+
+.credits[
+.center[Taken from [[1]](https://www.analog.com/media/en/analog-dialogue/volume-39/number-2/articles/the-right-adc-architecture.pdf)]
 ]
 
 ---
+name: S10
 
-class: title-slide
-layout: false
-count: false
-.logo-title[]
+# The Conversion Process
 
-# SAR ADC 
-### Operating Principles
+- We know that an analog signal is continuous in both time and amplitude, whereas a digital signal is not
+- Therefore, the analog signal needs to be digitized/discretized  
+ - A process known as sampling is used to convert the analog signal into discrete time steps
+ - A process known as quantization is used to convert the analog into discrete amplitudes
+- The analog to digital conversion process introduce error
+ - For example during quantization information is lost
 
----
-
-layout: true
-name: template_slide
-
-.logo-slide[]
-.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2020)]
+.center[<img src="img/ADCProcess.png" height="180">]
 
 ---
-name: S14
+name: S11
 
 # The Sampling Process (PI)
 
-- [Recall](#S7) that we want to take samples of the analog signal at discrete points in time
+- We want to take samples of the analog signal at discrete points in time
 - This is because the quantization process takes time as it is not an instantaneous process
  - During the quantization process we need to keep the signal being converted constant 
 - This is achieved by using a sample and hold circuit to capture a “snapshot” of the analog signal and store it until the quantization process is completed
@@ -459,7 +395,7 @@ name: S14
 .center[<img src="img/SampleHold.png" height="150">]
 
 ---
-name: S15
+name: S12
 
 # The Sampling Process (PII)
 
@@ -473,11 +409,22 @@ name: S15
 
 
 .center[<img src="img/SampleHold.png" height="150">]
+---
+name: S13
+
+# The Quantization Process
+
+- The full voltage range is broken into discrete intervals
+- The number of number of bits available in an ADC to represent the amplitude of a signal determine the number of discrete voltage intervals, as the number of intervals is equal to 2<sup>bits</sup>
+- As an example, lets consider an ADC with a full voltage range of 5V and examine how it will represent a 3.2V analog signal if this ADC had 1-bit, 2-bits and 3-bits to represent an analog signal 
+
+.center[<img src="img/Quantization.png" height="270">]
+
 
 ---
-name: S16
+name: S14
 
-# The Quantization Process 
+# SAR Conversion 
 
 - The sample of the analog signal is converted to a digital number over a series of ADC clock cycles
  - Hence the name “successive approximation”, an algorithm that dates back to the 1500s
@@ -488,7 +435,7 @@ name: S16
 .center[<img src="img/SARPlot.png" height="240">]
 
 ---
-name: S17
+name: S15
 
 # SAR Conversion in Tabular Format
 
@@ -499,7 +446,7 @@ name: S17
 .center[<img src="img/SARTable.png" width="700">]
 
 ---
-name: S18
+name: S16
 
 # Acquisition Time & Conversion Time
 
@@ -515,7 +462,7 @@ name: S18
  - The ADC unit of the ATmega328P requires a clock frequency between 50kHz and 200kHz (operating outside of this range impacts the ADC accuracy)
 
 ---
-name: S19
+name: S17
 
 # Multiple ADC Channels
 
@@ -528,6 +475,52 @@ name: S19
  - Some MCUs have 2 or more ADC units to allow simultaneous sampling of 2 or more signals
 
 .center[<img src="img/Multiplex.png" width="580">]
+
+---
+name: S18
+
+# Characteristics of an ADC (PI)
+
+- Acquisition time
+ - How long it takes for the ADC hardware to acquire a sample of the analog signal
+ - This includes switching multiplexers, charging internal capacitors, waiting for transients to settle, etc. 
+- Conversion time
+ - Time taken by the ADC to convert the sample of the analog signal into a digital number
+- Total sampling time
+ - This is the total time taken to make a single ADC reading and is therefore the sum of both the acquisition time and conversion time
+ - The maximum sampling rate/frequency is limited by the minimum total sampling time
+\\[ f\_{sample(max)} = \frac{1}{t\_{acquisition(min)} + t\_{conversion(min)}} \\]
+- We will learn more about the acquisition process and the conversion process soon
+
+---
+name: S19
+
+# Characteristics of an ADC (PII)
+
+- Resolution (bits)
+ - This is determined by the number of bits available in the ADC to represent the signal
+ - For example, an ADC that has a 8-bit resolution got 2<sup>8</sup> amplitude intervals
+- Supply voltage (AV<sub>CC</sub>)
+ - This is the voltage that is needed to power the internal circuitry of an ADC (e.g. 5V)
+- Reference voltage (V<sub>ref</sub>)
+ - This specifies the voltage which the input signal is compared to (e.g. 5V) and therefore signals larger than the reference voltage cannot be accurately converted
+- Step size (V<sub>step</sub>)
+ - This is the smallest signal that can be determined by the ADC and is a function of both the resolution and the reference voltage
+\\[ V\_{step} = \frac{V\_{ref}}{2^{resolution}} \\]
+
+---
+name: S20
+
+# Example: Sampling Rate and Resolution
+
+.questions[
+An ADC is used to convert an analog signal that is between 0V and 3V to a digital signal. This ADC has a minimum acquisition time of 140ns, and a minimum conversion time of 360ns.   
+- What is the maximum sampling rate for the ADC? 
+- What is the maximum frequency that can be present in a signal such that the ADC could still accurately measure the signal?
+- What should be the minimum reference voltage that could be used in this design? 
+- What should be the minimum supply voltage this ADC should be specified to? 
+- If the ADC should be capable of measuring down to a 10mV signal, what should be the minimum resolution of the ADC? Assume the ADC uses the minimum reference voltage needed for this design. 
+]
 
 ---
 
@@ -703,25 +696,45 @@ name: S29
  - The total conversion takes 13 cycles in normal conversion mode and 13.5 cycles in auto triggered conversion mode
 
 ---
+name: S29
+
+# ADC Clock
+
+.right-column[
+<img src="img/ATmegaADCClk.png" height="250">
+]
+
+.left-column[
+- The ATmega328P datasheet recommend choosing an ADC clock frequency between 50kHz and 200kHz 
+ - Since the system clock frequency is 16MHz, we have a choice between a prescaler of 64 or 128
+- A prescaler of 64 result in an ADC clock of 250kHz while 128 results in 125kHz
+ - In the lecture examples, we will use a prescaler of 64 
+- Though a 250kHz ADC clock frequency is slightly above the recommended, we should be able to achieve good accuracy 
+ - You may experiment with higher ADC clock frequencies to strike a balance between accuracy and sampling speed 
+ - A capacitor across ADC pin can improve settling time 
+]
+
+---
 name: S30
 
 # Configuring the ADC
 
 - First we need to configure the ADC as per our needs
  - Need to set the bits of the [ADMUX](#S24), [ADCSRA](#S25), [ADCSRB](#S26) and [DIDR0](#S27) registers 
- - Do this in an initialization function
-- In the lectures, as an example, we will configure the ADC to operate in the single conversion mode
- - For the project you are required to operate the ADC in the auto triggered mode using a timer as the trigger source 
+- As an example, we will configure the ADC to operate in auto trigger mode with TC0 overflow as source 
+ - We will sample ADC0 pin and use TC0 setup from previous lecture (i.e., an overflow every 10&mu;s)
+ - During an ADC conversion, which takes 54&mu;s, auto trigger will be disabled 
+ - An ADC conversion will be auto triggered during overflow event following a conversion complete 
 
 .codes[
 ```c
-// This function configures the ADC to use AVCC as reference and read ADC0 in single conversion mode
+//This function configures the ADC to use AVCC as reference and read ADC0 in auto trigger mode
 void adc_init(void){
-  ADMUX = 0b01000000;     //AVCC set as reference, ADC0 selected and results are right adjusted
-  ADCSRA = 0b10000100;    //Set ADEN bit to 1 (enable ADC) and prescaler to 100 (i.e. 16)
-                          //To improve readability write in the form "ADCSRA |= (1&#60;&#60;ADEN) | (4&#60;&#60;ADPS0);"
-  ADCSRB = 0b00000000;    //Using the single conversion mode (for project you have to use auto trigger mode)
-  DIDR0 = 0b00000000;     //Buffers are not disabled (for project you may disable the buffers to save power)
+  ADMUX |= 1 << REFS0;  //AVCC set as reference, ADC0 selected and results are right adjusted
+  ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE) | (0b110 << ADPS0);    
+                        //Enable ADC, start conversion, setup auto-trigger and set prescaler to 64
+  ADCSRB |= (0b100 << ADTS0);   //Use TC0 overflow as auto- trigger source 
+  DIDR0 = 1 << ADC0D;   //ADC0 buffer disabled
 }
 ```
 ]
@@ -731,25 +744,21 @@ name: S31
 
 # Performing a Conversion
 
-- We also know how to use the ADCL & ADCH registers to read the conversion results
- - Select the input channel and then start a conversion by setting ADSC bit
+- The ADCL & ADCH registers store the conversion results
+ - Since the ADC is already configured in the aut trigger mode, it takes a new ADC sample at every qualifying overflow event 
  - Wait for the conversion to finish by polling the ADIF bit and read result from ADCL & ADCH
- - We typically do the above in a function dedicated to read a given channel
+ - Reset the ADIF and TOV0 flags so it is ready to take next ADC sample 
 
 .codes[
 ```c
-// This function reads an ADC channel and return results
-uint16_t adc_read_channel_single_conversion(uint8_t channel){	
-  ADMUX &= 0xF0;                        //Clear channel selection
-  ADMUX |= channel;                     //Set the channel to convert
-
-  ADCSRA |= (1 << ADSC);                //Starting an ADC conversion
-	
+//This function reads an ADC channel and return results
+uint16_t adc_read_channel_pool(void){
   while ((ADCSRA & (1 << ADIF)) == 0) { //ADIF bit is checked to see if it is 0
     ;                                   //If ADIF bit is not 1, wait until it becomes 1
   }
-	
-  return ((ADCL << 0) | (ADCH << 8));   //Alternatively you can write return ADC;
+  ADCSRA |= 1 << ADIF;                  //Clear the ADIF flag
+  TIFR0 |= 1 << TOV0;                     //Clear the TC0 overflow flag
+  return ADC;                           //Returning the ADC value
 }
 ```
 ] 
@@ -759,30 +768,29 @@ name: S32
 
 # Completing the ADC Code
 
+- PB5 is toggled after every conversion to verify ADC sampling is synchronized with PWM signal on PD5
+ - Timing between ADC samples will be just over 54&mu;s as conversion waits for next overflow event 
+
 .codes[
 ```c
-#define F_CPU 2000000UL                      //Defining system clock frequency
+#include "common.h"
+#include "timer0.h"
+#include "adc.h"
+#include <avr/io.h>
+#include <stdint.h>
 
-#include <avr/io.h>                         //Needed for using the macros for register addresses
-#include <stdio.h>                          //Needed for printf()
-#include <util/delay.h>                     //Needed for using _delay_ms()
-#include "uart.h"                           //Including our uart peripheral library
-#include "adc.h"                            //Including our adc peripheral library
-
-static FILE usart_stdout = FDEV_SETUP_STREAM(uart_printf, NULL, _FDEV_SETUP_WRITE); //Creating a stream variable 
+volatile static uint16_t ADC_VALUE = 0;
 
 int main(void){
-  stdout = &usart_stdout;                   //Binding the steam variable to stdout
-  uart_init(9600);                          //Initializing the UART to 9600 baud, 8N1, with no parity
-  adc_init();                               //Initializing the ADC
-  uint32_t dc_voltage_mv = 0;               //Initializing variable to hold ADC result
-
+  tc0_init_FPWM_100k();   //Initializing TC0 to generate a 100kHz 50% D PWM
+  adc_init();             //Initializing ADC with auto trigger mode
+  PIN_OUT(PINB5);         //Set PB5 as output
   while (1){
-    dc_voltage_mv = ((uint32_t)adc_read_channel_single_conversion(2) * 5000)/1024;  //Converting result to mV
-    printf("Voltage: %d mV\n\r", (uint16_t)dc_voltage_mv);                          //Printing the result
-    _delay_ms(500);                                                                 //Repeat every 0.5s
+    ADC_VALUE = adc_read_channel_pool();
+    PIN_TOGGLE(PINB5);
   }
 }
+
 ```
 ]
 
@@ -803,47 +811,30 @@ name: S33
 
 
 ---
-name: S34
-
-# Things To Note
-
-- Your ADC function is blocking and your MCU cannot do anything while taking an ADC reading
- - For the project you will have to use an ADC interrupt 
- - The ADC also need to be triggered based on a timer event to take an ADC reading every 0.1ms
-- You must understand examples you use for the lab or the project
- - Your individual understanding will be assessed during all assessments 
- - During 2nd test you will have to develop a C program yourself and simulate it on Proteus
- - All team members must therefore understand every part of the design
-- It is critical that you complete the pre-lab of the ADC lab before your lab session so that you can get help with the later parts of the lab
- - Please do not waste the opportunity to get support in the labs 
- - With many students in the class, closer to due dates, there will be limited opportunities to ask for help 
-
-
----
 
 class: title-slide
 layout: false
 count: false
 .logo-title[]
 
-# Acknowledgments 
-#### These slides are adapted from material prepared by Travis Scott & Muhammad Nadeem
+# Questions?
 
 
 
     </textarea>
 
-    <!-- 
+    
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
-    -->    
+      
    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript">
     </script>
 
-
+    <!-- 
     <script src="remark/remark.min.js" type="text/javascript">
     </script>
+    -->  
 
     <script type="text/javascript">
       var hljs = remark.highlighter.engine;
