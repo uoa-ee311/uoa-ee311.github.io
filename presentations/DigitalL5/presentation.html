@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>UART Communication</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { 
+        font-family: 'Droid Serif'; 
+        line-height: 1.6;
+        }
+
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: bold;
+        color: #00467F;
+      }
+
+      h1{
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+      }
+
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+      .TitleAuthor {
+        color:white; 
+        font-weight: normal;
+      }
+
+      .title-slide .remark-slide-number {
+        display: none;
+      }
+      .title-slide h1, h2, h3, h4 {
+        text-align: left;
+        color:white;
+        line-height: 0.7;
+        font-weight: bold;
+      }
+
+      .title-slide {
+        vertical-align: middle;
+        background-color: #00467F;
+      }
+
+      .logo-title {
+        content: "";
+        position: absolute;
+        top: 15px;
+        right:   15px;
+        height: 88px;
+        width: 267px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cdn.auckland.ac.nz/assets/central/central-services/mediaandmarketing/uoa-logos-2015/uoa-logo-2015-reverse.png);
+      }
+      .logo-slide {
+        content: "";
+        position: absolute;
+        top: 35px;
+        right:   15px;
+        height: 96px;
+        width: 100px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cpb-ap-se2.wpmucdn.com/blogs.auckland.ac.nz/dist/d/79/files/2015/10/uoa-v-colour2.png);
+      }
+
+      .left-column {
+        width: 65%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column {
+        width: 30%;
+        float: right;
+        word-wrap: break-word;
+      }
+
+      .left-column-s {
+        width: 75%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column-s {
+        width: 20%;
+        float: right;
+        word-wrap: break-word;
+      }
+
+      .footer {
+        content: "";
+        position: absolute;
+        bottom: 17px;
+        color:gray;
+        font-size: 10pt;
+      }
+      
+      @page {
+        size: 1210px 681px;
+        margin: 0;
+      }
+
+      @media print {
+        .remark-slide-scaler {
+          width: 100% !important;
+          height: 100% !important;
+          transform: scale(1) !important;
+          top: 0 !important;
+          left: 0 !important;
+        }
+      }
+      
+      .credits {
+        font-size: 12px;
+        line-height: 10px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .codes {
+        
+        line-height: 20px !important;
+      }
+
+      .questions {
+        font-size: 20px;
+        line-height: 28px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .zoom175 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom175:hover {
+        transform: scale(1.75) translateY(-20%) translateX(-20%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+      .color-grey{
+        color: #919191;
+      }
+
+    </style>
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <style>
+    .smaller-font { font-size:14px } 
+    </style>
+
+    <!-- KaTeX and Mathjax support refer to below for syntax -->
+    <!-- https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+    
+    <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style>
+      /* Table Style */
+      .tg  {border-collapse:collapse;border-color:#9ABAD9;border-spacing:0;}
+      .tg td{background-color:#EBF5FF;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#444;
+        font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:2px 10px;word-break:normal;}
+      .tg th{background-color:#409cff;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#fff;
+        font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:2px 10px;word-break:normal;}
+      .tg .tg-dzaw{background-color:#4F81BD;color:#FFF;font-weight:bold;text-align:left;vertical-align:top}
+      .tg .tg-sabo{background-color:#ebf5ff;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-096r{color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-jayl{background-color:#d2e4fc;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-ig71{background-color:#D2E4FC;color:#000000;text-align:left;vertical-align:top}
+    </style>
+
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide
+count: false
+.logo-title[]
+
+## ELECTENG 311
+# Electronics Systems Design
+### UART Communication 
+
+.TitleAuthor[Duleepa J Thrimawithana]
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+
+name: S1a
+
+# Learning Objectives
+
+- Why do microcontrollers have to communicate?
+- Communication protocols and categorization 
+- Commonly used communication protocols 
+- Peripheral I/O used to implement communication 
+- Fundamentals of UART communication 
+- Understanding baud rate and data rate
+- What do the waveforms for a UART communication look like?
+- How to develop code to implement UART communication on an ATmega328P
+- Format of a data frame suitable for the project 
+
+---
+
+name: S1b
+
+# Lecture Quiz 
+
+- The lecture quiz is now available on Canvas
+ - Quiz is available for 3 days and allows 3 attempts
+ - Best of the 3 attempts taken as the final score
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# How do Microcontrollers Communicate?
+### Protocols and Categorization  
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+
+name: S2
+
+# Why Communicate?
+
+.center[<img src="img/CommsGen.png" height="200">]
+
+- A microcontroller seldom works in isolation
+- In a typical system, a microcontroller is expected to share information with other devices around it
+- To share information, microcontrollers need to communicate with other processors, modules, sensors, displays, etc.
+- The communication can be for the functioning of the circuit (e.g. reading a temperature sensor), or for debugging and diagnostics (e.g. logging data to a PC)
+
+---
+
+name: S3
+
+# What are Communication Protocols?
+
+- Communication with a microcontroller can be implemented in different ways
+- To communicate the transmitter and receiver must agree on a specific communication protocol
+ - Analogous to a spoken language, a protocol defines how information is communicated by varying a physical quantity, called the transmission medium
+ - Protocols can be implemented in software or hardware
+- Transmission mediums could include voltage, current, light, RF waves, acoustic waves, etc.
+
+.center[<img src="img/Mediums.png" height="220">]
+
+---
+name: S4
+
+# Data Transmission Modes 
+
+- Transmission modes can be broadly categorized as simplex/duplex, synchronous/asynchronous and serial/parallel
+- In simplex implementations data is transferred from A to B only while in full-duplex implementations data is transferred from A to B and B to A simultaneously
+ - In half-duplex implementations data is transferred from A to B or B to A, but not simultaneously
+ - Duplex implementations allow bidirectional communication, but could require more channels (e.g. a wire each for send and receive)
+
+.center[<img src="img/Duplex.png" height="200">]
+
+
+---
+name: S5
+
+# Synchronous vs Asynchronous Transmission
+&nbsp;
+.center[<img src="img/Sync.png" height="140">]
+&nbsp;
+- In synchronous mode a separate signal is used to indicate the start of each piece of data being transmitted 
+ - Often this signal is called a clock signal, like the clock used in synchronous digital circuits
+ - Require more channels (e.g. separate clock wire) but have lower overhead and higher throughput
+- In asynchronous mode a special “sync” event is transmitted on the data line to provide a reference point in time
+ - Need to have a common understanding of time, and therefore is vulnerable to variations
+
+---
+name: S6
+
+# Serial vs Parallel Transmission
+&nbsp;
+.center[<img src="img/SerialParallel.png" height="90">]
+&nbsp;
+- In serial mode only one symbol is sent at a time while in parallel multiple symbols are sent simultaneously
+ - Parallel mode can send more data at a time, but require more channels (e.g. one wire per bit)
+- A “symbol” is the data sent each time interval
+ - In a digital (binary) system there are only two symbols, ‘0’ and ‘1’, which are referred to as bits
+- There are many different communication protocols and each follow different data transmission modes
+ - For example a certain protocol could implement half-duplex, synchronous, parallel communication
+
+---
+name: S7
+
+# Common Communication Protocols
+
+- There are many more parameters which define a communication protocol
+ - We have just looked at some of the major ones
+- The embedded industry has adopted a number of common communication protocols
+- Serial Peripheral Interface (SPI)
+ - Implements full-duplex, serial and synchronous communication
+- Inter-Integrated Circuit (I2C)
+ - Implements half-duplex, serial and synchronous communication
+- Controller Area Network (CAN)
+ - Implements half-duplex, serial and asynchronous communication
+- Universal Asynchronous Receiver Transmitter (UART)
+ - Implements full-duplex, serial and asynchronous communication
+- Universal Serial Bus (USB)
+ - Implements full or half duplex, serial and asynchronous communication
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# UART Communication
+### Fundamentals Principles
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+name: S8
+
+# Universal Asynchronous Receiver Transmitter
+
+- UART protocol is considered one of the simplest, cheapest and widely used
+ - Commonly used for low data-rate applications like GPS, sensors, modems, etc.
+- Data goes out on the transmit (TX) line and comes in on the receive (RX) line
+ - The TX on microcontroller connects to RX on the device it is communicating with
+ - Implements full-duplex, serial and asynchronous communication
+- The microcontroller and the device are connected using 3 lines/wires (TX, RX and a ground) 
+ - If only needing simplex communication, 2 lines/wires are sufficient (ground, and TX/RX)
+- There are extensions to the protocol which add flow control and synchronous transmission (i.e. USART)
+
+.center[<img src="img/UARTConnection.png" height="150">]
+
+---
+name: S9
+
+# UART Communication in Your Project
+
+.center[<img src="img/System.png" height="280">]
+
+- The MCU of the flyback convert needs to communicate with a PC
+ - A USB-UART module is provided to interface the MCU with a PC
+- You need to use the UART peripheral to send data to and receive data from a PC  
+ - Measured V<sub>out</sub> is sent to PC and V<sub>ref</sub> received from PC is used as reference 
+
+---
+name: S10
+
+# UART Data Transmission 
+
+- When transmitting data through UART, each bit in a byte of data is sent at a time in a sequential fashion along the wire/line that connects TX to RX of the two devices 
+ - A shift registers is used to convert the byte into individual bits to send during each time interval
+ - The Least-Significant-Bit (LSB) is transmitted first
+- UART on the receiving device receives each bit in sequence and reassembles them into the original byte
+
+.center[<img src="img/UARTDataTx.png" height="225">]
+
+
+---
+name: S11
+
+# UART Frame Format
+
+- Each data byte transmitted is preceded by a start-bit, which is indicated by a logic "0"
+ - The start-bit (“sync” bit) tells the receiver when to expect a data byte from the microcontroller 
+- Each data byte transmitted is ended with at least one stop bit, which is indicated by a logic "1"
+ - The stop bit(s) ensures the receiver can detect the next start bit
+- The “idle” state (i.e. when not sending any data) of the line is logic "1"
+ - This is historical from using UARTs for telegraphy
+- An optional parity bit may be included before the stop-bit(s)
+ - The parity bit allows the receiver to detect some instances of corruption
+- “[data bits]N[stop bits] [parity type if any]” naming scheme used
+ - E.g. “8N1 with odd parity” means 8 data bits are sent then an odd parity bit and 1 stop bit
+
+.center[<img src="img/UARTFrame.png" height="100">]
+
+---
+name: S12
+
+# UART Waveforms (PI)
+
+.center[<img src="img/UARTWaveform.png" height="310">]
+
+- A UART “frame” or “packet” composes of a start bit, data bits, parity bit (if used), and a stop bit (or 2)
+ - Bits are represented by voltage levels VCC (for logic "1") and 0V (for logic "0")
+ - Least-Significant-Bit (LSB) is transmitted first 
+
+---
+name: S13
+
+# UART Waveforms (PII)
+
+
+.center[<img src="img/UARTByte.png" height="310">]
+
+- A UART “frame” or “packet” composes of a start bit, data bits, parity bit (if used), and a stop bit (or 2)
+ - Bits are represented by voltage levels VCC (for logic "1") and 0V (for logic "0")
+ - Least-Significant-Bit (LSB) is transmitted first 
+
+---
+name: S14
+
+# UART Baud Rate
+
+.center[<img src="img/UARTUBRR.png" height="230">]
+
+- The amount of time between each bit being transmitted is determined by the baud rate
+\\[ \text{Time per Bit} = \frac{1}{\text{Baud Rate}} \\]
+- Standard baud rates are 4800, 9600, 19200 etc.
+ - Technically you can use any baud rate but not all are supported by a given devices
+
+---
+name: S15
+
+# Baud Rate vs Data Rate
+
+- The time taken to send one bit is set by the baud rate
+- Total bits sent per frame include the start bit, data bits, parity bit (if used), and a stop bit (or 2)
+- As an example, consider an 8N1 with no parity scheme 
+ - The UART frame would consist of 1 start bit, 8 data bits and 1 stop bit 
+ - Therefore, we would need to send 10 bits per frame of which only 8 are data bits
+- The data rate in bits per second (bps) when using UART communication is therefore
+\\[ \text{Data Rate} = \frac{\text{Data Bits per Frame}}{\text{Total Bits per Frame}} \times \text{Baud Rate} \\]
+- The time taken to transmit a certain number of data bits is therefore
+\\[ \text{Transmission Time} = \frac{\text{Data Bits to Transmit}}{\text{Data Rate}} \\]
+
+
+---
+name: S16
+
+# Example: Sending 80 Bytes Over UART
+
+.questions[
+The UART of a microcontroller is setup to transmit data using 9600 baud, 8N1 with odd parity. The microcontroller transmits 80 bytes of data consecutively through this UART to a computer. Determine the following,
+- Time take to send a bit in a UART frame
+- Number of bits transmitted per UART frame
+- Data rate in bps
+- Time taken to send 80 bytes of data
+]
+
+---
+name: S18
+
+# UART Waveform
+
+- A UART transmission sent from the ATmega328P is captured using an oscilloscope 
+ - The ATmega328P is transmitting “01011101” (0x5D) using 9600 baud, 8N1, with no parity
+
+.center[<img src="img/Scope.png" width="550">]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# The ATmeage328P UART 
+### Configuring and Using
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+name: S19
+
+# ATmega328P USART Peripheral
+
+- Supports full duplex operation
+- Asynchronous or synchronous communication
+- Has a high resolution baud rate generator
+- Supports 5, 6, 7, 8, or 9 data bits
+- Supports 1 or 2 stop bits
+- Odd or even parity generation and checking supported in hardware
+- Data over-run and framing error detection
+- Noise filtering including false start bit detection
+- Transmit (TX) complete, TX ready, and Receive (RX) complete interrupts
+- When using a 16MHz system clock, supports up to 1M baud 
+
+---
+name: S20
+
+# ATmega328P USART Pins
+
+- In the ATmega328P the USART0 Receive (RX) and Transmit (TX) pins are fixed
+ - RX pin is PD0 (pin 30) while TX pin is PD1 (pin 31)
+- By default the bits of the DDRD register that corresponds to these two pins are configured in the correct mode (input for RX, output for TX) when we enable the UART peripheral
+
+.center[<img src="img/328PPins.png" width="300">]
+
+---
+name: S21
+
+# ATmega328P USART Implementation
+
+.center[<img src="img/328PUART.png" width="420">]
+
+---
+name: S22
+
+# ATmega328P USART Registers
+
+- The ATmega328P only has one USART and this is named USART0 
+ - Since we use asynchronous mode, in lectures we will refer to USART0 as UART0
+- There are 5 registers associated with UART0
+
+<table class="tg" style="undefined;table-layout: fixed; width: 600px; margin-left:auto; margin-right:auto;">
+  <colgroup>
+  <col style="width: 200px">
+  <col style="width: 400px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="tg-dzaw"><span style="color:white">Register</span></th>
+      <th class="tg-dzaw"><span style="color:white">Functionality</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-jayl">UDR0</td>
+      <td class="tg-jayl">UART0 Input/Output Data Register</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">UCSR0A</td>
+      <td class="tg-sabo">UART0 Control and Status Register A</td>
+    </tr>
+    <tr>
+      <td class="tg-jayl">UCSR0B</td>
+      <td class="tg-jayl">UART0 Control and Status Register B</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">UCSR0C</td>
+      <td class="tg-sabo">UART0 Control and Status Register C</td>
+    </tr>
+    <tr>
+      <td class="tg-jayl">UBRR0</td>
+      <td class="tg-jayl">UART0 Baud Rate Register</td>
+    </tr>
+  </tbody>
+</table>
+
+- UDR0 register contains the UART data 
+- The remaining four registers are used to control the peripheral
+ - Some fields are set by the user to control the operation
+ - Some fields are set by the UART to indicate its current state
+
+---
+name: S23
+
+# UDR0 Register
+
+.center[<img src="img/UDR0.png" width="600">]
+
+- The transmit data buffer (TXB) and receive data buffer (RXB) registers share the same address
+ - The register accessed depends on whether a read or write is executed by the code
+- When setup to transmit data 
+ - The code loads the data byte to transmit into the TXB register through UDR0
+ - When the transmit shift register is empty the data in TXB register will be loaded automatically into the transmit shift register 
+ - Each bit in the transmit shift register will be automatically transmitted one at a time as [we learnt previously](#S10)
+- When setup to receive data
+ - Once the receive shift register receive a data byte, it is automatically copied into the RXB register 
+
+---
+name: S24
+
+# UCSR0A Register
+
+.center[<img src="img/UCSR0A.png" width="600">]
+
+- RXC0:	*Receive Complete* flag is set when a new data frame is received
+- TXC0:	*Transmit Complete* flag is set after transmitting a data frame   
+- UDRE0: *Data Register Empty* flag when set indicates if UDR0 is ready to be loaded with new data
+- .color-grey[FE0: *Frame Error*]
+- .color-grey[DOR0:	*Data Over-Run*]
+- .color-grey[UPE0:	*Parity Error*]
+- .color-grey[U2X0:	*Double Transmission Speed*]
+- .color-grey[MPCM0: *Multi-Processor Communication Mode*]
+
+---
+name: S25
+
+# UCSR0B Register
+
+.center[<img src="img/UCSR0B.png" width="600">]
+
+- RXCIE0:	*Receive Complete Interrupt Enable*
+- TXCIE0:	*Transmit Complete Interrupt Enable*
+- .color-grey[UDRIE0: *Data Register Empty Interrupt Enable*]
+- RXEN0:	*Receiver Enable*
+- TXEN0:	*Transmitter Enable*
+- UCSZ02:	*Character Size*
+- .color-grey[RXB80:	*Receive Data Bit 8* when using a UART frame with 9 data bits]
+- .color-grey[TXB80:	*Transmit Data Bit 8* when using a UART frame with 9 data bits]
+
+---
+name: S26
+
+# UCSR0C Register
+
+.center[<img src="img/UCSR0C.png" width="600">]
+
+- UMSEL0[1..0]:	*Mode Select* where 00 = UART, 01 = USART, 10 = Reserved, 11 = SPI
+- UPM0[1..0]:	*Parity Mode* where 00 = Disabled, 01 = Reserved, 10 = Even, 11 = Odd
+- USBS0: *Stop Bit Select* where 0 = 1-bit, 1 = 2-bits
+- UCSZ0[1..0]: *Character Size* where 00 = 5-bits, 01 = 6-bits, 10 = 7-bits, 11 = 8-bits while UCSZ02 is set to 0
+- .color-grey[UCPOL0:	*USART Clock Polarity* when operating in synchronous mode]
+
+---
+name: S27
+
+# UBRR0 Register 
+
+.center[<img src="img/UBRR0B.png" width="600">]
+.center[<img src="img/UBRR0A.png" width="600">]
+
+- UBRR0[12..0]:	*Baud Rate Register* value sets the baud rate by prescaling the system clock to generate a clock source for the UART
+
+---
+name: S28
+
+# Calculating Value of UBRR0
+
+.center[<img src="img/UARTClock.png" width="500">]
+
+- The UBRR0 value defines the prescaler applied to used to the system clock (f<sub>osc</sub>) to obtain the UART clock (i.e. UART clock = (f<sub>osc</sub> / (UBRR0 + 1))
+- Under normal operation the UART clock needs to be 16 times the baud rate and therefore
+\\[ \text{Baud Rate} = \frac{f\_{osc}} {16 \times \left( UBRR0 + 1 \right) } \quad \text {or} \quad UBRR0 = \frac {f\_{osc}} {\left( \text {Baud Rate} \right) \times 16}  - 1\\]
+
+---
+name: S29
+
+# Configuring the UART
+
+- First we need to configure the UART as per our specifications 
+ - Need to set the bits of the [UCSR0A](#S24), [UCSR0B](#S25), [UCSR0C](#S26) and [UBRR0](#S27) registers 
+ - Have to configure the bits of the DDRD register associated with TX and RX pins (done by default)
+ - Lets configure the UART peripheral to 115200 baud, 8N1 with no parity  
+
+.codes[
+```c
+// This function configures the UART to 9600 baud, 8N1 with no parity
+void uart_init(uint32_t baud_rate){
+  UCSR0A = 0b00000000;    //None of the settings here are used
+  UCSR0B = 0b00001000;    //Set TXEN0 bit to 1 (enable transmit) and UCSZ02 bit to 0 (8 data bits)
+                          //To improve readability we should aim to write this in the form "UCSR0B = (1&#60;&#60;TXEN0);"
+  UCSR0C = 0b00000110;    //UMSEL0[1..0]=00 (UART mode), UPM0[1..0]=00 (no parity), 
+                          //USBS0=0 (1 stop-bit), UCSZ0[1..0]=11 (8 data bits)
+  UBRR0 = 2000000 / (16 * baud_rate) - 1;
+                          //Set UBRR0 as per baud rate formula
+}
+```
+]
+
+
+---
+name: S30
+
+# Transmitting a Data Byte
+
+- We also know how to use the UART registers to transmit data
+ - We send data by loading the data byte to be sent into the UDR0 register
+ - UDR0 needs to be ready for the new data byte and this can be checked by making sure the UDRE0 bit in the UCSR0A register is set
+ - We typically do the above in a function dedicated to transmitting a byte
+
+.codes[
+```c
+// This function transmits a single byte via the UART
+void uart_transmit_byte(char byte){	
+  while ((UCSR0A & 0b00100000) == 0){       //UDRE0 bit is checked to see if it is 0 
+  ;                                         //If UDRE0 bit is not 0, wait until it becomes 0	
+  }
+
+  //Put the byte to be sent into the UDR0 register
+  UDR0 = byte;
+}
+```
+] 
+
+---
+name: S31
+
+# Transmitting an Array of Bytes
+
+- We can also write a function that can transmit an array of bytes 
+ - In a loop, we need to transmit one byte at a time by calling the function we wrote to transmit a byte
+ - The number of bytes in the array is determined using the method *strlen* 
+ - To use *strlen* you need to **#include &lt; string.h &gt;**
+
+.codes[
+```c
+//This function transmits an array of bytes via the UART using uart_transmit_byte(char byte)function
+void uart_transmit_array(char* msg){
+	//Loop through each byte in the array 
+	for (uint8_t i = 0; i < strlen(msg); i++){		
+		uart_transmit_byte(msg[i]);				//Transmit each byte using uart_transmit_byte(char byte)
+	}	
+}
+```
+] 
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Character Encoding
+### American Standard Code for Information Interchange (ASCII)
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2022)]
+
+---
+name: S32
+
+# Why Do We Need Character Encoding?
+
+- UART communication protocol allows us to successfully transfer data between a microcontroller and external devices
+ - UART can send a single byte of data at a time
+- If we only want to send numbers between 0-255 (or -128 to 127) then this works, but what if we want to send other data types?
+ - For example how to send alphanumeric characters, larger numbers, key-value pairs, etc.
+- We call these desired values our “character set”
+- Encoding determines how our character set is represented by the data we can send
+- There are many types of character encoding systems
+ - ASCII, ANSI, Unicode and UTF are a few common encoding systems
+- ASCII maps letters (upper and lower case), numbers (0-9), and special characters, to the range 0-127
+ - For example, 0x48 is used to represent the character ‘H’
+
+---
+name: S33
+
+# The ASCII Table
+
+.center[<img src="img/ASCII.jpg" width="700">]
+
+---
+name: S33a
+
+# Demo: ASCII Conversion
+
+<iframe height="400px" width="100%" src="https://replit.com/@duleepajt/ASCIIConversion?lite=true" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"></iframe>
+
+---
+name: S34
+
+# Completing the UART Code
+
+.codes[
+```c
+#define F_CPU 2000000UL                     //Defining system clock frequency
+
+#include <avr/io.h>                         //Needed for using the macros for register addresses
+#include <string.h>                         //Needed for using strlen()
+#include <util/delay.h>                     //Needed for using _delay_ms()
+
+//Prototypes of functions used
+void uart_init(uint32_t baud_rate);     
+void uart_transmit_byte(char byte);
+void uart_transmit_array(char* msg);
+
+int main(void){
+
+  uart_init(9600);                          //Initializing the UART to 9600 baud, 8N1, with no parity
+
+  while (1){
+    uart_transmit_byte(0x48);               //Transmitting character 'H' - alternatively uart_transmit_byte('A');
+    uart_transmit_array("ello World\n\r");  //Transmitting string "ello World" with newline character '\n'
+                                            //and carriage return character '\r'
+    _delay_ms(1000);                        //Transmit above characters every 1s
+  }
+}
+```
+]
+
+---
+name: S35
+
+# Using *printf* and *sprintf* (PI)
+
+- The *printf* and *sprintf* commands uses ASCII encoding
+ - These commands take an input string, format it, and output it
+- To use *printf* and *sprintf* **#include &lt; stdio.h &gt;** 
+- We also need to redirect the output of *printf* to use the UART and to do this we bind a function which transmits a character via the UART
+
+.codes[
+```c
+//Creating a stream variable
+static FILE usart_stdout = FDEV_SETUP_STREAM(uart_printf, NULL, _FDEV_SETUP_WRITE);
+
+int main(void)
+{
+  stdout = &usart_stdout;         //Binding the stream variable to stdout	
+  uart_init(9600);                //Initializing the UART to 9600 baud, 8N1 with no parity
+  
+  while (1){
+    printf("Hello World\r\n");    //Printing "Hello World"
+    _delay_ms(1000);              //Transmit message every 1s
+  }
+}
+```
+]
+
+---
+name: S36
+
+# Using *printf* and *sprintf* (PII)
+
+- To use *printf* we need a new function called *uart_printf*
+
+.codes[
+```c
+int uart_printf(char var, FILE *stream) {
+	uart_transmit_byte(var);      //Using our original function to transmit UART data
+	return 0;
+}
+```
+]
+
+- Both *printf* and *sprintf* take a format string which defines the output together with a set of arguments
+- Format specifiers stating with % sign tell where to put these arguments and how to format them
+
+.codes[
+```c
+printf("Color %s, Number %d, Hex %X","Red", 125, 125);
+```
+]
+
+- When using sprintf the output is written into a character array
+ - An example of using *sprintf* is provided in the UART lab
+- The main drawback of using *printf* and *sprintf* is the overhead they add in a very resource limited environment
+
+---
+name: S37
+
+# Developing Modular Software
+
+- At this stage you should be learning to develop modular software
+ - For example, all code relating each peripheral can be in a separate .c file, with a corresponding .h file
+ - Allows code reuse, manageable and readable code, easy to collaborate, easy to test and validate
+- As an example, lets consider the code developed to use the UART
+ - Use a separate C source file called *uart.c* and a corresponding header file called *uart.h*, which will hold function prototypes for all functions in *uart.c*
+ - The *uart.h* should **#include** as few other .h files as possible and it should be protected against multiple **#include**
+ - **#include "uart.h"** in *uart.c* together with any necessary .h files
+ - **#include "uart.h"** in *main.c* so that we can access our UART functions
+- You may also want a shared .h such as *common.h* for global **#define** for example **#define F_CPU**
+ - Avoid sharing global variables between .c files by declaring them as *static* 
+
+---
+name: S38
+
+# Adding Source & Header Files to Project
+
+- To add the *uart.c* source file and *uart.h* header file to the project right-click on project name in solution explorer and click on *Add* followed by *New Item*
+
+.center[<img src="img/NewFiles.png" width="900">]
+
+---
+name: S39
+
+# Things To Note
+
+- Your transmit function is blocking and your MCU cannot do anything else while transmitting over the UART
+ - It can interfere with code that has timing constraints
+ - DO NOT use UART transmissions from within time critical tasks like interrupts
+- You must understand examples you use for the lab or the project
+ - Your individual understanding will be assessed during all assessments 
+ - During 2nd test you will have to develop a C program yourself and simulate it on Proteus
+ - All team members must therefore understand every part of the design
+- It is critical that you complete the pre-lab of the UART lab before your lab session so that you can get help with the later parts of the lab
+ - Please do not waste the opportunity to get support in the labs 
+ - With many students in the class, closer to due dates, there will be limited opportunities to ask for help 
+- You need to demonstrate UART transmission during your midsemester review 
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Acknowledgments 
+#### These slides are adapted from material prepared by Travis Scott & Muhammad Nadeem
+
+
+
+    </textarea>
+
+    <!-- 
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    -->    
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript">
+    </script>
+
+
+    <script src="remark.min.js" type="text/javascript">
+    </script>
+
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="terminal.language.js" type="text/javascript"></script>
+
+    <script src="https://kit.fontawesome.com/a405eedf54.js" crossorigin="anonymous"></script>
+    <script src="mark.min.js" type="text/javascript">
+    </script>
+    <link rel="stylesheet" href="remark.search.css">
+    <script src="remark.search.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+      var options = {};
+
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        ]});
+      }
+
+      var slideshow = remark.create({
+        ratio: '16:9',
+        slideNumberFormat: '%current%',
+        countIncrementalSlides: false,
+        renderMath,
+        highlightLanguage: 'c',
+        highlightStyle: 'github',
+        navigation: {
+          // Enable or disable navigating using scroll
+          // Default: true
+          // Alternatives: false
+          scroll: true,
+
+          // Enable or disable navigation using touch
+          // Default: true
+          // Alternatives: false
+          touch: true,
+
+          // Enable or disable navigation using click
+          // Default: false
+          // Alternatives: true
+          click: false,
+        },
+        
+      });
+
+      MathJax.Hub.Config({
+          tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+          processEscapes: true
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          $(MathJax.Hub.getAllJax()).map(function(index, elem) {
+              return(elem.SourceElement());
+          }).parent().addClass('has-jax');
+      });
+
+      MathJax.Hub.Configured();
+      
+      //Terminal style highligting code
+      var highlighted = document.querySelectorAll("code.terminal span.hljs-ansi");
+      Array.prototype.forEach.call(highlighted, function(next) {
+        next.insertAdjacentHTML("beforebegin", next.textContent);
+        next.parentNode.removeChild(next);
+      });
+
+      window.addEventListener('load', function() {
+      RemarkSearch.create({'position': 'top-left', 'caseSensitive' : false, 'showIcon': true, 'autoSearch': true});
+      });
+
+
+    </script>
+  </body>
+</html>
