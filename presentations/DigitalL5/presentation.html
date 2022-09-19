@@ -674,19 +674,18 @@ name: S29
 - First we need to configure the UART as per our specifications 
  - Need to set the bits of the [UCSR0A](#S24), [UCSR0B](#S25), [UCSR0C](#S26) and [UBRR0](#S27) registers 
  - Have to configure the bits of the DDRD register associated with TX and RX pins (done by default)
- - Lets configure the UART peripheral to 115200 baud, 8N1 with no parity  
+ - Lets configure the UART peripheral to 57600 baud, 8N1 with no parity  
+ - Both receive and transmit interrupts are enabled 
 
 .codes[
 ```c
-// This function configures the UART to 9600 baud, 8N1 with no parity
-void uart_init(uint32_t baud_rate){
-  UCSR0A = 0b00000000;    //None of the settings here are used
-  UCSR0B = 0b00001000;    //Set TXEN0 bit to 1 (enable transmit) and UCSZ02 bit to 0 (8 data bits)
-                          //To improve readability we should aim to write this in the form "UCSR0B = (1&#60;&#60;TXEN0);"
-  UCSR0C = 0b00000110;    //UMSEL0[1..0]=00 (UART mode), UPM0[1..0]=00 (no parity), 
-                          //USBS0=0 (1 stop-bit), UCSZ0[1..0]=11 (8 data bits)
-  UBRR0 = 2000000 / (16 * baud_rate) - 1;
-                          //Set UBRR0 as per baud rate formula
+void UART_init_inturpt(void){
+  UCSR0B |= 1 << TXEN0 | 1 << RXEN0 | 1 << TXCIE0 | 1 << RXCIE0;	
+  //Enable transmit, receive, and interrupt, UCSZ02=0 (default - 8 data bits))
+  UCSR0C |= 3 << UCSZ00;      //UMSEL0[1..0]=00 (default - UART mode), UPM0[1..0]=00 (default - no parity),
+  //USBS0=0 (default - 1 stop bit), UCSZ0[1..0]=11 (default - 8 data bits)
+  UBRR0 = F_CPU / ((uint32_t)16 * BAUD_RATE) - 1;
+  //Set UBRR0 as per baud rate formula
 }
 ```
 ]
@@ -695,23 +694,28 @@ void uart_init(uint32_t baud_rate){
 ---
 name: S30
 
-# Transmitting a Data Byte
+# Receiving Data
 
-- We also know how to use the UART registers to transmit data
- - We send data by loading the data byte to be sent into the UDR0 register
- - UDR0 needs to be ready for the new data byte and this can be checked by making sure the UDRE0 bit in the UCSR0A register is set
- - We typically do the above in a function dedicated to transmitting a byte
+- When a byte of data arrives at the RX pin, it is loaded to UDR0 and an interrupt is triggered 
+ - Lets use an incoming message format of "XXXXX\r\n" where XXXXX is V_ref in mV
+ - In the ISR, as each byte of data is received, store the received byte in an array used as a buffer 
+ - Use '\r' character to determine the end of incoming message 
 
 .codes[
 ```c
-// This function transmits a single byte via the UART
-void uart_transmit_byte(char byte){	
-  while ((UCSR0A & 0b00100000) == 0){       //UDRE0 bit is checked to see if it is 0 
-  ;                                         //If UDRE0 bit is not 0, wait until it becomes 0	
+ISR(USART_RX_vect){
+  rx_buffer[rx_byte_pos] = UDR0;        //Store received character to next position of array
+  rx_byte_pos++;                        //Increment buffer position
+  rx_complete_flag = 0;                 //Indicate message not ready to read
+  if(rx_buffer[rx_byte_pos-1] == '\r'){ //Check if a carriage return entered indicating end of message
+    rx_buffer[rx_byte_pos-1] = '\0';    //Replace \r with a null to indicate end of message
+    rx_complete_flag = 1;               //Indicate message ready to read
+    rx_byte_pos = 0;                    //Reset position in array
   }
-
-  //Put the byte to be sent into the UDR0 register
-  UDR0 = byte;
+  else if(rx_byte_pos > (RX_BUFFER_SIZE -1)){	
+    rx_byte_pos = 0;                    //If buffer full discard message and reset buffer 
+	}
+  PIN_TOGGLE(PINB5);                    //Toggle pin to indicate ISR execution 
 }
 ```
 ] 
@@ -719,21 +723,21 @@ void uart_transmit_byte(char byte){
 ---
 name: S31
 
-# Transmitting an Array of Bytes
+# Transmitting Data
 
-- We can also write a function that can transmit an array of bytes 
- - In a loop, we need to transmit one byte at a time by calling the function we wrote to transmit a byte
- - The number of bytes in the array is determined using the method *strlen* 
- - To use *strlen* you need to **#include &lt; string.h &gt;**
+- We can use a similar approach used to receive a message to send a message 
+ - The message to be sent can be loaded on to an array used as a buffer 
+ - A message format similar to "XXXXX\r\n" where XXXXX is V_out in mV, can be used 
+ - We can use a flag to indicate the ISR that a new message is ready to be transmitted 
+ - In the UART TX ISR, we need to load one byte at a time to UDR0 
+ - Use '\r' character to determine the end of outgoing message and reset the flag 
 
 .codes[
 ```c
-//This function transmits an array of bytes via the UART using uart_transmit_byte(char byte)function
-void uart_transmit_array(char* msg){
-	//Loop through each byte in the array 
-	for (uint8_t i = 0; i < strlen(msg); i++){		
-		uart_transmit_byte(msg[i]);				//Transmit each byte using uart_transmit_byte(char byte)
-	}	
+ISR(USART_TX_vect){
+
+//Write your UART transmit code here 
+
 }
 ```
 ] 
@@ -780,40 +784,30 @@ name: S33
 .center[<img src="img/ASCII.jpg" width="700">]
 
 ---
-name: S33a
-
-# Demo: ASCII Conversion
-
-<iframe height="400px" width="100%" src="https://replit.com/@duleepajt/ASCIIConversion?lite=true" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"></iframe>
-
----
 name: S34
 
-# Completing the UART Code
+# Using *printf* and *sprintf* 
+
+- The *printf* and *sprintf* commands uses ASCII encoding
+ - These commands take an input string, format it, and output it
+- To use *printf* and *sprintf* **#include &lt; stdio.h &gt;** 
+- For your project it may be easier to convert between ASCII and integer by adding or subtracting 48
 
 .codes[
 ```c
-#define F_CPU 2000000UL                     //Defining system clock frequency
+int main(void){	
+	
+  //Code....
 
-#include <avr/io.h>                         //Needed for using the macros for register addresses
-#include <string.h>                         //Needed for using strlen()
-#include <util/delay.h>                     //Needed for using _delay_ms()
+  char tx_buffer[TX_BUFFER_SIZE];
+  sprintf(tx_buffer,"%d\r\n", 15370);
 
-//Prototypes of functions used
-void uart_init(uint32_t baud_rate);     
-void uart_transmit_byte(char byte);
-void uart_transmit_array(char* msg);
+  while(1){
 
-int main(void){
+    //Code...
 
-  uart_init(9600);                          //Initializing the UART to 9600 baud, 8N1, with no parity
-
-  while (1){
-    uart_transmit_byte(0x48);               //Transmitting character 'H' - alternatively uart_transmit_byte('A');
-    uart_transmit_array("ello World\n\r");  //Transmitting string "ello World" with newline character '\n'
-                                            //and carriage return character '\r'
-    _delay_ms(1000);                        //Transmit above characters every 1s
   }
+
 }
 ```
 ]
@@ -821,66 +815,9 @@ int main(void){
 ---
 name: S35
 
-# Using *printf* and *sprintf* (PI)
-
-- The *printf* and *sprintf* commands uses ASCII encoding
- - These commands take an input string, format it, and output it
-- To use *printf* and *sprintf* **#include &lt; stdio.h &gt;** 
-- We also need to redirect the output of *printf* to use the UART and to do this we bind a function which transmits a character via the UART
-
-.codes[
-```c
-//Creating a stream variable
-static FILE usart_stdout = FDEV_SETUP_STREAM(uart_printf, NULL, _FDEV_SETUP_WRITE);
-
-int main(void)
-{
-  stdout = &usart_stdout;         //Binding the stream variable to stdout	
-  uart_init(9600);                //Initializing the UART to 9600 baud, 8N1 with no parity
-  
-  while (1){
-    printf("Hello World\r\n");    //Printing "Hello World"
-    _delay_ms(1000);              //Transmit message every 1s
-  }
-}
-```
-]
-
----
-name: S36
-
-# Using *printf* and *sprintf* (PII)
-
-- To use *printf* we need a new function called *uart_printf*
-
-.codes[
-```c
-int uart_printf(char var, FILE *stream) {
-	uart_transmit_byte(var);      //Using our original function to transmit UART data
-	return 0;
-}
-```
-]
-
-- Both *printf* and *sprintf* take a format string which defines the output together with a set of arguments
-- Format specifiers stating with % sign tell where to put these arguments and how to format them
-
-.codes[
-```c
-printf("Color %s, Number %d, Hex %X","Red", 125, 125);
-```
-]
-
-- When using sprintf the output is written into a character array
- - An example of using *sprintf* is provided in the UART lab
-- The main drawback of using *printf* and *sprintf* is the overhead they add in a very resource limited environment
-
----
-name: S37
-
 # Developing Modular Software
 
-- At this stage you should be learning to develop modular software
+- You should be developing modular software that is easy to follow
  - For example, all code relating each peripheral can be in a separate .c file, with a corresponding .h file
  - Allows code reuse, manageable and readable code, easy to collaborate, easy to test and validate
 - As an example, lets consider the code developed to use the UART
@@ -892,7 +829,7 @@ name: S37
  - Avoid sharing global variables between .c files by declaring them as *static* 
 
 ---
-name: S38
+name: S36
 
 # Adding Source & Header Files to Project
 
@@ -900,22 +837,6 @@ name: S38
 
 .center[<img src="img/NewFiles.png" width="900">]
 
----
-name: S39
-
-# Things To Note
-
-- Your transmit function is blocking and your MCU cannot do anything else while transmitting over the UART
- - It can interfere with code that has timing constraints
- - DO NOT use UART transmissions from within time critical tasks like interrupts
-- You must understand examples you use for the lab or the project
- - Your individual understanding will be assessed during all assessments 
- - During 2nd test you will have to develop a C program yourself and simulate it on Proteus
- - All team members must therefore understand every part of the design
-- It is critical that you complete the pre-lab of the UART lab before your lab session so that you can get help with the later parts of the lab
- - Please do not waste the opportunity to get support in the labs 
- - With many students in the class, closer to due dates, there will be limited opportunities to ask for help 
-- You need to demonstrate UART transmission during your midsemester review 
 
 ---
 
@@ -924,8 +845,7 @@ layout: false
 count: false
 .logo-title[]
 
-# Acknowledgments 
-#### These slides are adapted from material prepared by Travis Scott & Muhammad Nadeem
+# Questions?
 
 
 
