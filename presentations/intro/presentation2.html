@@ -229,7 +229,7 @@ layout: true
 name: template_slide
 
 .logo-slide[]
-.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2026)]
 
 ---
 
@@ -379,7 +379,7 @@ layout: false
 count: false
 .logo-title[]
 
-# Design of a Pocket Sized Power Supply
+# Design of a Smart Power Bank
 ### Project Information
 
 ---
@@ -388,7 +388,7 @@ layout: true
 name: template_slide
 
 .logo-slide[]
-.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2026)]
 
 ---
 name: S11
@@ -396,58 +396,63 @@ name: S11
 # The Project
 
 - What is this course about and what should you expect to learn?
- - Gives you an opportunity to design and develop a commonly used switched-mode power supply using the electrical, magnetic, control and embedded programing principles you learnt so far
- - During this process you will gain knowledge, experience, skill-set and professional behavior needed to succeed in more challenging projects you will engage as an engineer
+ - Gives you an opportunity to design and develop a system incorporatingpower electronics converters, analog and digital control, and a user interface
+ - During this process you will gain knowledge, experience, skill-set and <b>professional behavior</b> needed to succeed in more challenging projects you will engage as an engineer
 - What would you design and engineer during this course?
- - A compact programmable power supply that could replace the bulky bench power supply 
+ - Sub-systems of a smart power bank depending on your team's interest and skill-sets to develop
 - How would you achieve this task?
- - A *flyback* type power converter is developed to generate a programmable *isolated* DC voltage between 5V and 30V from a 20V DC source
- - A suitable *high-frequency isolation transformer* is designed for the flyback converter while off-the-shelf digital isolators are used to isolate communication signals
- - An *embedded software program* is developed to control the output voltage of the converter to voltage requested by the user 
+ - All teams must develop a *Boost Converter* to derive a 5V output from the energy storage element
+ - The boost converter will be controlled using an ATMega328P MCU and an UC3843 controller
+ - Depending on your team's interest, you can choose to develop the other sub-systems such as the *Charger*, *User Interface* or other features
+ - The charger can be a linear converter implemented using discrete components, while the user interface subsystem contains protection, battery management and touch control features
 
 ---
 name: S12
 
-# A Typical Work Bench Power Supply
+# A Typical Smart Power Bank
 
-- A low voltage DC supply is a piece of essential equipment found on a work bench
- - Typically has 1 or more independent isolated outputs
- - The voltage and current at each output can be controlled/programmed via a user interface
+- There are many commercially available power banks in the market with many smart features
+ - Modern devices have a USB-C PD interface to charge and to provide a 5V output to the devices
+ - Often has a user interface and modern devices include wireless charging 
 
-.center[<img src="img/PSU_GW.jpg" height="290">
+.center[<img src="img/TearDown.png" height="290">
 .credits[
-The GW3323 Low Voltage DC Power Supplies Found on MDLS Work Benches [[2]](https://www.gwinstek.com/en-global/products/detail/GPE-X323)
+Tear Down of a Smart Power Bank [[2]](https://www.chargerlab.com/teardown-of-apple-iphone-air-magsafe-battery-a3466/)
 ]
 ]
 
 ---
 name: S13
 
-# Architecture of a Typical LV Power Supply
+# Architecture of a Modern Power Bank - P1
 
-- A 50Hz transformer with multiple taps is used to generate an isolated output 
- - This low-frequency transformer is the main contributor to size and weight 
-- A series type linear regulator is used to regulate the output to value set by the user 
- - Efficiency improved by switching between taps of the transformer 
+- Charging the power bank and deriving a 5V output is done through the USB-C PD interface
+- A bi-directional buck-boost converter interface the USB-C PD and the energy storage element 
+ - When in the charging mode, to takes energy from the input and charge the energy storage element
+ - When in the discharging mode, a 5V output is generated using energy from the storage element
+- Sensing circuitry measure voltages, currents and temperatures to ensure safe operation 
+ - Isolation switch physical isolate the storege element under unsafe conditions
 
-.center[<img src="img/PSU_GW2.png" height="260">
+.center[<img src="img/Power_Bank_EG.png" height="190">
 .credits[
-Architecture of a GW3323 Power Supply [[3]](https://www.gwinstek.com/en-global/products/downloadSeriesDownNew/8033/1198)
+Architecture of a Power Bank
 ]
 ]
 
 ---
 name: S14
 
-# Internals of a Typical LV Power Supply
+# Architecture of a Modern Power Bank - P2
 
-- Internal circuitry shows the size of the low-frequency transformer used
- - We will use a high-frequency transformer to significantly reduce the size and weight
-- Second largest component is the heatsink used to cool the linear regulator 
- - We will use a more efficient switched-mode regulator to overcome this problem
+- A microcontroller (MCU) implements user interface and to manage the operation of the power bank
+ - Battery management system (BMS) monitors the storage element to ensures safe operation 
+ - Touch interface allows the user to turn-on/off the power bank
+ - Control logic controls the buck-boost converter
 
-.center[
-<iframe width="500" height="281" src="https://www.youtube.com/embed/BGXbl0lrqfc?start=112" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+.center[<img src="img/Power_Bank_EG.png" height="190">
+.credits[
+Architecture of a Power Bank
+]
 ]
 
 ---
@@ -455,11 +460,51 @@ name: S15
 
 # Suggested System Architecture 
 
-.center[<img src="img/System.png" height="320">]
+.center[<img src="img/System_Diagram.png" height="280">]
 
-- You will derive the 20V DC source needed to power your design from a bench-top power supply
- - In real-life, you can use a USB-C PD interface to derive the 20V DC
-- A 220&Omega; rheostat will be used as the load to test and characterize your power supply
+- We have divided the suggested system architecture into 3 sub-systems, 
+ - A separate charging sub-system 
+ - A boost converter sub-system for deriving 5V output
+ - An smarts sub-system to implement user interface, monitoring and protection
+
+---
+name: S15b
+
+# Suggested Boost Converter Architecture 
+
+.center[<img src="img/Boost_Conv_Sys.png" height="280">]
+
+- The boost converter converts the 2.5V to 3.5V DC from the energy storage element to a 5V DC output
+ - Employs a UC3843 current mode controller to control the boost converter
+ - An ATmega328P microcontroller is used to implement a PI controller to regulate the 5V output
+ - Includes a hardware protection feature for over-voltage 
+
+---
+name: S15c
+
+# Suggested Charger Architecture 
+
+.center[<img src="img/Linear_Reg_Sys.png" height="200">]
+
+- A linear regulator charges the energy storage element from 0V to 3.5V DC
+ - Discrete components implements a linear regulator with both current and voltage control
+ - Fully analog design using an OpAmp to implement feedback control
+ - Should use a low dropout design to charge the energy storage element to 3.5V from a 5V input
+- A PCB needs to be designed to implement the linear regulator 
+ - Should include an isolation switch to isolate the energy storage element under unsafe conditions
+
+---
+name: S15d
+
+# Suggested Smarts Architecture 
+
+.center[<img src="img/Touch_BMS_Sys.png" height="250">]
+
+- An ATmega328PB implements the user interface and manages the operation of the power bank
+ - A capacitive touch sensor is used to turn on/off the power bank
+ - Voltages, currents and temperatures are monitored to ensure safe operation of the power bank
+ - Implements a battery management system (BMS) to track the state of charge (SOC) 
+- Hardware protection circuitry is implemented to provide an independent layer of protection
 
 ---
 name: S16
@@ -510,62 +555,22 @@ name: S16
       <td class="tg-sabo">Isolation Rating</td>
       <td class="tg-sabo"> 500 V or more</td>
     </tr>
-    <tr>
-      <td class="tg-ig71">Over Voltage Protection</td>
-      <td class="tg-ig71">32 V</td>
-    </tr>
-    <tr>
-      <td class="tg-sabo">Converter Topology</td>
-      <td class="tg-sabo">Flyback</td>
-    </tr>
-    <tr>
-      <td class="tg-jayl">Information Displayed to User on PC</td>
-      <td class="tg-jayl">Output Voltage</td>
-    </tr>
-    <tr>
-      <td class="tg-096r">User Setpoints</td>
-      <td class="tg-096r">Output Voltage</td>
-    </tr>
-    <tr>
-      <td class="tg-jayl">PCB Technology</td>
-      <td class="tg-jayl">Double Layer with PTH</td>
-    </tr>
   </tbody>
 </table>
-
-
----
-name: S17
-
-# Expected Output Characteristics
-
-- Designing a power supply that can deliver 12W at any output voltage level (between 5V and 30V) is significantly more complicated
- - Even commercial power supplies for this reason limit the output in some manner
-- To reduce the complexity of your design, it is expected to follow the output characteristics defined by the output voltage vs. power curve below
- - If you wish to improve power output at low voltages, then you must first discuss your solutions and seek approval
-
-.center[<img src="img/OutputChar.png" height="200">]
-
----
-name: S18
-
-# Demo of Expected Final Design
-
-.center[<img src="img/Demo.png" height="430">]
 
 ---
 name: S19
 
 # Working in Teams
 
-- You will work in a team of 4 
+- You will work in a team of 4 to 8 members
  - You can chose your team members and register your team details on Canvas by the end of 1st week
- - All team members should attend support sessions together 
+ - All team members should attend lab sessions together 
+ - Team size and task division needs to be justified when you present your project proposal
 - Throughout the project work as a team and aim to support each other
  - This is an important part of preparing to be a professional engineer
- - You depend on each other to do well in this course
 - Plan your work, document your work and communicate regularly with your team members
- - Use a logbook and/or [Trello](https://trello.com) to plan and document your work 
+ - Use a logbook and [Slack](https://slack.com/intl/en-nz/) to plan and document your work 
  - Use [Slack](https://slack.com/intl/en-nz/) and [Zoom](https://zoom.us)/[Hangouts](https://hangouts.google.com) for team communications
  - Use [GitHub](https://github.com) and [G Suite](https://gsuite.google.com)/[Office 365](https://www.library.auckland.ac.nz/services/it-essentials/computer-facilities/software-personal-use/microsoft-student-advantage-office-365) products to collaborate with team members
 - Be patient with your team members even if they are not making much progress during the initial stage
@@ -585,8 +590,8 @@ name: S21
 # How to Get an Excellent Grade
 
 - Is the project challenging?
- - Yes, design and developing your first switched-mode power supply can be quite challenging
- - You need to have a good mastery of circuit analysis techniques, magnetics, control and embedded programming
+ - Yes, design and developing your first power electronics systems can be quite challenging
+ - You need to have a good mastery of circuit analysis techniques, magnetics, control, digital logic, analog circuitry and embedded programming
 - What are the most challenging aspects?
  - Time management, planing and team work are the key challenges
  - As in a real life project, resources are limited (time, teams' availability, lab space, equipment, software licenses, etc.) and therefore last minute frantic endeavour will not help
