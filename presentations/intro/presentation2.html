@@ -191,7 +191,7 @@ layout: true
 name: template_slide
 
 .logo-slide[]
-.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2026)]
 
 ---
 
@@ -402,7 +402,7 @@ name: S11
  - Sub-systems of a smart power bank depending on your team's interest and skill-sets to develop
 - How would you achieve this task?
  - All teams must develop a *Boost Converter* to derive a 5V output from the energy storage element
- - The boost converter will be controlled using an ATMega328P MCU and an UC3843 controller
+ - The boost converter will be controlled using an ATMega328PB MCU and an UC3843 controller
  - Depending on your team's interest, you can choose to develop the other sub-systems such as the *Charger*, *User Interface* or other features
  - The charger can be a linear converter implemented using discrete components, while the user interface subsystem contains protection, battery management and touch control features
 
@@ -476,7 +476,7 @@ name: S15b
 
 - The boost converter converts the 2.5V to 3.5V DC from the energy storage element to a 5V DC output
  - Employs a UC3843 current mode controller to control the boost converter
- - An ATmega328P microcontroller is used to implement a PI controller to regulate the 5V output
+ - An ATmega328PB microcontroller is used to implement a PI controller to regulate the 5V output
  - Includes a hardware protection feature for over-voltage 
 
 ---
@@ -546,6 +546,7 @@ name: S16
       <td class="tg-ig71">Output Voltage Ripple</td>
       <td class="tg-ig71">50 mV or Less</td>
     </tr>
+    <tr>
       <td class="tg-ig71">Switching Frequency</td>
       <td class="tg-ig71">100 kHz</td>
     </tr>
@@ -592,6 +593,7 @@ name: S16b
       <td class="tg-ig71">PCB</td>
       <td class="tg-ig71">2-Layer PTH with SMT and TH Devices</td>
     </tr>
+    <tr>
       <td class="tg-ig71">PCB Size</td>
       <td class="tg-ig71">Smaller than 100 mm x 100 mm</td>
     </tr>
@@ -820,7 +822,7 @@ name: S29
 - In some cases, even if you do not meet the prerequisite, after an interview, we may allow you to continue with the course, but we will have to partner you with a suitable team 
  - Contact Duleepa for more information
 - Follow details on Canvas or the [course website](https://uoa-ee311.github.io/extra.html) to get setup on EdDiscussions, Slack and GitHub
- - Guides detailing how to obtain and install your personal copy of the software we will use in this course (Atmel Studio, Proteus VSM, Altium Designer, LTspice and GitHub Desktop) are available
+ - Guides detailing how to obtain and install your personal copy of the software we will use in this course (Atmel Studio, Proteus VSM, Altium Designer, LTspice, Plecs and GitHub Desktop) are available
  - Ansys is only available via FlexIT
 
 ---
@@ -868,7 +870,7 @@ name: S31
  - The voltage drop across the switch is controlled to achieve the desirable output 
  - Since the switch always has a certain voltage drop across it while also conducting current, the switch dissipates part of the power supplied by the source as losses
 - A switched-mode converter uses a switch such as a BJT, that is continuously *switched* back and forth between the cut-off and saturation (or ohmic) regions
- - In cut-off region, though there is voltage between the switch, it has no current flowing through it
+ - In cut-off region, though there is voltage across the switch, it has no current flowing through it
  - In saturation region, though there is current through the switch, voltage drop across it is insignificant
  - As such, the switch does not dissipate power as loss when its either in the cut-off or saturation regions
 - Lets explore these two types of converters further with the aid of a case study
