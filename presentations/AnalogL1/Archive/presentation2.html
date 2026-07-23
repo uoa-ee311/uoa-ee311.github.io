@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="plecsModel">
+  <head>
+    <title>Introduction to Flyback Converters</title>
+    <meta charset="utf-8">
+
+
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { 
+        font-family: 'Droid Serif'; 
+        line-height: 1.6 !important;
+        }
+
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: bold;
+        color: #00467F;
+      }
+
+      h1{
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+      }
+
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+      .TitleAuthor {
+        color:white; 
+        font-weight: normal;
+      }
+
+      .title-slide .remark-slide-number {
+        display: none;
+      }
+      .title-slide h1, h2, h3, h4 {
+        text-align: left;
+        color:white;
+        line-height: 0.7;
+        font-weight: bold;
+      }
+
+      .title-slide {
+        vertical-align: middle;
+        background-color: #00467F;
+      }
+
+      .logo-title {
+        content: "";
+        position: absolute;
+        top: 15px;
+        right:   15px;
+        height: 88px;
+        width: 267px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cdn.auckland.ac.nz/assets/central/central-services/mediaandmarketing/uoa-logos-2015/uoa-logo-2015-reverse.png);
+      }
+      .logo-slide {
+        content: "";
+        position: absolute;
+        top: 35px;
+        right:   15px;
+        height: 96px;
+        width: 100px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://cpb-ap-se2.wpmucdn.com/blogs.auckland.ac.nz/dist/d/79/files/2015/10/uoa-v-colour2.png);
+      }
+
+      .left-column {
+        width: 65%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column {
+        width: 30%;
+        float: right;
+        word-wrap: break-word;
+      }
+
+      .left-column-50 {
+        width: 47%;
+        float: left;
+        word-wrap: break-word;
+      }
+     
+      .right-column-50 {
+        width: 47%;
+        float: right;
+        word-wrap: break-word;
+      }
+
+      .footer {
+        content: "";
+        position: absolute;
+        bottom: 17px;
+        color:gray;
+        font-size: 10pt;
+      }
+      
+      @page {
+        size: 1210px 681px;
+        margin: 0;
+      }
+
+      @media print {
+        .remark-slide-scaler {
+          width: 100% !important;
+          height: 100% !important;
+          transform: scale(1) !important;
+          top: 0 !important;
+          left: 0 !important;
+        }
+      }
+      
+      .credits {
+        font-size: 12px;
+        line-height: 4px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .codes {
+        
+        line-height: 20px !important;
+      }
+
+      .codes_dense {
+        
+        line-height: 15px !important;
+      }
+
+      .questions {
+        font-size: 20px;
+        line-height: 28px !important;
+        font-family: 'Droid Serif'; 
+      }
+
+      .zoom175 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom175:hover {
+        transform: scale(1.5) translateY(10%) translateX(0%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+      .zoom15 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom15:hover {
+        transform: scale(1.43) translateY(-6%) translateX(0%); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+    </style>
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <style>
+    .smaller-font { font-size:14px } 
+    </style>
+
+    <!-- KaTeX and Mathjax support refer to below for syntax -->
+    <!-- https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+    
+    <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <style>
+      /* Table Style */
+      .tg  {border-collapse:collapse;border-color:#9ABAD9;border-spacing:0;}
+      .tg td{background-color:#EBF5FF;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#444;
+        font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:3px 10px;word-break:normal;}
+      .tg th{background-color:#409cff;border-color:#9ABAD9;border-style:solid;border-width:1px;color:#fff;
+        font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:3px 10px;word-break:normal;}
+      .tg .tg-dzaw{background-color:#4F81BD;color:#FFF;font-weight:bold;text-align:left;vertical-align:top}
+      .tg .tg-sabo{background-color:#ebf5ff;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-096r{color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-jayl{background-color:#d2e4fc;color:#000000;text-align:left;vertical-align:top}
+      .tg .tg-ig71{background-color:#D2E4FC;color:#000000;text-align:left;vertical-align:top}
+    </style>
+
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide
+count: false
+.logo-title[]
+
+## ELECTENG 311
+# Electronics Systems Design 
+### Flyback Converter Analysis & Design
+
+.TitleAuthor[Duleepa J Thrimawithana]
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+
+name: S1
+
+# Learning Objectives
+
+- Energy storage elements 
+- What is a flyback converter?
+ - Converter topology and how it works
+- A simplified model of a flyback converter
+- Steady-state analysis of an ideal flyback converter
+ - What are the expected voltage and current waveforms
+ - Deriving relation between circuit parameters and operating conditions
+- Example design
+ - Determining the circuit parameters to meet a set of design specifications
+ - Determining the operating conditions 
+- Practical considerations
+ - Understanding the impact of non-ideal transformer 
+ - Practical waveforms
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# What is a Flyback Converter?
+### An Introduction
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+
+name: S2
+
+# Inductors
+
+.left-column[
+- An inductor is an energy storage element 
+ - Energy is stored in the magnetic field that is generated when there is a current flowing through the windings of an inductor,
+\\[ E\_L = \frac{1}{2} L I\_L^2 \\]
+- To store energy we can connect an inductor across a DC voltage source and let the current ramp-up to a desired value since,
+\\[ I\_L = \frac{1}{L} \int\_{0}^{T\_{dur}} V\_{in} \, \mathrm{d}t = \frac{V\_{in}}{L} T\_{dur} \quad \because V\_{in} \textrm{ is constant} \\]
+ - Assume initial current in L is 0A and S<sub>p</sub> turned-off at T<sub>dur</sub>
+ - **I<sub>L</sub> cannot change abruptly** so D circulates I<sub>L</sub> when S<sub>p</sub> is off
+]
+ 
+.right-column[
+.center[<img src="img/Inductor.png" height="420px">]
+]
+
+---
+
+name: S3
+
+# Capacitors
+
+.left-column[
+- A capacitor is an energy storage element 
+ - Energy is stored in the electric field that is generated when there is a voltage across the terminals of a capacitor,
+\\[ E\_C = \frac{1}{2} C V\_C^2 \\]
+- To store energy we can connect a capacitor across a DC current source and let the voltage ramp-up to a desired value since,
+\\[ V\_C = \frac{1}{C} \int\_{0}^{T\_{dur}} I\_{in} \, \mathrm{d}t = \frac{I\_{in}}{C} T\_{dur} \quad \because I\_{in} \textrm{ is constant} \\]
+ - Assume initial voltage of C is 0V and S<sub>p</sub> turned-on at T<sub>dur</sub>
+ - **V<sub>C</sub> cannot change abruptly** so D isolates V<sub>C</sub> when S<sub>p</sub> is off
+]
+ 
+.right-column[
+.center[<img src="img/Capacitor.png" height="420px">]
+]
+
+---
+
+name: S4
+
+# Converter Topology
+
+.center[<img src="img/Flyback_Main.png" height="180px">]
+
+- A flyback converter consists of a *flyback transformer (Tx)*, *switch (S<sub>p</sub>)*, *diode (D<sub>s</sub>)* and a *capacitor (C<sub>o</sub>)*
+- The switch is operated at a certain duty-cycle, D<sub>p</sub>, to control the output voltage, V<sub>out</sub>
+ - When S<sub>p</sub> is on during D<sub>p</sub>T<sub>s</sub>, the primary winding, L<sub>p</sub>, of the transformer is connected across the input source, V<sub>in</sub>, causing I<sub>in</sub> to build-up thus storing energy in L<sub>p</sub>
+ - When S<sub>p</sub> is off during (1-D<sub>p</sub>)T<sub>s</sub>, the energy stored in L<sub>p</sub> is released to the output, charging C<sub>o</sub>
+ - D<sub>s</sub> makes sure C<sub>o</sub> is not discharged through L<sub>s</sub>
+- As we learnt in [PWM control](https://uoa-ee311.github.io/presentations/intro/presentation.html#46), S<sub>p</sub> is operated at a fixed frequency f<sub>s</sub> and therefore T<sub>s</sub> = 1/f<sub>s</sub>
+
+---
+
+name: S5
+
+# Flyback Operation - An Analogy (PI)
+
+.center[<img src="img/Analogy.png" height="220px">]
+
+- We can compare a flyback converter to an analogy where a smaller water bucket is used to fill a bigger water bucket that has a hole
+ - Here the hole represents the load resistor (i.e., smaller R<sub>L</sub> bigger hole) and the water in smaller bucket represents energy stored in L<sub>p</sub> and transferred to output
+- The larger bucket represents the output capacitor that holds V<sub>out</sub> relatively constant
+ - However, there is a voltage ripple at V<sub>out</sub> since the water level dips and rises between each fill
+
+---
+
+name: S6
+
+# Flyback Operation - An Analogy (PII)
+
+.left-column[
+- If very small or no hole (i.e., large R<sub>L</sub> or open-circuit ) water will overflow (i.e., large voltage **damaging** system) 
+ - V<sub>out</sub> can build up to a very large voltage - **electric shock** hazard and **flying debris** from exploding components
+ - Before turning-on a flyback converter make sure **protection circuitry** works and an appropriate **load is attached**
+- We can reduce the ripple at V<sub>out</sub> by 
+ - Increasing the size of the larger bucket (i.e., larger C<sub>out</sub>)
+ - Filling more frequently (i.e., faster f<sub>s</sub>)
+- To transfer more power (i.e., higher V<sub>out</sub> at smaller R<sub>L</sub>) we can 
+ - Increasing the size of the smaller bucket (i.e., larger E<sub>L</sub>)
+ - Filling more frequently (i.e., faster f<sub>s</sub>)
+]
+ 
+.right-column[
+.center[<img src="img/Analogy_2.png" height="420px">]
+]
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Analyzing a Flyback Converter
+### A Steady-State Model
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S7
+
+# Transformer Model
+
+- We know how a flyback converter works in general terms, so lets mathematically model its operations
+ - The mathematical model will help us determine the parameters of components we should use
+- To simplify our analysis, we could replace the flyback transformer with it equivalent cantilever model
+- In our transformer model, L<sub>p</sub> and L<sub>s</sub> are the self-inductances of primary and secondary windings
+ - k, the coupling factor between the two windings is typically greater than 0.98 and also,
+
+\\[ \acute{V}\_s = n V\_s \quad \text{and} \quad \acute{I}\_s = \frac{1}{n} I\_s \quad \text{and} \quad \acute{R}\_s = n^2 R\_s \\]
+\\[ \text{where for T-model} \quad n = \sqrt{ \frac{L\_p}{L\_s} } = \frac{N\_p}{N\_s} \quad \text{and for cantilever model} \quad n = k\sqrt{ \frac{L\_p}{L\_s} } \approx \sqrt{ \frac{L\_p}{L\_s} } \approx \frac{N\_p}{N\_s}\\]
+
+.zoom175[
+.center[<img src="img/Tx_Models.png" height="120px">]
+]
+
+---
+name: S8
+
+# A Model of the Flyback
+
+.center[<img src="img/Flyback_Model.png" height="190px">]
+
+- Lets replace the flyback transformer with its equivalent cantilever model to help our mathematical analysis
+ - For now we are going to **assume k is 1** (later we will investigate the impact of a k less than 1)
+- In an SMPS, such as this flyback converter, the switch, S<sub>p</sub>, can only be either on or off
+ - We can draw two equivalent circuits, one for when S<sub>p</sub> is on and other for when S<sub>p</sub> is off
+- We will analyse the circuit assuming it has reached a steady-state 
+ - The average change in current through L<sub>p</sub> and voltage across C<sub>o</sub> over one switching period is 0
+
+---
+name: S9
+
+# Equivalent Circuits - S<sub>p</sub> is On
+
+.center[<img src="img/Flyback_On.png" height="210px">]
+
+- With PWM control, at the beginning of each switching cycle, S<sub>p</sub> will be turned-on for a duration [DT<sub>s</sub>](https://uoa-ee311.github.io/presentations/intro/presentation.html#47)
+ - Turning on S<sub>p</sub> shorts L<sub>p</sub> across V<sub>in</sub> causing I<sub>in</sub> to ramp from 0 to a higher value storing energy in L<sub>p</sub>
+- Since V<sub>in</sub> is directly applied across the primary side of the ideal transformer V<sub>s</sub> is -V<sub>in</sub>/n
+ - This is because the positive end of transformer secondary is reversed as indicated by the dots
+- The anode end of D<sub>s</sub> is negative while the cathode end is positive, thus D<sub>s</sub> is reverse biased (i.e. blocking)
+- We will assume that C<sub>o</sub> is quite large and holds V<sub>out</sub> constant (though it is discharging a bit)
+
+---
+name: S10
+
+# Equivalent Circuits - S<sub>p</sub> is Off (PI)
+
+.center[<img src="img/Flyback_Off.png" height="210px">]
+
+- After DT<sub>s</sub>, S<sub>p</sub> will be turned-off until the beginning of the next switching cycle 
+ - Turning off S<sub>p</sub> disconnects L<sub>p</sub> from V<sub>in</sub> and thus I<sub>in</sub> is 0A
+- Since current in L<sub>p</sub> cannot change abruptly, it finds a path to continue through the transformer and D<sub>s</sub>
+ - This is called **flyback time** and energy that was stored in L<sub>p</sub> during DT<sub>s</sub> now replenishes C<sub>o</sub>
+- As L<sub>p</sub> losses energy, I<sub>D</sub> as well as I<sup>'</sup><sub>D</sub> ramps down to 0A before the end of the switching cycle
+ - We call this **discountinuous mode** operation since current in L<sub>p</sub> is 0 during part of T<sub>s</sub>
+
+---
+name: S11
+
+# Equivalent Circuits - S<sub>p</sub> is Off (PII)
+
+.center[<img src="img/Flyback_Disc.png" height="210px">]
+
+- After I<sub>D</sub> reach 0A, apart from C<sub>o</sub>, the other components do not contribute to the functionality until the beginning of the next switching cycle
+ - We will call this time the **discountinuous time**
+- Having a discountinuous time ensures, all the energy we stored in L<sub>p</sub> is delivered to the output
+- One of our design goals will be to select components that ensure discountinuous mode operation
+ - This is the preferred operation mode for a flyback converter 
+
+---
+name: S12
+
+# Steady-State Waveforms
+
+.zoom15[
+.center[<img src="img/Waveforms.png" height="440px">]
+]
+
+---
+name: S13
+
+# Energy Stored in L<sub>p</sub>
+
+.left-column[
+- During DT<sub>s</sub> (i.e., when S<sub>p</sub> is on), current in L<sub>p</sub>, which is the same as I<sub>in</sub>, ramps-up from 0 and reaches I<sub>Lp(pk)</sub> when S<sub>p</sub> is turning off,
+\\[ I\_{Lp(pk)} = \frac{1}{L\_p} \int\_{0}^{DT\_s} V\_{in} \, \mathrm{d}t = \frac{V\_{in}}{L\_p} DT\_{s} \quad \because V\_{p} = V\_{in} \equiv \textrm{ constant} \\]
+- Using I<sub>Lp(pk)</sub> we can find peak energy stored in L<sub>p</sub>,
+\\[ E\_{Lp(pk)} = \frac{1}{2} L I\_{Lp(pk)}^2 = \frac{V^2\_{in}}{2L\_p} D^2T^2\_{s}   \\]
+- Thus, we can use D to control the peak energy we store in L<sub>p</sub> 
+ - L<sub>p</sub>, V<sub>in</sub> and T<sub>s</sub> are fixed in a given design
+ - PWM controller sets D to regulate V<sub>out</sub> by controlling E<sub>Lp(pk)</sub>
+]
+ 
+.right-column[
+.center[<img src="img/Lp_Energy.png" height="420px">]
+]
+
+---
+name: S14
+
+# Output Power
+
+.left-column[
+- All of the energy stored in L<sub>p</sub> (i.e., E<sub>Lp(pk)</sub>), is delivered to the output between DT<sub>s</sub> and T<sub>s</sub>
+- All this energy is consumed by R<sub>Load</sub> because the average voltage across C<sub>o</sub> is not changing 
+ - In steady-state C<sub>o</sub> is effectively not absorbing/loosing energy when averaged over one time period
+ - However, inside each time period C<sub>o</sub> charge and discharge by the same amount leading to a small ripple in V<sub>out</sub>
+- So we can relate output power to E<sub>Lp(pk)</sub> assuming all components are lossless,
+\\[ P\_{out} = E\_{Lp(pk)} f\_s = \frac{V^2\_{in}}{2f\_s L\_p} D^2 \quad \because T\_{s} = 1/f\_{s} \\]
+]
+ 
+.right-column[
+.center[<img src="img/Lp_Energy.png" height="420px">]
+]
+
+---
+name: S15
+
+# Calculating Required L<sub>p</sub>
+
+- Since P<sub>out</sub> is proportional to D<sup>2</sup>, maximum P<sub>out</sub> is achieved at maximum D we choose to operate our flyback converter 
+- Therefore, we can determine the value of L<sub>p</sub> that should be used in a flyback converter designed to deliver up to P<sub>out(max)</sub> 
+\\[ L\_{p(req)} \leqslant \frac{V^2\_{in}}{2f\_s P\_{out(max)}} D^2\_{max} \\]
+- We know P<sub>out(max)</sub>, V<sub>in</sub> and f<sub>s</sub> from design specifications
+ - D<sub>max</sub> can be selected to be 0.5 as it simplifies the design
+- Since we assumed a lossless flyback converter for this analysis, when designing your converter pick a L<sub>p</sub> value that is slightly smaller than what you calculate
+ - If V<sub>in</sub> is not constant, use the smallest V<sub>in</sub> you expect to operate at (in your design V<sub>in</sub> is constant)
+
+---
+name: S16
+
+# Calculating Required Turns Ratio (PI)
+
+.left-column[
+- n determines whether we operate in the discountinuous mode
+ - Note that if in discountinuous mode `\(  \lgroup D + D' \rgroup \leqslant 1 \)`
+- Since the average value of I<sub>Lp</sub> doesn't change in steady-state,
+\\[  \int\_{0}^{T\_s} V\_p \, \mathrm{d}t = V\_{in}DT\_s - nV\_{out}D'T\_s = 0\\]
+- Substituting `\( D' = V_{in}D \, / \, nV_{out} \)` in `\(  \lgroup D + D' \rgroup \leqslant 1 \)` we get,
+\\[  n \geq \frac {V\_{in}D} {V\_{out}(1-D)} \\]
+- Thus, to guarantee discountinuous operation, select an n that is greater than the max value of `\( V_{in}D \, / \, V_{out} (1-D)\)`
+]
+ 
+.right-column[
+.center[<img src="img/Voltage_Stress.png" height="420px">]
+]
+
+---
+name: S17
+
+# Calculating Required Turns Ratio (PII)
+
+.left-column[
+- n also directly influences maximum voltage stress experienced by S<sub>p</sub> and D<sub>s</sub>
+\\[ V\_{Sp(max)} = V\_{in} + nV\_{out} \quad \text{and} \quad V\_{Ds(max)} = V\_{in}/n + V\_{out} \\]
+- When selecting devices to implement S<sub>p</sub> and D<sub>s</sub> we need to make sure they have voltage ratings greater than the maximum voltage stress they experience
+- Higher voltage rated devices are more expensive
+ - Performance tends to be also poor (e.g., higher losses) 
+- Smaller n leads to lower voltage stress across S<sub>p</sub> at the expense of the voltage stress across D<sub>s</sub>
+ - We need to find a balance between these contradicting needs
+]
+ 
+.right-column[
+.center[<img src="img/Voltage_Stress.png" height="420px">]
+]
+
+---
+name: S18
+
+# Average Currents
+
+.left-column[
+- Since ripple voltage at V<sub>out</sub> is negligible, I<sub>out</sub> is a constant DC value give by,
+\\[ I\_{out} = \frac{V\_{out}}{R\_{Load}} \\]
+- The average value of I<sub>in</sub> is,
+\\[ I\_{in(av)} = \frac{1}{T\_{s}} \int\_{0}^{T\_s} I\_{in} \, \mathrm{d}t = \frac{1}{2} DI\_{L(pk)} = \frac{V\_{in}}{2L\_p} D^2T\_{s} \\]
+- The average value of I<sub>D</sub> should be the same as I<sub>out</sub> and is,
+\\[ I\_{D(av)} = \frac{1}{T\_{s}} \int\_{0}^{T\_s} I\_{D} \, \mathrm{d}t = \frac{1}{2} nD'I\_{L(pk)} = I\_{out} \\]
+]
+ 
+.right-column[
+.center[<img src="img/Average_Currents.png" height="400px">]
+]
+
+---
+name: S19
+
+# RMS Currents
+
+.left-column[
+- RMS currents dictate conduction loss in transformer and S<sub>p</sub>
+- To calculate RMS of I<sub>in</sub>, which is a linear function, it can be written as `\(  I_{Lp(pk)} t /DT_s \)` for `\(  0 \leq t \leq DT_s\)`
+- RMS of I<sub>in</sub> is therefore give by,
+\\[ I\_{in(RMS)} = \sqrt { \frac{1}{T\_s} \int\_{0}^{T\_s} I^2\_{in} \, \mathrm{d}t } = \sqrt { \frac{1}{T\_s} \int\_{0}^{DT\_s} \left( \frac {I\_{Lp(pk)}} {DT\_s} t \right)^2 \, \mathrm{d}t } \\]
+\\[ I\_{in(RMS)} = \sqrt { \frac{1}{T\_s} \left( \frac {I\_{Lp(pk)}} {DT\_s} \right)^2 \left[ \frac{t^3} {3} \right]^{DT\_s}\_0 } = I\_{Lp(pk)} \sqrt {\frac {D} {3}} \\]
+- Similarly we can show that `\(  I_{D(RMS)} = nI_{Lp(pk)} \sqrt{D' \, / \, 3 } \)`
+]
+ 
+.right-column[
+.center[<img src="img/Average_Currents.png" height="400px">]
+]
+
+
+---
+name: S20
+
+# Output Voltage
+
+.left-column[
+- In a flyback converter, like in any switched-mode converter, we use D to control the output voltage across a load R<sub>load</sub>
+- Since we already know what [P<sub>out</sub>](#S14) is, we can derive the relation between V<sub>out</sub> and D,
+\\[ P\_{out} = \frac {V^2\_{out}} {R\_{Load}} = \frac{V^2\_{in}}{2f\_s L\_p} D^2 \quad \Rightarrow \quad V\_{out} = \sqrt{ \frac{R\_{Load}}{2f\_s L\_p} } \, V\_{in}D \\]
+- As we expected, V<sub>out</sub> is proportional to D
+- However, V<sub>out</sub> also depends on R<sub>load</sub> unlike in some other switched-mode converters
+ - An open circuit at output (i.e., R<sub>load</sub> &#8594; &#8734;) causes V<sub>out</sub> to reach &#8734; as predicted by the [water bucket](#S6) analogy 
+]
+ 
+.right-column[
+.center[<img src="img/OutputWaveforms.png" height="400px">]
+]
+
+---
+name: S21
+
+# Output Voltage Ripple
+
+.left-column[
+- In practice C<sub>o</sub> is a finite value and the AC current, I<sub>Co</sub>, flowing through it cause a very small ripple voltage, &Delta;V<sub>out</sub>, at output
+ - From KCL we know that I<sub>Co</sub> = I<sub>D</sub> - I<sub>out</sub>
+- Assume &Delta;V<sub>out</sub> is negligible so V<sub>out</sub> and I<sub>out</sub> are DC signals
+- Using trigonometry we can determine duration C<sub>o</sub> is charging,
+\\[ \frac {nI\_{Lp(pk)} - I\_{out}} {nI\_{Lp(pk)}} = \frac {T\_{Chrg}} {D'T\_s} \quad \Rightarrow \quad T\_{Chrg} = \frac { (nI\_{Lp(pk)} - I\_{out}) D'T\_s} {nI\_{Lp(pk)}} \\]
+- Using this information we can evaluate &Delta;V<sub>out</sub> since,
+\\[ \Delta V\_{out} = \frac {1} {C\_o} \int\_{0}^{T\_{Chrg}} I\_{Co} \, \mathrm{d}t =  \frac {1} {2C\_o} \left( nI\_{Lp(pk)} - I\_{out} \right)T\_{Chrg} \\]
+]
+ 
+.right-column[
+.center[<img src="img/RippleVout.png" height="425px">]
+]
+
+---
+name: S22
+
+# Demo: A Conceptual Flyback Converter
+
+.questions[
+When f<sub>s</sub>=100kHz, D=0.5 and R<sub>load</sub>=100&#8486;, calculate I<sub>Lp(pk)</sub>, P<sub>out</sub>, V<sub>out</sub>, D', V<sub>Sp(max)</sub>, V<sub>Ds(max)</sub>, I<sub>in(av)</sub>, I<sub>D(av)</sub>, I<sub>in(RMS)</sub>, I<sub>D(RMS)</sub> and &Delta;V<sub>out</sub>. Show answers match simulation. Explore behavior when D and R<sub>load</sub> change. 
+]
+
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# How to Design a Flyback Converter
+### An Example
+
+---
+
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+
+name: S23
+
+# Design Specifications
+
+
+.left-column[
+- Using what we learnt so far lets design a flyback converter that meets the specifications listed in the table
+- In this design both the input and output voltages are fixed
+ - In many cases you will need to cater for a range of input/output voltages 
+- We are going to take as D<sub>max</sub> = 0.5, &eta; = 100% and design for discountinuous mode operation
+- To 'Design' this converter first we have to determine suitable values for L<sub>p</sub>, n, L<sub>s</sub> and C<sub>o</sub>
+- Then we analyse the voltage stress across S<sub>p</sub> and D<sub>s</sub>, average and RMS current stresses as well as operating D 
+ - We will do this analysis at P<sub>out</sub> = 50W and P<sub>out</sub> = 100W
+]
+
+.right-column[
+.center[<img src="img/FlybackDesign.png" height="170px">]
+
+<table class="tg" style="undefined;table-layout: fixed; width: 300px; margin-left:auto; margin-right:auto;">
+  <colgroup>
+  <col style="width: 150px">
+  <col style="width: 150px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="tg-dzaw"><span style="color:white">Parameter</span></th>
+      <th class="tg-dzaw"><span style="color:white">Specification</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-jayl">V<sub>in</sub></td>
+      <td class="tg-jayl"> 20V </td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">V<sub>out</sub></td>
+      <td class="tg-sabo"> 200V </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71"> P<sub>out</sub></td>
+      <td class="tg-ig71"> 0W to 100W </td>
+    </tr>
+    <tr>
+      <td class="tg-ig71">f<sub>s</sub></td>
+      <td class="tg-ig71">100kHz</td>
+    </tr>
+    <tr>
+      <td class="tg-sabo">&Delta;V<sub>out</sub></td>
+      <td class="tg-sabo">2V</td>
+    </tr>
+  </tbody>
+</table> 
+]
+
+---
+
+name: S24
+
+# Parameters of the Transformer 
+
+- Since we know the maximum power the converter is expected to deliver from the specifications (i.e., 100W) we can calculate the [required L<sub>p</sub>](#S15),
+\\[ L\_{p(req)} \leqslant \frac{V^2\_{in}}{2f\_s P\_{out(max)}} D^2\_{max} = 5 \mu H \\]
+- Since we are assuming our converter has no losses, to be on the safe side lets **choose L<sub>p</sub> = 4.5&micro;H**
+- We can also determine the [minimum turns-ratio](#S16) of the transformer,
+\\[  n \geq \left [ \frac {V\_{in}D} {V\_{out}(1-D)} \right]\_{(max)} \quad \Rightarrow \quad n \geq 0.1 \\]
+- Noting that a smaller *n* results in [larger V<sub>Ds(max)</sub> and a larger *n* in larger V<sub>Sp(max)</sub>](#S17) lets **choose *n* = 0.5**
+\\[ V\_{Sp(max)} = V\_{in} + nV\_{out} = 120V \quad \text{and} \quad V\_{Ds(max)} = V\_{in}/n + V\_{out} = 240V \\]
+
+---
+name: S25
+
+# Operating Conditions (PI) 
+
+- Since we have now determined the parameters of the transformer (i.e., L<sub>p</sub> = 4.5&micro;H & *n* = 0.5) next will be determine [operating D and D'](#S14) at each output power level 
+\\[ D = \sqrt{ \frac {2 P\_{out} f\_s L\_p} {V^2\_{in}} }  \quad \Rightarrow \quad D\_{@100W} = 0.47 \quad \& \quad D\_{@50W} = 0.34 \\]
+- Now we can determine both [I<sub>Lp(pk)</sub>](#S13) (i.e., same as I<sub>in(pk)</sub>) and I<sub>Ls(pk)</sub> (i.e., same as I<sub>D(pk)</sub>),
+\\[ I\_{Lp(pk)} = \frac{V\_{in}}{L\_p} DT\_{s}  \quad \Rightarrow \quad I\_{Lp(pk@100W)} = 21.08A \quad \& \quad I\_{Lp(pk@50W)} = 14.91A \\]
+\\[ I\_{Ls(pk)} = nI\_{Lp(pk)} \quad \Rightarrow \quad I\_{Ls(pk@100W)} = 10.54A \quad \& \quad I\_{Ls(pk@50W)} = 7.45A \\]
+
+---
+name: S26
+
+# Operating Conditions (PII) 
+
+- [Average currents](#S18) can be calculated as,
+\\[ I\_{in(av)} = \frac{1}{2} DI\_{L(pk)} \quad \Rightarrow \quad I\_{in(av@100W)} = 5A \quad \& \quad I\_{in(av@50W)} = 2.5A \\]
+\\[ I\_{D(av)} = I\_{out} = \frac{V\_{out}}{R\_{Load}} \quad \Rightarrow \quad I\_{D(av@100W)} = 0.50A \quad \& \quad I\_{D(av@50W)} = 0.25A\\]
+- [RMS currents](#S19) can be calculated as,
+\\[ I\_{in(RMS)} = I\_{Lp(pk)} \sqrt {\frac {D} {3}} \quad \Rightarrow \quad I\_{in(RMS@100W)} = 8.38A \quad \& \quad I\_{in(RMS@50W)} = 4.38A \\]
+\\[ I\_{D(RMS)} = nI\_{Lp(pk)} \sqrt {\frac {D'} {3}} \quad \Rightarrow \quad I\_{D(RMS@100W)} = 1.87A \quad \& \quad I\_{D(RMS@50W)} = 1.11A \\]
+
+---
+name: S27
+
+# Capacitor Size and Ripple Voltage 
+
+- We can now calculate the [C<sub>out</sub> required](#S21) to ensure a voltage ripple less than what is specified (i.e., 2V),
+\\[  C\_o \geqslant  \frac {1} {2 \Delta V\_{out} } \frac { \left( nI\_{Lp(pk)} - I\_{out} \right)^2 } {nI\_{Lp(pk)}} D'T\_s  \quad \Rightarrow \quad C\_o \geqslant 2.26 \mu F \\]
+- As the size and cost targets are not specified we can use a larger capacitor and in this example lets **choose C<sub>out</sub> = 10&micro;F**
+- Lets calculate ripple voltage at each power level to make sure it is acceptable 
+\\[  \Delta V\_{out} =  \frac {1} {2 C\_o} \frac { \left( nI\_{Lp(pk)} - I\_{out} \right)^2 } {nI\_{Lp(pk)}} D'T\_s  \quad \Rightarrow \quad  \Delta V\_{out(@100W)} = 0.45V \quad \& \quad \Delta V\_{out(@50W)} = 0.23V\\]
+- As a percentage our voltage ripple is less than 0.23% of V<sub>out</sub> (i.e., our assumption of V<sub>out</sub> being a DC voltage is accurate)
+
+---
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# What to Expect from a Practical Flyback Converter
+### Impact of Transformer Leakage Inductance
+
+---
+layout: true
+name: template_slide
+
+.logo-slide[]
+.footer[[Duleepa J Thrimawithana](https://www.linkedin.com/in/duleepajt), Department of Electrical, Computer and Software Engineering (2021)]
+
+---
+name: S28
+
+# Leakage Inductance (PI)
+
+.center[<img src="img/Real_Flyback.png" height="220px">]
+
+- It is impossible to build a transformer that has perfect coupling (i.e., k = 1) as we assumed earlier
+- k of a flyback transformer is quite high and is typically over 0.998
+ - This means the analysis we conducted assuming k = 1 is still very accurate
+- Having a k of less than 1 means that there is going to be leakage inductance (i.e., `\( L_{lk} = (1-k^2)L_p \)`)
+ - We can use the Cantilever model to explore impact of leakage inductance on the operation of the flyback converter 
+
+---
+name: S29
+
+# Leakage Inductance (PII) 
+
+.center[<img src="img/Real_FlybackW.png" height="170px">]
+
+- From Cantilever model we can see that the I<sub>in</sub> flows through the leakage inductance (i.e., `\( L_{lk} = (1-k^2)L_p \)`) when S<sub>p</sub> is turned-on storing energy in it
+- When S<sub>p</sub> is turning-off I<sub>in</sub> rapidly fall from I<sub>Lp(pk)</sub> to 0A over a few 10s of nano-seconds because a real switch cannot turn-off instantaneously 
+- V<sub>lk</sub> can be very large since the time S<sub>p</sub> takes to turn-off, t<sub>off</sub>, is very small, 
+\\[  V\_{lk} = L\_{lk} \, \frac {\mathrm{d}I\_{in}} {\mathrm{d}t} = -(1-k^2)L\_p \frac {I\_{Lp(pk)}} {t\_{off}} \\]
+
+---
+name: S30
+
+# Parasitic Capacitance of Switch (PI)
+
+.center[<img src="img/Real_FlybackW2.png" height="170px">]
+
+- A practical switch also has a small inbuilt capacitance across it due to the way it is manufactured
+ - Size of C<sub>Sp</sub> depends on the switch and you will learn more about this later
+- When S<sub>p</sub> turns-off, this parasitic capacitance, C<sub>Sp</sub>, absorbs the energy stored in the leakage inductance
+ - As a result V<sub>Sp</sub> rises up to a voltage greater than V<sub>in</sub> + nV<sub>out</sub>
+- The large voltage across V<sub>Sp</sub> when S<sub>p</sub> is off causes this parasitic energy to circulate between C<sub>Sp</sub> and the leakage inductance at their resonant frequency
+ - The circulating energy is dissipated as losses and the resonance eventually disappears  
+
+---
+name: S31
+
+# Parasitic Capacitance of Switch (PII)
+
+.center[<img src="img/Real_FlybackW3.png" height="170px">]
+
+- After the energy stored in k<sup>2</sup>L<sub>p</sub> is delivered to output, the flyback enters [discontinuous time](#S11) 
+- Note that during the [flyback time](#S10) C<sub>Sp</sub> is charged to V<sub>in</sub> + nV<sub>out</sub> 
+- In the ideal converter I<sub>in</sub> and therefore V<sub>p</sub> was 0 during [discontinuous time](#S11)
+ - This causes C<sub>Sp</sub> that is charged to V<sub>in</sub> + nV<sub>out</sub> to discharge in to V<sub>in</sub>
+ - However L<sub>p</sub> is in this discharge path thus causing this parasitic energy to circulate between C<sub>Sp</sub> and L<sub>p</sub> at their resonant frequency
+- As this circulating energy is dissipated in losses the resonance starts decaying   
+
+---
+name: S32
+
+# Practical Steady State Waveforms
+
+.zoom15[
+.center[<img src="img/Real_FlybackW_Summary.png" height="453px">]
+]
+
+
+---
+name: S33
+
+# Demo: A Practical Flyback Converter
+
+.questions[
+Calculate the resonant frequency of the parasitic circulating energy during the flyback time and the discontinuous time. Show answers match simulation. Explore behavior when D and R<sub>load</sub> change. 
+]
+
+
+
+---
+
+class: title-slide
+layout: false
+count: false
+.logo-title[]
+
+# Questions?
+
+
+
+    </textarea>
+
+    
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+      
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript">
+    </script>
+
+    <!-- 
+    <script src="remark/remark.min.js" type="text/javascript">
+    </script>
+    -->  
+
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="remark/terminal.language.js" type="text/javascript"></script>
+
+    <script src="https://kit.fontawesome.com/a405eedf54.js" crossorigin="anonymous"></script>
+    <script src="remark/mark.min.js" type="text/javascript">
+    </script>
+    <link rel="stylesheet" href="remark/remark.search.css">
+    <script src="remark/remark.search.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+      var options = {};
+
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        ]});
+      }
+
+      var slideshow = remark.create({
+        ratio: '16:9',
+        slideNumberFormat: '%current%',
+        countIncrementalSlides: false,
+        renderMath,
+        highlightLanguage: 'c',
+        highlightStyle: 'github',
+        navigation: {
+          // Enable or disable navigating using scroll
+          // Default: true
+          // Alternatives: false
+          scroll: true,
+
+          // Enable or disable navigation using touch
+          // Default: true
+          // Alternatives: false
+          touch: true,
+
+          // Enable or disable navigation using click
+          // Default: false
+          // Alternatives: true
+          click: false,
+        },
+        
+      });
+
+      MathJax.Hub.Config({
+          tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+          processEscapes: true
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          $(MathJax.Hub.getAllJax()).map(function(index, elem) {
+              return(elem.SourceElement());
+          }).parent().addClass('has-jax');
+      });
+
+      MathJax.Hub.Configured();
+      
+      //Terminal style highligting code
+      var highlighted = document.querySelectorAll("code.terminal span.hljs-ansi");
+      Array.prototype.forEach.call(highlighted, function(next) {
+        next.insertAdjacentHTML("beforebegin", next.textContent);
+        next.parentNode.removeChild(next);
+      });
+
+      window.addEventListener('load', function() {
+      RemarkSearch.create({'position': 'top-left', 'caseSensitive' : false, 'showIcon': true, 'autoSearch': true});
+      });
+
+    </script>
+  </body>
+</html>
