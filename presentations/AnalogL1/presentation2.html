@@ -576,6 +576,20 @@ name: S19
 \\[ I\_{L(RMS)} = \sqrt { \frac{1}{T\_s} \int\_{0}^{T\_s} I^2\_{L(dc)} \, \mathrm{d}t + \frac{1}{T\_s} \int\_{0}^{T\_s} I^2\_{L(ac)} \, \mathrm{d}t }  \\]
 
 
+---
+name: S19
+
+# RMS Inductor Current (PII)
+ 
+.center[<img src="img/RMS_IL.png" height="100px">]
+
+- Due to the shape of the I<sub>L(ac)</sub> waveform, the RMS of I<sub>L(ac)</sub> can be calculated as follows by considering the first half of the waveform 
+
+\\[ \frac{1}{T\_s} \int\_{0}^{T\_s} I^2\_{L(ac)} \, \mathrm{d}t = \frac{1}{DT\_s} \int\_{0}^{DT\_s} \left[ -0.5\,\Delta I\_L + \Delta I\_L \frac{t}{DT\_s} \right]^2 \mathrm{d}t \\]
+
+\\[ \frac{1}{T\_s} \int\_{0}^{T\_s} I^2\_{L(ac)} \, \mathrm{d}t = \frac{1}{DT\_s} \int\_{0}^{DT\_s} \left[ \frac{\Delta I^2\_L}{4} - \frac{\Delta I^2\_L \, t}{DT\_s} + \frac{\Delta I^2\_L \, t^2}{D^2T\_s^2} \right] \mathrm{d}t = \frac{\Delta I^2\_L}{12} \\]
+
+
 
 ---
 name: S22
