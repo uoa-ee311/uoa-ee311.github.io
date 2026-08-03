@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="plecsModel">
   <head>
-    <title>Control of Flyback Converters</title>
+    <title>Control of Converters</title>
     <meta charset="utf-8">
 
     <!--Plecs WBS--->
@@ -326,7 +326,7 @@ name: S8
 
 .center[<img src="img/PropotionalGain.png" height="170px">]
 
-- From our [analysis](#S7), we could see that if K<sub>p</sub> is chosen to be large such that K<sub>p</sub>T<sub>flybk</sub> &#62;&#62; 1, then V<sub>out</sub> &#8776; V<sub>ref</sub>
+- From our [analysis](#S7), we could see that if K<sub>p</sub> is chosen to be large such that K<sub>p</sub>T<sub>boost</sub> &#62;&#62; 1, then V<sub>out</sub> &#8776; V<sub>ref</sub>
 - We could also observe this in our system diagram where D = K<sub>p</sub>V<sub>err</sub>
  - Since 0 &leq; D &leq; 1, larger the K<sub>p</sub> smaller the V<sub>err</sub>
 - Thus, a proportional controller with a sufficiently large K<sub>p</sub> will help achieve an V<sub>out</sub> that closely follow a target voltage set by V<sub>ref</sub>
@@ -339,7 +339,7 @@ name: S10
 
 - V<sub>ref</sub> can be modelled as a sinusoidal signal to emulate a user changing V<sub>ref</sub> to set different V<sub>out</sub> values
  - Disturbances we make to the system, e.g., changing V<sub>ref</sub> or R<sub>load</sub>, can be considered to generate a spectrum of frequencies 
-- In a converter, to store energy in L<sub>p</sub> and to charge/discharge C<sub>o</sub> takes time, and thus a change in D does not result in an immediate change in V<sub>out</sub>
+- In a converter, to store energy in L and to charge/discharge C<sub>o</sub> takes time, and thus a change in D does not result in an immediate change in V<sub>out</sub>
  - T<sub>boost</sub> captured these delays as pols and zeros in its transfer function
 - Lets exaggerate these delays and assume that at the frequency of V<sub>ref</sub> the converter introduce a half-cycle delay (i.e. 180<sup>0</sup> delay
  - A 180<sup>0</sup> delay to a sinusoidal wave represents a negative gain
@@ -437,8 +437,7 @@ name: S20
 
 .center[<img src="img/PeakCMC.png" height="180px">]
 
-- Our analysis of a boost converter showed that I<sub>L(pk)</sub> is proportional to D
-\\[ \Delta I\_L = \frac{V\_{in} }{L} DT\_{s}  \\]
+- Our analysis of a boost converter showed that I<sub>L</sub> and thus I<sub>L(pk)</sub> increases with D
 - As such, instead of directly controlling D, we can control I<sub>L(pk)</sub> to achieve a similar outcome
 - This is **peak current mode control** and is a very common/preferred control method 
 - The output of the PI controller now sets the reference peak current, I<sub>L(pk)_ref</sub>
@@ -514,7 +513,7 @@ name: S25
 .center[<img src="img/UC3843_Output.png" height="190px">]
 
 - We call this output circuit configuration a **Totem Pole** or a **Push-Pull** configuration
- - OUTPUT pin can be connected directly to the gate of the MOSFET switch used in our flyback converter through a small resistor
+ - OUTPUT pin can be connected directly to the gate of the MOSFET switch used in our converter through a small resistor
  - This resistor limits the current drawn from OUTPUT pin to less than 1A
 - The output of the control circuitry determines if the OUTPUT pin is 0V or VCC
  - If control circuitry sends logic '1' OUTPUT is 0V (i.e., MOSFET switch is off)
@@ -530,7 +529,7 @@ name: S26
 - Connecting a resistor, R<sub>T</sub>, and a capacitor, C<sub>T</sub>, at the RT/CT pin configures the oscillator to operate at the required PWM frequency, f<sub>s</sub>
 - Voltage at the RT/CT pin is a sawtooth waveform that has a frequency f<sub>s</sub>
  - Every time this sawtooth waveform reach its peak voltage the oscillator generates an output pulse that 'sets' the PWM latch
-- When PWM latch is 'set' it outputs logic '0' making the 'OR' gate output a logic '0' causing MOSFET switch of the flyback converter to turn-on
+- When PWM latch is 'set' it outputs logic '0' making the 'OR' gate output a logic '0' causing MOSFET switch of the boost converter to turn-on
 
 ---
 name: S27
@@ -584,7 +583,7 @@ name: S30
 - 1.4V is subtracted from V<sub>pi_out</sub> and divided by 3 before feeding to the inverting input of comparator
  - This sets I<sub>L(pk)_ref</sub> and its maximum value is clamped to 1V by a Zener diode 
 - When the voltage at ISENS pin exceeds I<sub>L(pk)_ref</sub>, the comparator outputs 1 to reset the latch
- - When PWM latch is 'reset' it outputs logic '1' making the 'OR' gate output a logic '1' causing MOSFET switch of the flyback converter to turn-off
+ - When PWM latch is 'reset' it outputs logic '1' making the 'OR' gate output a logic '1' causing MOSFET switch of the boost converter to turn-off
 - When the PI controller output, V<sub>pi_in</sub> is 1V (i.e., V<sub>pi_out</sub> &approx; 5V), I<sub>L(pk)_ref</sub> will be 1V 
 
 ---
